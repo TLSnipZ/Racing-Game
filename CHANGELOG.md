@@ -1,5 +1,18 @@
 # Changelog
 
+## Phase 5 — Interface & Tuning (2026-09-11)
+
+- Replaced bottom scroll anchors with prominent top section tabs and a sticky cash/level/reputation HUD.
+- Separated Garage, Jobs, Workshop and Saves; kept search/inspection state across tab switches, added keyboard tab navigation, global recovery access and a Jobs READY badge.
+- Kept game session and presentation clock above the panels so changing sections neither pauses jobs nor mutates saved progress.
+- Added 14 parts across 8 slots and three fictional brands, with compatibility/level/cash gates and a current-versus-preview confirmation dialog.
+- Added per-vehicle purchased-part ownership, one upgrade per slot, retained swapped parts, free refit and free stock restoration without refunds.
+- Added derived power/weight and build ratings, kept factory fields separate, and updated Garage display/sorting/fitted parts to reflect the current build.
+- Blocked tuning on delivery-assigned cars until claim/cancel without blocking other vehicles or on-foot shifts.
+- Added Save v4 migration from v1/v2/v3, preserving old fields and pending jobs; retained browser key and KAGEHAMA1 transport format.
+- Retained previous regression scenarios and added tuning, migration, true-tab, sticky-header, keyboard, storage-failure and mobile/desktop browser checks.
+- Updated README, roadmap and Phase 5 contract. Starter/job balances, final artwork, racing and later automation are unchanged or still future work.
+
 ## Planning update — Phase 5 scope (2026-09-11)
 
 - Expanded the next milestone to **Interface & Tuning**: first a prominent top navigation, real separate content sections and a persistent cash/level/rep HUD (5A), then the first performance-parts workshop (5B).
