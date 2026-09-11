@@ -37,6 +37,7 @@ export function isEconomyState(value: unknown, vehicles: readonly Pick<PlayerVeh
 }
 export function getJobRequirement(state: GameState, job: JobDefinition): string | null {
   if (state.selectedStarterId === null) return 'Choose your starter first.';
+  if (state.racing.activeRace) return 'Settle or withdraw from your race before accepting a job. One driver, one activity.';
   if (state.playerLevel < job.minLevel) return `Requires Level ${job.minLevel}.`;
   if (state.economy.activeJob) return 'Finish or cancel your current job first.';
   if (job.requiresVehicle) {
@@ -51,7 +52,10 @@ function add(left: number, right: number): number {
   return left + right;
 }
 function assertClock(nowMs: number) { if (!integer(nowMs)) throw new Error('Device clock is invalid. Restore your clock and retry.'); }
-function assertEconomy(state: GameState) { if (!isEconomyState(state.economy, state.ownedVehicles)) throw new Error('Economy state is invalid.'); }
+function assertEconomy(state: GameState) {
+  if (!isEconomyState(state.economy, state.ownedVehicles)) throw new Error('Economy state is invalid.');
+  if (state.economy.activeJob && state.racing.activeRace) throw new Error('A job and a race cannot run together.');
+}
 export function startJob(state: GameState, jobId: string, nowMs: number): GameState {
   assertClock(nowMs); assertEconomy(state);
   const job = findJob(jobId);

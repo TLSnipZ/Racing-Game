@@ -3,6 +3,8 @@ import { ChevronRight, Database } from 'lucide-react';
 import { STARTER_CARS } from './data/starters';
 import { purchaseStarter } from './domain/game';
 import { cancelJob, claimJob, startJob } from './domain/economy';
+import { cancelRace, settleRace, startRace } from './domain/racing';
+import { isRaceReady } from './domain/raceModel';
 import { selectActiveVehicle } from './domain/garage';
 import { installPart, removePart } from './domain/tuning';
 import { SAVE_VERSION } from './domain/persistence';
@@ -11,16 +13,17 @@ import { useJobClock } from './hooks/useJobClock';
 import { GameHeader, type SectionTab } from './components/GameHeader';
 import { Garage } from './components/Garage';
 import { Jobs } from './components/Jobs';
+import { Races } from './components/Races';
 import { Workshop } from './components/Workshop';
 import { SaveManagement } from './components/SaveManagement';
 import { VehicleSilhouette } from './components/VehicleSilhouette';
 import './styles/phase3.css';
 import './styles/phase4.css';
 import './styles/phase5.css';
+import './styles/phase6.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
-  // Session and clock live above all tabs. A view switch cannot restart the game or a job.
   const session = useGameSession();
   const { game, blocked } = session;
   const [tab, setTab] = useState<SectionTab>('garage');
@@ -28,12 +31,13 @@ export function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = STARTER_CARS.find((car) => car.id === selectedId) ?? null;
   const hasStarted = game.selectedStarterId !== null || game.ownedVehicles.length > 0;
-  const now = useJobClock(game.economy.activeJob);
+  const now = useJobClock(game.economy.activeJob ?? game.racing.activeRace);
   const job = game.economy.activeJob;
   const jobReady = !!job && Number.isSafeInteger(now) && now >= job.startedAtMs && now >= job.finishesAtMs;
+  const raceReady = isRaceReady(game.racing.activeRace, now);
   useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, [tab]);
   function selectTab(next: SectionTab) {
-    if ((next === 'jobs' || next === 'workshop') && !hasStarted) return;
+    if ((next === 'jobs' || next === 'workshop' || next === 'races') && !hasStarted) return;
     setTab(next);
   }
   function returnToGarage() {
@@ -45,9 +49,9 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5">
+  return <main className="shell phase3 phase4 phase5 phase6">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
-    <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} onTab={selectTab} />
+    <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
       <Database size={13} />{blocked ? 'SAVE PROTECTED · ACTION REQUIRED' : session.error ? 'SAVE FAILED · PLEASE CHECK BELOW'
         : session.savedAt ? `AUTOSAVED · ${new Date(session.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · SAVE V${SAVE_VERSION}` : 'AUTOSAVE READY'}
@@ -57,8 +61,7 @@ export function App() {
       <button className="secondaryButton" type="button" onClick={() => { setTab('saves'); document.getElementById('tab-saves')?.focus({ preventScroll: true }); }}>OPEN SAVE TOOLS</button>
       {blocked && session.raw !== null && <details><summary>Show stored data for recovery</summary><textarea aria-label="Stored recovery data" readOnly value={session.raw} /></details>}
     </section>}
-
-    {/* Hidden panels stay mounted to retain search/inspection/forms, but have no layout, focus or accessibility presence. */}
+    {/* Views retain filters/forms but hidden panels have no layout, focus or accessibility presence. */}
     <div id="panel-garage" role="tabpanel" aria-labelledby="tab-garage" tabIndex={0} hidden={tab !== 'garage'} className="sectionPanel">
       {hasStarted ? <Garage key={viewEpoch} game={game} blocked={blocked} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
         : !blocked && <>
@@ -86,6 +89,12 @@ export function App() {
         onClaim={(id) => session.command((current) => claimJob(current, id, Date.now()))}
         onCancel={(id) => session.command((current) => cancelJob(current, id))} />}
     </div>
+    <div id="panel-races" role="tabpanel" aria-labelledby="tab-races" tabIndex={0} hidden={tab !== 'races'} className="sectionPanel">
+      {hasStarted && <Races key={viewEpoch} game={game} now={now} blocked={blocked}
+        onStart={(eventId, vehicleId, key) => session.command((current) => startRace(current, eventId, vehicleId, key, Date.now()))}
+        onSettle={(id) => session.command((current) => settleRace(current, id, Date.now()))}
+        onCancel={(id) => session.command((current) => cancelRace(current, id))} />}
+    </div>
     <div id="panel-workshop" role="tabpanel" aria-labelledby="tab-workshop" tabIndex={0} hidden={tab !== 'workshop'} className="sectionPanel">
       {hasStarted && <Workshop key={viewEpoch} game={game} blocked={blocked}
         onInstall={(car, part, expected) => session.command((current) => installPart(current, car, part, expected))}
@@ -96,7 +105,6 @@ export function App() {
         onReset={() => { const ok = session.resetGame(); if (ok) returnToGarage(); return ok; }} />
     </div>
     <div id="panel-city" role="tabpanel" aria-labelledby="tab-city" hidden />
-    <div id="panel-races" role="tabpanel" aria-labelledby="tab-races" hidden />
-    <footer>PHASE 5 // INTERFACE & TUNING · PRE-ALPHA · NEXT: RACING</footer>
+    <footer>PHASE 6 // RACING · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }

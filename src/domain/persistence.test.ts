@@ -6,6 +6,7 @@ import legacyV3 from '../../tests/fixtures/save-v3.json';
 import { createNewGameState, createPlayerVehicle, purchaseStarter } from './game';
 import { claimJob, createEconomyState, startJob } from './economy';
 import { createVehicleTuning, getVehicleBuildStats, installPart } from './tuning';
+import { createRacingState } from './racing';
 import { clearStorage, deserializeSave, exportSaveCode, importSaveCode, isGameState, loadFromStorage, MAX_SAVE_LENGTH,
   SAVE_CODE_PREFIX, SAVE_STORAGE_KEY, SAVE_VERSION, saveToStorage, serializeSave } from './persistence';
 const purchased = () => purchaseStarter(createNewGameState(), 'pico-rs', 'first');
@@ -14,7 +15,7 @@ const storage = () => {
   const values = new Map<string, string>();
   return { getItem: (key: string) => values.get(key) ?? null, setItem: (key: string, value: string) => { values.set(key, value); }, removeItem: (key: string) => { values.delete(key); } };
 };
-describe('Save v4 and historical compatibility', () => {
+describe('Current save and historical compatibility', () => {
   it('round-trips a new game', () => expect(deserializeSave(serializeSave(createNewGameState(), 1234)).state).toEqual(createNewGameState()));
   it('round-trips the active second vehicle and all per-instance data', () => {
     const state = purchased(); state.ownedVehicles.push(createPlayerVehicle('rz-t', 'second')); state.activeVehicleId = 'second';
@@ -23,26 +24,26 @@ describe('Save v4 and historical compatibility', () => {
   it('keeps the portable transport prefix unchanged', () => expect(exportSaveCode(purchased())).toMatch(/^KAGEHAMA1-/));
   it('migrates the actual Phase 2 shape without losing any original field', () => {
     const before = JSON.stringify(legacy); const result = deserializeSave(before);
-    expect(result).toEqual({ ...legacy, version: SAVE_VERSION, state: { ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(),
+    expect(result).toEqual({ ...legacy, version: SAVE_VERSION, state: { ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(),
       ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) } });
     expect(JSON.stringify(legacy)).toBe(before);
   });
   it('migrates a fixed v2 fixture without a reward, reset or changed active car', () => {
     const before = JSON.stringify(legacyV2); const result = deserializeSave(before);
-    expect(result).toEqual({ ...legacyV2, version: SAVE_VERSION, state: { ...legacyV2.state, economy: createEconomyState(),
+    expect(result).toEqual({ ...legacyV2, version: SAVE_VERSION, state: { ...legacyV2.state, economy: createEconomyState(), racing: createRacingState(),
       ownedVehicles: legacyV2.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) } });
     expect(JSON.stringify(legacyV2)).toBe(before);
   });
   it('preserves a second active car and valid legacy levels in v2', () => {
     const state = purchased(); state.ownedVehicles.push(createPlayerVehicle('rz-t', 'second')); state.activeVehicleId = 'second'; state.playerLevel = 7; state.reputation = 100;
-    const { economy: _economy, ...old } = state; expect(deserializeSave(raw(old, 2)).state).toEqual(state);
+    const { economy: _economy, racing: _racing, ...old } = state; expect(deserializeSave(raw(old, 2)).state).toEqual(state);
   });
   it.each([legacy, legacyV2])('imports old schema $version codes without a new prefix', (fixture) => {
     const code = SAVE_CODE_PREFIX + Buffer.from(JSON.stringify(fixture), 'utf8').toString('base64url');
     expect(importSaveCode(code).state.economy).toEqual(createEconomyState()); expect(importSaveCode(code).state.cashYen).toBe(fixture.state.cashYen);
   });
   it('migrates an empty v1 save to a null active ID and empty economy', () => {
-    const { activeVehicleId: _id, economy: _economy, ...old } = createNewGameState(); expect(deserializeSave(raw(old, 1)).state).toEqual(createNewGameState());
+    const { activeVehicleId: _id, economy: _economy, racing: _racing, ...old } = createNewGameState(); expect(deserializeSave(raw(old, 1)).state).toEqual(createNewGameState());
   });
   it('keeps Unicode names in codes', () => {
     const state = purchased(); state.ownedVehicles[0].name = '影浜 • ナイト 🏎️'; expect(importSaveCode(exportSaveCode(state)).state).toEqual(state);
@@ -97,11 +98,11 @@ describe('Save v4 and historical compatibility', () => {
     state.economy.lastReceipt!.runId = 2; expect(isGameState(state)).toBe(false); paid.economy.lastReceipt!.levelAfter = 0; expect(isGameState(paid)).toBe(false);
   });
 });
-describe('Save v4 tuning migration and invalid imports', () => {
+describe('Tuning migration and invalid imports', () => {
   it('preserves a fixed v3 pending delivery, previous receipt, car and balance exactly', () => {
     const before = JSON.stringify(legacyV3); const result = deserializeSave(before);
-    expect(result.version).toBe(4); expect(result.savedAt).toBe(legacyV3.savedAt);
-    expect(result.state).toEqual({ ...legacyV3.state, ownedVehicles: legacyV3.state.ownedVehicles.map((v) => ({ ...v, tuning: createVehicleTuning() })) });
+    expect(result.version).toBe(SAVE_VERSION); expect(result.savedAt).toBe(legacyV3.savedAt);
+    expect(result.state).toEqual({ ...legacyV3.state, racing: createRacingState(), ownedVehicles: legacyV3.state.ownedVehicles.map((v) => ({ ...v, tuning: createVehicleTuning() })) });
     expect(JSON.stringify(legacyV3)).toBe(before);
   });
   it('keeps v3 portable codes and jobs without claiming rewards', () => {
@@ -117,10 +118,10 @@ describe('Save v4 tuning migration and invalid imports', () => {
   it.each([undefined, null, {}, { purchasedPartIds: [], installedBySlot: { intake: 'aoba-panel-filter' } },
     { purchasedPartIds: ['unknown'], installedBySlot: {} }, { purchasedPartIds: ['aoba-panel-filter'], installedBySlot: { tires: 'aoba-panel-filter' } },
     { purchasedPartIds: ['kurogane-big-turbo'], installedBySlot: { turbo: 'kurogane-big-turbo' } }])('rejects bad v4 tuning instead of resetting it %j', (tuning) => {
-    const state = purchased(); expect(() => deserializeSave(raw({ ...state, ownedVehicles: [{ ...state.ownedVehicles[0], tuning }] }))).toThrow();
+    const state = purchased(); expect(() => deserializeSave(raw({ ...state, ownedVehicles: [{ ...state.ownedVehicles[0], tuning }] }, 4))).toThrow();
   });
-  it('migrates empty saves from v1, v2 and v3 with no phantom purchases', () => {
-    for (const version of [1, 2, 3]) expect(deserializeSave(raw(createNewGameState(), version)).state).toEqual(createNewGameState());
+  it('migrates empty saves from v1, v2, v3 and v4 with no phantom purchases', () => {
+    for (const version of [1, 2, 3, 4]) expect(deserializeSave(raw(createNewGameState(), version)).state).toEqual(createNewGameState());
   });
   it('preserves unfamiliar historical factory parts without treating them as purchased upgrades', () => {
     const old = structuredClone(legacyV3); old.state.ownedVehicles[0].installedParts.push('Historical custom label');

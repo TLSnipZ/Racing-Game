@@ -4,6 +4,7 @@ import legacy from '../fixtures/save-v1.json' with { type: 'json' };
 import { createNewGameState, createPlayerVehicle, purchaseStarter } from '../../src/domain/game';
 import { createEconomyState } from '../../src/domain/economy';
 import { createVehicleTuning } from '../../src/domain/tuning';
+import { createRacingState } from '../../src/domain/racing';
 import { SAVE_VERSION, serializeSave } from '../../src/domain/persistence';
 import { seedRaw, stored, tab } from './helpers';
 const twoCars = () => { const game = purchaseStarter(createNewGameState(), 'pico-rs', 'pico-1'); game.ownedVehicles.push(createPlayerVehicle('rz-t', 'akari-1')); return game; };
@@ -18,7 +19,7 @@ test('three starters, real purchase, active vehicle and reload', async ({ page }
 test('migrates a v1 browser save with its original instance and balance', async ({ page }) => {
   await seedRaw(page, JSON.stringify(legacy)); await expect(page.locator('.activeSummary strong')).toHaveText('Hoshino Pico RS');
   await expect(page.getByTestId('cash')).toHaveText('¥18,000'); await expect.poll(async () => JSON.parse((await stored(page))!).version).toBe(SAVE_VERSION);
-  expect(JSON.parse((await stored(page))!).state).toEqual({ ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) });
+  expect(JSON.parse((await stored(page))!).state).toEqual({ ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(), ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) });
 });
 test('inspection is free and does not change active ride; explicit activation persists', async ({ page }) => {
   await seedRaw(page, serializeSave(twoCars())); await page.getByRole('button', { name: 'Inspect Akari RZ-T (akari-1)' }).click();
