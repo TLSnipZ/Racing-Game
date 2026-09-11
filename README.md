@@ -6,86 +6,91 @@ A pre-alpha car-collection, street-racing and automotive-empire game set in the 
 
 > Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
 
-**Current milestone: Phase 4 — Economy** · **Save schema: v3** · **Next: Phase 5 — Interface & Tuning**
+**Current milestone: Phase 5 — Interface & Tuning** · **Save schema: v4** · **Next: Phase 6 — Racing**
 
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Economy and save contract](docs/PHASE4.md) · [Garage milestone](docs/PHASE3.md) · [Build and deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Interface, tuning and save contract](docs/PHASE5.md) · [Economy milestone](docs/PHASE4.md) · [Garage milestone](docs/PHASE3.md) · [Build and deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
-## What you can play now
+## Play now
 
-Start with **¥50,000**, inspect three inexpensive cars and confirm one starter purchase. The price is deducted and your own vehicle instance is created. Your garage includes searchable/sortable cards, a dossier, engine/body/transmission condition, originality, fitted parts and a saved **active vehicle**. Inspecting a different car does not activate it or cost money.
+Choose one of three inexpensive starters with **¥50,000**, earn money and reputation from jobs, and build your car with compatible performance parts. Purchases create an individual vehicle with mileage, engine/body/transmission condition, original factory data and its own tuning inventory.
 
-**Phase 4 adds a repeatable earning loop:** accept a job, wait for its short timer, claim yen and reputation, unlock better jobs, and save towards the upcoming tuning shop. The **Jobs** navigation link takes you to the job board. A single accepted contract is saved immediately, including its deadline and assigned car. Reloading never restarts the timer or duplicates the reward.
+### A proper game interface
+
+A compact **cash / level / reputation HUD stays at the top**, together with the navigation, while you scroll. Garage, Jobs, Workshop and Saves are separate in-game sections: clicking a tab changes the visible panel instead of scrolling through one long page. City and Races remain visibly unavailable.
+
+Jobs keep their original deadlines in every section. A **READY** badge on Jobs appears when a reward can be claimed; it does not claim automatically. Garage inspection, search and sorting survive tab switches. Arrow keys, Home and End operate the tab row. On narrow screens, the navigation row can scroll horizontally while the HUD stays visible. Save warnings are global and link to recovery tools. A reload starts in Garage; the selected UI tab is not part of your game save.
+
+### First tuning workshop
+
+**14 parts, 8 slots and 3 fictional brands:** Aoba Streetworks, Senka Dynamics and Kurogane Boost. Intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo upgrades offer different build choices.
+
+Select the **vehicle to tune**, filter the catalog and open a part's preview. Review current versus proposed power, weight, power-to-weight, grip, handling, braking, reliability and originality before confirming **BUY & INSTALL**.
+
+- Parts are purchased **for that individual car**, not globally unlocked. Identical cars have separate inventories.
+- Only one upgrade fits each slot. Replacing one retains the old part; refitting owned parts is free.
+- **RESTORE STOCK** removes an upgrade without a refund. Factory pieces are kept, so restoration is reversible.
+- Turbo upgrades currently fit the **Akari RZ-T only**. Level/compatibility/cash requirements are visible before purchase.
+- A car assigned to a delivery cannot be modified until that job is claimed or cancelled. Another parked car can still be tuned; an on-foot Garage Shift does not lock any car.
+
+Power and weight shown in Garage are derived build values; the saved factory baseline is never repeatedly overwritten by upgrades. Ratings are a first game-balance model, **not a physics simulation or race prediction**. Reliability is not current engine condition. Parts do not repair wear or increase job rewards. Final art, engine swaps, part selling/transfers, repair costs, damage and racing are not included yet. The [Phase 5 contract](docs/PHASE5.md) lists all prices and effects.
 
 ### First contacts
 
 | Job | Unlock | Duration | Payment | Reputation | Vehicle use |
 | --- | --- | ---: | ---: | ---: | --- |
-| Garage Shift | Starter chosen / Level 1 | 15 seconds | ¥1,500 | +4 REP | Workshop work on foot; no mileage |
-| Parts Run | Level 2 | 30 seconds | ¥3,000 | +8 REP | Active car; +6 km when claimed |
-| Dockside Delivery | Level 3 | 45 seconds | ¥5,500 | +14 REP | Active car; +12 km when claimed |
+| Garage Shift | Starter chosen / Level 1 | 15 seconds | ¥1,500 | +4 REP | On foot; no mileage |
+| Parts Run | Level 2 | 30 seconds | ¥3,000 | +8 REP | Assigned car; +6 km on claim |
+| Dockside Delivery | Level 3 | 45 seconds | ¥5,500 | +14 REP | Assigned car; +12 km on claim |
 
-Only **one job at a time**. Payment requires a manual claim after the deadline; there are no entry fees, auto-repeat chains, random failures, fuel bills, damage or Heat yet. All three stock starters can do delivery work. Workshop shifts remain available when a car cannot drive. Cancelling after confirmation pays nothing and adds no mileage.
-
-Reputation is cumulative. Level thresholds are **0 / 20 / 60 / 120 / 200 / ...**, using `10 × level × (level − 1)`, with a Phase 4 progression cap of **Level 20**. Reputation and money can continue increasing at the cap. Five Garage Shifts unlock Level 2. There is no extra level-up cash bonus. The initial balance is provisional, not a real-world wage simulation.
+One accepted job at a time. Claims are manual; no entry fees, auto-repeat, fuel charges, random failure, damage or Heat. Cancelling after confirmation pays nothing. Reputation thresholds are **0 / 20 / 60 / 120 / 200 / ...** (`10 × level × (level − 1)`), with a current progression cap of Level 20. Five Garage Shifts unlock Level 2. No extra level-up cash bonus. Starter prices and job balance are unchanged in Phase 5.
 
 ### Starter cars
 
-| Car | Layout | Power | Price | Cash remaining | Character |
+| Car | Layout | Base power | Price | Cash remaining | Character |
 | --- | --- | ---: | ---: | ---: | --- |
 | Hoshino Pico RS | FWD | 105 PS | ¥32,000 | ¥18,000 | Lightweight, reliable, inexpensive |
 | Hoshino Tora 85 | RWD | 118 PS | ¥42,000 | ¥8,000 | Old-school touge/drift potential |
 | Akari RZ-T | RWD Turbo | 155 PS | ¥48,000 | ¥2,000 | Highest starter power, worn condition |
 
-The initial game grants **one** starter, not three free cars. Additional-car acquisition arrives with the market in Phase 8. Vehicle profiles remain placeholder silhouettes. City, racing and workshop functionality are not implemented yet. Phase 5 introduces spending on performance parts; for now you can earn and save.
-
-## Next milestone — Interface & Tuning (planned)
-
-Phase 5 now includes the requested interface reorganisation alongside tuning:
-
-- **5A — Shared interface:** replace the bottom scroll-link bar with prominent top navigation and real in-game sections. Only the selected section is shown. A compact cash/level/reputation HUD and navigation stay visible while scrolling, in every section, on desktop and mobile.
-- **5B — Workshop:** add compatible performance parts, purchasing/installation, derived vehicle stats and clear trade-offs in a dedicated Workshop section.
-
-Changing sections must not pause or restart accepted jobs, change the active car, lose progress or reload the whole game. Job-ready indicators and save warnings remain accessible across sections. City and Races remain marked unavailable until implemented. This is a planned change, not functionality already released in Phase 4. The [roadmap](docs/ROADMAP.md) records acceptance tests and compatibility requirements.
-
-Later automation is planned primarily with **Phase 12 — Empire & Automation**: passive businesses and staff-managed routines, with explicitly capped offline production. Crew-dispatched repeated work is a candidate mechanic; exact unlocks/costs/limits are not fixed. Current jobs remain manual, and the Phase 5 interface change does not itself introduce automation.
+The game grants **one starter, not three free cars**. Additional acquisition is planned for Phase 8. Vehicle silhouettes remain placeholders, not final artwork. The initial meaningful loop is now starter → job → income → tuning. Racing is next.
 
 ## Saves, export/import and reset
 
-Progress is stored automatically in **this browser on this device** under `kagehama:save`. Purchases, car activation, job acceptance/claim/cancellation, confirmed imports and resets write immediately before the visible state changes. No account or cloud synchronisation is implemented.
+Progress autosaves in **this browser on this device**, under `kagehama:save`. Purchases, fitting/restoration, activation, job acceptance/claim/cancellation, import and reset write successfully **before** changing visible progress. Tab changes and countdown rendering do not write game data.
 
-- **Export:** generate a portable `KAGEHAMA1-...` code for backup or another device, including a pending job.
-- **Import:** review the confirmation summary before replacing the entire current save, including its job.
-- **Reset:** confirmation returns to ¥50,000, Level 1, zero reputation/jobs and the three starter choices. Export first to keep a way back.
+- **Export:** generate a `KAGEHAMA1-...` code in Saves, including tuning inventory and a pending job.
+- **Import:** inspect the confirmation summary before replacing the entire current save.
+- **Reset:** confirmation returns to ¥50,000, Level 1, no cars/parts/jobs and the starter selection. Export first to retain a backup.
 
-**Save v1 and v2 data migrate automatically to v3.** V1 gains its first car as the active vehicle; v2 keeps its existing active choice. Migration adds an empty job record without changing prior cash, reputation, level, cars or parts, and without inventing historical income. The code prefix stays `KAGEHAMA1-`: it versions the transport, not the internal save schema.
+**Valid Save v1, v2 and v3 data migrate automatically to v4. No reset is needed.** V1 gains its first car as active; v1/v2 gain the empty job record introduced in Phase 4. All old cars gain empty per-car tuning data. Existing factory strings/stats, money, levels, reputation, active car and v3 job records/deadlines/receipts are preserved. The transport prefix intentionally remains `KAGEHAMA1-`.
 
-Closing the page can make the **one accepted job** ready by the next visit. It still needs a manual claim. It does not generate repeated jobs or business/offline income. Previously exported codes are snapshots: deliberately importing an older code restores that older state, including any older unclaimed contract.
+Closing the page can ready the **one accepted job**, never an auto-repeat chain. Old export codes are snapshots: importing one restores that old state. No account, cloud synchronisation or server-authoritative anti-cheat exists.
 
-Malformed or newer unsupported saves are **not automatically deleted**. Recovery warnings block normal writes until resolved. Failed writes do not award money, consume pending rewards or silently apply imports/resets. A backwards device-clock jump blocks early claims and offers cancellation. Timing and save validation prevent ordinary invalid/repeated actions, **not deliberate cheating**: clocks and export codes are client-controlled. Use one tab at a time; detected external changes block stale writes, but this is not a distributed lock. Clearing site data or using private browsing can remove progress; keep exported backups.
+Unreadable/newer saves are not silently deleted. Warnings block normal writes until resolved. Failed writes do not consume money, parts or rewards. A backwards device-clock jump blocks premature job claims. Use one browser tab at a time; external changes block stale writes when detected, but this is not a distributed lock. Clearing site data or private browsing can remove progress; keep exported backups.
 
-## Development roadmap
+## Roadmap
 
-- [x] **Phase 0 — Foundation:** React/TypeScript/Vite, midnight-Japan design and starter catalog.
-- [x] **Phase 1 — Core Game:** player state, starter purchase and individual vehicle instances.
-- [x] **Phase 2 — Persistence:** autosave, portable codes, validation and confirmed reset.
-- [x] **Phase 3 — Garage:** vehicle cards/details, active-vehicle management and browser regression tests.
-- [x] **Phase 4 — Economy:** timed jobs, yen/rep rewards, level gates, receipts, mileage and v1/v2→v3 migration.
-- [ ] **Phase 5 — Interface & Tuning:** prominent top navigation, real section tabs, persistent cash/level/rep HUD, parts, installation, modifiers, trade-offs and tuning brands.
-- [ ] **Phase 6 — Racing:** Touge, Drag, Street Sprint and Expressway simulation.
-- [ ] **Graphics & Audio I:** targeted art/audio pass after a complete job→tuning→race loop; exact scheduling remains flexible.
-- [ ] **Phase 7 — Kagehama:** city map, districts and unlocks.
-- [ ] **Phase 8 — Car Market:** used cars, individual listings, buying/selling and dynamic values.
-- [ ] **Phase 9 — Heat:** police pressure and underground risk/reward.
-- [ ] **Phase 10 — Collection:** rarities, Collection Book, achievements and Icon cars.
-- [ ] **Phase 11 — Advanced Cars:** auctions, imports, barn finds and restoration.
-- [ ] **Phase 12 — Empire & Automation:** businesses, garage upgrades, staff/crew, delegated routines and capped offline production.
-- [ ] **Phase 13+ — Endgame:** Legacy/Prestige, rival crews, bosses, events and expanded catalog.
+- [x] **0 — Foundation:** React/TypeScript/Vite, midnight-Japan design and catalog.
+- [x] **1 — Core Game:** player state, starter purchase and vehicle instances.
+- [x] **2 — Persistence:** autosave, portable codes and confirmed reset.
+- [x] **3 — Garage:** cards, dossiers, active car and regression tests.
+- [x] **4 — Economy:** timed jobs, yen/rep, level gates and mileage.
+- [x] **5 — Interface & Tuning:** persistent top HUD, separate tabs, first parts workshop and Save v4 migration.
+- [ ] **6 — Racing:** Touge, Drag, Street Sprint and Expressway simulation.
+- [ ] **Graphics & Audio I:** targeted pass after the first complete job→tuning→race loop.
+- [ ] **7 — Kagehama:** city map, districts and unlocks.
+- [ ] **8 — Car Market:** used listings, buy/sell and value model.
+- [ ] **9 — Heat:** police pressure and underground risk/reward.
+- [ ] **10 — Collection:** rarities, Collection Book, achievements and Icon cars.
+- [ ] **11 — Advanced Cars:** auctions, imports, barn finds and restoration.
+- [ ] **12 — Empire & Automation:** businesses, staff/crew, delegated routines and capped offline production.
+- [ ] **13+ — Endgame:** Legacy/Prestige, rivals, bosses, events and catalog expansion.
 
-The [detailed roadmap](docs/ROADMAP.md) separates working features from future plans. README, roadmap, changelog and save-compatibility notes are reviewed with every feature change. Graphics will expand alongside later content after the initial art pass.
+Automation is later progression, not part of this workshop: businesses and staff will handle repetitive operations. Exact crew routines, unlocks, costs and offline limits still need design. Graphics expand alongside content after the first art pass. See the [detailed roadmap](docs/ROADMAP.md). README, roadmap, changelog and compatibility notes are reviewed with every feature change.
 
 ## Development and verification
 
-**Playing requires no installation. Use the live link above.** Local development is optional; the workflow runs tests/builds and publishes `main` only after successful checks.
+**Playing requires no installation.** The workflow checks feature branches and only publishes `main` after successful tests/build/browser checks.
 
 Use Node.js 24, matching CI:
 
@@ -98,19 +103,12 @@ npm run test:e2e
 npm run dev
 ```
 
-On Windows PowerShell, use `npm.cmd` / `npx.cmd` when script policy blocks `npm.ps1`. No policy change is required just to use those command shims.
-
-`npm test` runs domain tests. `npm run test:e2e` exercises the built site at `/Racing-Game/`, including timed jobs via Playwright's controlled clock; build first. CI installs browser dependencies and attaches reports/screenshots. `phase/**` branches run checks without publishing; only `main` deploys. A local `git pull` updates local files only and is not required to publish changes already committed on GitHub.
+On PowerShell use `npm.cmd` / `npx.cmd` when script policy blocks `.ps1` shims; no policy change is needed. `npm test` runs domain tests. Browser tests run the built site at `/Racing-Game/`; build first. CI attaches Chromium reports and screenshots. `phase/**` branches do not deploy. A local `git pull` only synchronises your own copy.
 
 ## Architecture
 
-- `src/data/` — vehicle and job catalogs.
-- `src/domain/` — pure game/garage/economy commands, progression, validation, save codec and migrations.
-- `src/hooks/` — browser storage/session boundary; durable writes before publishing state.
-- `src/components/` — garage, job board, placeholder profiles and save tools; timers only update presentation.
-- `tests/fixtures/` — fixed v1/v2 save data for compatibility checks.
-- `tests/e2e/` — production-build browser regression tests.
+`src/data/` holds vehicle/job/part catalogs. `src/domain/` holds pure commands, derived build stats, validation, codec and migrations. `src/hooks/` owns the durable session boundary and presentation clock. `src/components/` contains the sticky shell and section views. Historical fixtures live in `tests/fixtures/`; browser regressions in `tests/e2e/`.
 
 ## Project principles
 
-JDM and Japanese underground-car culture are the heart of the setting. Fictional manufacturers create an original universe, not real brands with swapped logos. Rarity/collector value should stay separate from raw performance; different builds should excel at different disciplines. Content should be data-driven, and save compatibility and tests are core infrastructure rather than end-of-project cleanup.
+JDM and Japanese underground-car culture are the heart of the setting. Fictional manufacturers create an original universe. Rarity/collector value should stay distinct from raw performance. Content should be data-driven, different builds should suit different disciplines, and compatibility/tests are core infrastructure.

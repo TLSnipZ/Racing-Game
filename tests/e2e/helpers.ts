@@ -15,5 +15,6 @@ export async function seedRaw(page: Page, raw: string) {
 export async function seed(page: Page, state: GameState) {
   await seedRaw(page, serializeSave(state, T));
   await expect(page.getByTestId('cash')).toBeVisible();
+  await expect(page.locator('.saveIndicator')).toContainText('AUTOSAVED');
 }
 export async function clock(page: Page) { await page.clock.install({ time: new Date(T) }); await page.clock.pauseAt(new Date(T + 1000)); }

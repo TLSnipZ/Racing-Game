@@ -26,3 +26,4 @@ export function purchaseStarter(state: GameState, starterId: string, instanceId:
   const vehicle = createPlayerVehicle(starter.id, instanceId);
   return { ...state, cashYen: state.cashYen - starter.priceYen, selectedStarterId: starter.id,
     ownedVehicles: [vehicle], activeVehicleId: vehicle.instanceId };
+}
