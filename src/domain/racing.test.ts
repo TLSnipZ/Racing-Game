@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { findRaceEvent, RACE_EVENTS } from '../data/races';
 import { PARTS } from '../data/parts';
+import { JOBS } from '../data/jobs';
 import { createNewGameState, createPlayerVehicle, purchaseStarter } from './game';
 import { cancelJob, startJob } from './economy';
 import { selectActiveVehicle } from './garage';
 import { installPart, removePart } from './tuning';
-import { cancelRace, createRacingState, getRaceBuildKey, getRaceRequirement, getVehicleRaceBuild, settleRace, startRace } from './racing';
+import { cancelRace, getRaceBuildKey, getRaceRequirement, getVehicleRaceBuild, settleRace, startRace } from './racing';
 import { getPlayerPosition, getRaceProgress, getRaceStandings, isRaceReady, simulateSectors } from './raceModel';
 import { isRacingState, isRaceSnapshot } from './racingValidation';
 import { deserializeSave, exportSaveCode, importSaveCode, isGameState, serializeSave } from './persistence';
@@ -126,7 +127,7 @@ describe('Entry, settlement, cancellation and shared activity safety', () => {
     expect(cancelled.ownedVehicles).toEqual(state.ownedVehicles); expect(cancelled.racing.cancelledRaces).toBe(1);
     expect(cancelled.racing.records).toEqual([]); expect(isGameState(enter(cancelled))).toBe(true);
   });
-  it.each(['garage-shift', 'parts-run', 'dockside-delivery'])('rejects race entry while %s is pending and vice versa', (jobId) => {
+  it.each(JOBS.map((job) => job.id))('rejects race entry while %s is pending and vice versa', (jobId) => {
     const state = startJob(rich(), jobId, 0); expect(() => enter(state)).toThrow('job before entering');
     expect(() => startJob(enter(), jobId, 0)).toThrow('race before accepting');
     expect(isGameState(enter(cancelJob(state, 1)))).toBe(true);
@@ -179,8 +180,7 @@ describe('Replay and save safety', () => {
   });
   it('round-trips unclaimed and settled races without rerolling or paying again', () => {
     const state = enter(); const again = importSaveCode(exportSaveCode(state)).state; expect(again).toEqual(state);
-    expect(finish(again)).toEqual(finish(state)); const paid = finish(state);
-    expect(deserializeSave(serializeSave(paid)).state).toEqual(paid);
+    expect(finish(again)).toEqual(finish(state)); const paid = finish(state); expect(deserializeSave(serializeSave(paid)).state).toEqual(paid);
   });
   it('all completed/cancelled states keep their accounting invariant over repeated play', () => {
     let state = rich();
