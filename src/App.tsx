@@ -1,14 +1,17 @@
 import { useState } from 'react';
-import { ChevronRight, Database, Gauge, Map, Warehouse, Wrench } from 'lucide-react';
+import { BriefcaseBusiness, ChevronRight, Database, Gauge, Map, Warehouse, Wrench } from 'lucide-react';
 import { STARTER_CARS } from './data/starters';
 import { purchaseStarter } from './domain/game';
+import { cancelJob, claimJob, startJob } from './domain/economy';
 import { selectActiveVehicle } from './domain/garage';
 import { SAVE_VERSION } from './domain/persistence';
 import { useGameSession } from './hooks/useGameSession';
 import { Garage } from './components/Garage';
+import { Jobs } from './components/Jobs';
 import { SaveManagement } from './components/SaveManagement';
 import { VehicleSilhouette } from './components/VehicleSilhouette';
 import './styles/phase3.css';
+import './styles/phase4.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 
@@ -26,10 +29,10 @@ export function App() {
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
 
-  return <main className="shell phase3">
+  return <main className="shell phase3 phase4">
     <header><div><div className="eyebrow">KAGEHAMA / EAST WARD</div><h1>KAGEHAMA</h1><p className="subtitle">UNDERGROUND CAR EMPIRE</p></div>
       <div className="playerMeta"><div><span>CASH</span><strong data-testid="cash">{yen(game.cashYen)}</strong></div>
-        <div><span>LEVEL</span><strong>{game.playerLevel}</strong></div><div><span>REP</span><strong>{game.reputation}</strong></div></div>
+        <div><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel}</strong></div><div><span>REP</span><strong data-testid="reputation">{game.reputation}</strong></div></div>
     </header>
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
       <Database size={13} />{blocked ? 'SAVE PROTECTED · ACTION REQUIRED' : session.error ? 'SAVE FAILED · PLEASE CHECK BELOW'
@@ -40,6 +43,10 @@ export function App() {
       {blocked && session.raw !== null && <details><summary>Show stored data for recovery</summary><textarea aria-label="Stored recovery data" readOnly value={session.raw} /></details>}
     </section>}
 
+    {hasStarted && <Jobs game={game} blocked={blocked}
+      onStart={(id) => session.command((current) => startJob(current, id, Date.now()))}
+      onClaim={(id) => session.command((current) => claimJob(current, id, Date.now()))}
+      onCancel={(id) => session.command((current) => cancelJob(current, id))} />}
     {hasStarted ? <Garage game={game} blocked={blocked} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
       : !blocked && <>
         <section className="hero"><div className="heroCopy"><span className="tag">MERCER GARAGE // EAST WARD</span>
@@ -63,9 +70,11 @@ export function App() {
       </>}
     <SaveManagement game={game} blocked={blocked} onImport={(state) => { const ok = session.replaceGame(state); if (ok) setSelectedId(null); return ok; }}
       onReset={() => { const ok = session.resetGame(); if (ok) setSelectedId(null); return ok; }} />
-    <nav aria-label="Game navigation"><a href="#garage"><Warehouse />Garage</a><span aria-disabled="true" title="City: planned for Phase 7"><Map />City</span>
+    <nav aria-label="Game navigation"><a href="#garage"><Warehouse />Garage</a>
+      {hasStarted ? <a href="#jobs"><BriefcaseBusiness />Jobs</a> : <span aria-disabled="true" title="Choose a starter first"><BriefcaseBusiness />Jobs</span>}
+      <span aria-disabled="true" title="City: planned for Phase 7"><Map />City</span>
       <span aria-disabled="true" title="Racing: planned for Phase 6"><Gauge />Races</span><span aria-disabled="true" title="Tuning: planned for Phase 5"><Wrench />Workshop</span>
       <a href="#save-data"><Database />Saves</a></nav>
-    <footer>PHASE 3 // GARAGE · PRE-ALPHA · NEXT: JOBS & EARLY ECONOMY</footer>
+    <footer>PHASE 4 // ECONOMY · PRE-ALPHA · NEXT: TUNING & PERFORMANCE PARTS</footer>
   </main>;
 }

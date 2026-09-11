@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Copy, Download, RotateCcw, Upload } from 'lucide-react';
-import { exportSaveCode, importSaveCode, MAX_SAVE_LENGTH } from '../domain/persistence';
+import { exportSaveCode, importSaveCode, MAX_SAVE_LENGTH, SAVE_VERSION } from '../domain/persistence';
 import { getActiveVehicle } from '../domain/garage';
+import { findJob } from '../data/jobs';
 import type { GameState } from '../domain/types';
 
 export function SaveManagement({ game, blocked, onImport, onReset }: {
@@ -25,20 +26,21 @@ export function SaveManagement({ game, blocked, onImport, onReset }: {
   function importCodeNow() {
     try {
       const { state } = importSaveCode(importCode);
-      if (!window.confirm(`Import this save?\n\nCash: ¥${state.cashYen.toLocaleString('en-US')}\nLevel: ${state.playerLevel}\nVehicles: ${state.ownedVehicles.length}\nActive: ${getActiveVehicle(state)?.name ?? 'None'}\n\nYour current save will be replaced.`)) return;
+      const activeJob = state.economy.activeJob;
+      if (!window.confirm(`Import this save?\n\nCash: ¥${state.cashYen.toLocaleString('en-US')}\nLevel: ${state.playerLevel}\nReputation: ${state.reputation}\nVehicles: ${state.ownedVehicles.length}\nActive: ${getActiveVehicle(state)?.name ?? 'None'}\nCompleted jobs: ${state.economy.completedJobs}\nPending job: ${activeJob ? findJob(activeJob.jobId)?.name : 'None'}\n\nYour current save will be replaced, including any current job.`)) return;
       if (onImport(state)) { setImportCode(''); setSaveCode(''); setError(''); setMessage('Save imported and saved in this browser.'); }
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Import failed.'); }
   }
   function reset() {
-    if (!window.confirm('Reset your entire KAGEHAMA save?\n\nThis cannot be undone unless you exported a save code first.')) return;
+    if (!window.confirm('Reset your entire KAGEHAMA save, including jobs and reputation?\n\nThis cannot be undone unless you exported a save code first.')) return;
     if (onReset()) { setImportCode(''); setSaveCode(''); setError(''); setMessage('Save reset. Choose your new starter.'); }
   }
   return <section id="save-data" className="savePanel phase3SavePanel" aria-label="Save management">
-    <div className="sectionTitle"><div><span>02 / SAVE DATA · SCHEMA V2</span><h3>Save management</h3></div>
+    <div className="sectionTitle"><div><span>03 / SAVE DATA · SCHEMA V{SAVE_VERSION}</span><h3>Save management</h3></div>
       <p>Previous KAGEHAMA1 codes are still supported.</p></div>
     <div className="saveGrid">
       <article><div className="saveIcon"><Download /></div><h4>Export save</h4>
-        <p>Back up your cars and active-vehicle selection, or move your progress to another device.</p>
+        <p>Back up your cars, progress and pending job, or move to another device.</p>
         <button type="button" className="secondaryButton" disabled={blocked} onClick={generate}>GENERATE SAVE CODE</button>
         {saveCode && <div className="codeBox"><textarea readOnly value={saveCode} aria-label="Exported save code" onFocus={(e) => e.target.select()} />
           <button type="button" onClick={copy}><Copy size={15} /> COPY</button></div>}
