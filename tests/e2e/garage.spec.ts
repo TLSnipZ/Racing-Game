@@ -1,5 +1,6 @@
+import { Buffer } from 'node:buffer';
 import { test, expect, type Page } from '@playwright/test';
-import legacy from '../fixtures/save-v1.json';
+import legacy from '../fixtures/save-v1.json' with { type: 'json' };
 import { createNewGameState, createPlayerVehicle, purchaseStarter } from '../../src/domain/game';
 import { SAVE_STORAGE_KEY, serializeSave } from '../../src/domain/persistence';
 
