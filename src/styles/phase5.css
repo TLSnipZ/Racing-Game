@@ -1,0 +1,116 @@
+/* Phase 5: shared sticky shell, isolated panels and first functional workshop. */
+:root { scroll-behavior: auto; scroll-padding-top: calc(var(--game-header-height, 150px) + 18px); }
+.phase5 { padding-top: 0; padding-bottom: 24px; }
+.phase5 .gameTopbar { position: sticky; top: 0; z-index: 40; display: block; padding: 0; background: #0b0f12; border-bottom: 1px solid #4a4035; box-shadow: 0 9px 24px #0008; }
+.phase5 .gameHud { display: flex; justify-content: space-between; align-items: center; gap: 24px; padding: 19px 12px 16px; }
+.compactBrand { min-width: 0; }
+.compactBrand .eyebrow { font-size: 8px; letter-spacing: .19em; color: #aeb4b7; }
+.phase5 .compactBrand h1 { font: italic 800 34px/1 'Barlow Condensed', Impact, sans-serif; letter-spacing: .045em; margin: 4px 0; }
+.brandDot { color: #ee815a; }
+.buildLabel { font-size: 8px; letter-spacing: .18em; color: #bfaa85; }
+.phase5 .playerMeta { display: grid; grid-template-columns: minmax(110px, 1.6fr) minmax(60px, .7fr) minmax(85px, 1fr); max-width: 62%; gap: 22px; align-items: start; }
+.phase5 .playerMeta > div { min-width: 0; }
+.phase5 .playerMeta strong { font-size: clamp(22px, 2.3vw, 32px); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.phase5 .playerMeta span { color: #b3b8bb; font-size: 10px; }
+.phase5 .topNav { position: static; transform: none; display: block; width: 100%; max-width: none; margin: 0; border: 1px solid #354047; border-bottom: 0; background: #11181d; backdrop-filter: none; }
+.phase5 .sectionTabs { display: flex; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: #806a52 #11181d; }
+.phase5 .sectionTabs > button { position: relative; flex: 1 0 auto; min-width: 120px; display: flex; align-items: center; justify-content: center; gap: 9px; padding: 16px 18px; color: #c6cdd0; background: transparent; border: 0; border-right: 1px solid #28333a; border-bottom: 3px solid transparent; font-size: 13px; font-weight: 600; cursor: pointer; }
+.phase5 .sectionTabs > button:last-child { border-right: 0; }
+.phase5 .sectionTabs > button:hover:not(:disabled) { color: #fff1dc; background: #242622; }
+.phase5 .sectionTabs > button[aria-selected="true"] { color: #fff1df; border-bottom-color: #ec9564; background: #563327; }
+.phase5 .sectionTabs > button:disabled { opacity: 1; color: #899398; cursor: not-allowed; }
+.phase5 .sectionTabs button span { display: inline; padding: 0; border: 0; color: inherit; font: inherit; cursor: inherit; }
+.phase5 .topNav svg { width: 18px; height: 18px; flex-shrink: 0; }
+.phase5 .sectionTabs small { font-size: 7px; color: #a7a197; letter-spacing: .07em; }
+.phase5 .sectionTabs button:focus-visible { outline: 2px solid #ffd3a5; outline-offset: -5px; }
+.readyBadge { font: 700 8px/1 Arial, sans-serif; padding: 4px; border-radius: 3px; color: #d6f1bd; background: #284730; }
+.sectionPanel { min-width: 0; scroll-margin-top: calc(var(--game-header-height, 150px) + 16px); }
+.phase5 .sectionPanel[hidden] { display: none !important; }
+.phase5 .sectionPanel:focus { outline: none; }
+.phase5 .sectionPanel:focus-visible { outline: 2px solid #e6ba84; outline-offset: 4px; }
+.phase5 .saveIndicator { padding: 16px 3px; font-size: 9px; }
+.phase5 .phase3SavePanel { margin-top: 0; border-top: 0; padding-top: 10px; }
+.phase5 .jobsPanel { margin-top: 0; }
+.phase5 .garageHeading { margin-top: 7px; }
+.phase5 footer { margin-top: 36px; }
+.skipContent { position: fixed; left: 15px; top: -100px; z-index: 100; background: #f5ddba; color: #17120f; padding: 12px; }
+.skipContent:focus { top: 8px; }
+.workshopHeading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin: 8px 0 24px; }
+.workshopHeading h2 { font: italic 800 clamp(40px, 5vw, 66px)/1 'Barlow Condensed', Impact, sans-serif; margin: 9px 0; }
+.workshopHeading p { font-size: 12px; color: #b4baba; margin: 10px 0 0; }
+.workshopVehicle { display: grid; gap: 8px; max-width: 390px; min-width: 0; }
+.workshopVehicle > span { font-size: 9px; letter-spacing: .12em; color: #cfb48f; }
+.workshopVehicle small { font-size: 10px; line-height: 1.6; color: #aeb8b9; }
+.workshopVehicle select, .partsFilter select { max-width: 100%; min-width: 0; background: #172128; color: #e1e7e4; border: 1px solid #4a575e; padding: 12px; font-size: 12px; }
+.workshopSummary { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; border: 1px solid #5a4839; padding: 15px 18px; background: #241c17; color: #f0d7b2; font-size: 14px; }
+.workshopSummary > span { margin-left: auto; color: #beb3a4; font-size: 11px; }
+.buildStats { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); border: 1px solid #344047; border-top: 0; background: #10191e; }
+.buildStats > div { min-width: 0; padding: 18px; border-bottom: 1px solid #2b363b; border-right: 1px solid #2b363b; }
+.buildStats span { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: .12em; color: #aab6ba; margin-bottom: 7px; }
+.buildStats strong { font: 800 28px/1.1 'Barlow Condensed', Impact, sans-serif; color: #ede5d8; overflow-wrap: anywhere; }
+.buildStats small { font: 11px/1 Arial, sans-serif; color: #aeb9bc; margin-left: 6px; }
+.tuningNote { font-size: 11px; line-height: 1.8; color: #a7b0b4; margin: 15px 0 24px; }
+.workshopWarning { border-left: 3px solid #d09a60; padding: 12px 16px; background: #2a2118; color: #efcca0; font-size: 12px; line-height: 1.7; }
+.workshopFeedback { border: 1px solid #435741; padding: 14px; color: #c7dfb7; background: #19231a; font-size: 12px; line-height: 1.7; }
+.workshopSubheading { display: flex; align-items: end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin: 32px 0 16px; }
+.workshopSubheading h3 { font: 800 30px/1.2 'Barlow Condensed', Impact, sans-serif; text-transform: uppercase; margin: 4px 0 0; }
+.workshopSubheading > span { font-size: 11px; color: #a8b2b6; }
+.slotGrid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+.slotCard { min-width: 0; display: flex; align-items: start; flex-direction: column; gap: 9px; padding: 17px; background: #10171b; border: 1px dashed #35424a; }
+.slotModified { border: 1px solid #786246; background: #201c17; }
+.slotCard > span { font-size: 9px; text-transform: uppercase; color: #bdab90; letter-spacing: .1em; }
+.slotCard > strong { font: 600 17px/1.4 'Barlow Condensed', Arial, sans-serif; color: #d4ddde; }
+.slotCard > small { font-size: 8px; line-height: 1.7; color: #a3afb3; }
+.slotCard button { margin-top: auto; font-size: 8px; padding: 8px; }
+.partsFilter { display: flex; align-items: center; gap: 8px; color: #c5b08d; }
+.partsGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.partCard { min-width: 0; padding: 22px; border: 1px solid #36434a; background: #111b21; display: flex; flex-direction: column; }
+.partCardTop { display: flex; justify-content: space-between; align-items: center; gap: 9px; color: #ccb28f; font-size: 10px; }
+.partCategory { font-size: 8px; color: #acb6bb; text-transform: uppercase; letter-spacing: .1em; margin-top: 24px; }
+.partCard h4 { font: 800 26px/1.15 'Barlow Condensed', Impact, sans-serif; margin: 8px 0; text-transform: uppercase; color: #eee8dc; }
+.partCard p { font-size: 12px; line-height: 1.75; color: #b4bfc4; }
+.partPrice { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 14px; }
+.partPrice strong { font: 800 27px/1 'Barlow Condensed', Impact, sans-serif; color: #ecd5b1; }
+.partPrice > span { font-size: 8px; color: #b4c4b0; }
+.partCard .partRequirement { min-height: 36px; font-size: 10px; color: #cab99f; }
+.partCard button { padding: 13px; border-color: #7c644b; background: #32291f; color: #f0d9b8; }
+.partIncompatible { background: #111619; }
+.partDialog { width: min(620px, calc(100vw - 24px)); max-height: calc(100dvh - 40px); padding: 24px; border: 1px solid #917050; color: #e7e6dc; background: #111a20; box-shadow: 0 24px 100px #000a; overflow-y: auto; }
+.partDialog::backdrop { background: #05090de0; }
+.dialogHeading { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.partDialog h3 { font: 800 36px/1 'Barlow Condensed', Impact, sans-serif; text-transform: uppercase; margin: 12px 0; }
+.partDialog p { font-size: 12px; line-height: 1.75; color: #bdc6ca; }
+.iconButton { border: 1px solid #50606a; background: #1b2830; color: #e2d1b9; padding: 7px; cursor: pointer; }
+.comparisonTable { width: 100%; border-collapse: collapse; font-size: 12px; margin: 18px 0; }
+.comparisonTable caption { text-align: left; font-size: 10px; color: #b6c0c5; padding-bottom: 12px; }
+.comparisonTable th, .comparisonTable td { text-align: right; padding: 9px 6px; border-bottom: 1px solid #314149; font-variant-numeric: tabular-nums; }
+.comparisonTable th:first-child { text-align: left; font-weight: 600; }
+.comparisonTable small { font-size: 9px; color: #a6b4ba; }
+.positiveChange { color: #b1d59e; }
+.negativeChange { color: #ffb3a0; }
+.dialogActions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.installButton { border: 1px solid #ee9164; background: #a5452b; color: #fff2dd; font-size: 12px; font-weight: 700; padding: 13px 18px; cursor: pointer; }
+@media (max-width: 1050px) { .partsGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } .slotGrid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (max-width: 700px) {
+  .phase5 .gameHud { display: grid; grid-template-columns: 1fr; gap: 10px; padding: 10px 7px; }
+  .compactBrand { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .compactBrand .eyebrow { display: none; }
+  .phase5 .compactBrand h1 { font-size: 25px; margin: 0; }
+  .phase5 .playerMeta { max-width: none; grid-template-columns: minmax(0,1.4fr) minmax(0,.7fr) minmax(0,1fr); gap: 12px; text-align: left; }
+  .phase5 .playerMeta span { font-size: 8px; }
+  .phase5 .playerMeta strong { font-size: clamp(17px, 5.8vw, 24px); }
+  .phase5 .sectionTabs > button { min-width: 106px; gap: 6px; padding: 13px 12px; font-size: 12px; }
+  .phase5 .sectionTabs small { font-size: 6px; }
+  .phase5 .topNav svg { width: 16px; height: 16px; }
+  .workshopHeading { flex-direction: column; align-items: stretch; gap: 18px; }
+  .workshopVehicle { max-width: none; }
+  .workshopSummary > span { margin-left: 0; width: 100%; line-height: 1.6; }
+  .buildStats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .buildStats > div { padding: 15px; }
+  .partsGrid { grid-template-columns: 1fr; }
+  .partDialog { padding: 18px; }
+  .comparisonTable { font-size: 11px; }
+  .comparisonTable th, .comparisonTable td { padding: 9px 3px; }
+  .phase5 .saveIndicator { font-size: 8px; justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { .phase5 *, .phase5 *::before, .phase5 *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

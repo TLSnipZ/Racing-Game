@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "savedAt": 1789128002000,
+  "state": {
+    "cashYen": 15500, "playerLevel": 2, "reputation": 20, "selectedStarterId": "tora-85",
+    "ownedVehicles": [{
+      "instanceId": "legacy-tora-v3", "catalogId": "tora-85", "name": "Hoshino Tora 85", "year": 1986,
+      "engine": "1.6L NA I4", "drive": "RWD", "hp": 118, "weightKg": 970, "odometerKm": 213760,
+      "engineCondition": 74, "bodyCondition": 68, "transmissionCondition": 72, "originality": 91,
+      "installedParts": ["Factory intake", "Factory exhaust", "Factory ECU", "Factory suspension", "Aged road tires"]
+    }],
+    "activeVehicleId": "legacy-tora-v3",
+    "economy": {
+      "nextRunId": 7, "completedJobs": 5, "totalEarnedYen": 7500,
+      "activeJob": { "runId": 6, "jobId": "parts-run", "vehicleId": "legacy-tora-v3", "startedAtMs": 1789128001000, "finishesAtMs": 1789128031000, "rewardYen": 3000, "reputationReward": 8, "distanceKm": 6 },
+      "lastReceipt": { "runId": 5, "jobId": "garage-shift", "rewardYen": 1500, "reputationReward": 4, "levelBefore": 1, "levelAfter": 2 }
+    }
+  }
+}
