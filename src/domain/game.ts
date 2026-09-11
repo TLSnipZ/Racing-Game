@@ -1,12 +1,13 @@
 import { STARTER_CARS } from '../data/starters';
 import { createEconomyState } from './economy';
 import { createVehicleTuning } from './tuning';
+import { createRacingState } from './racing';
 import type { GameState, PlayerVehicle } from './types';
 
 export const STARTING_CASH_YEN = 50000;
 export function createNewGameState(): GameState {
   return { cashYen: STARTING_CASH_YEN, playerLevel: 1, reputation: 0, selectedStarterId: null,
-    ownedVehicles: [], activeVehicleId: null, economy: createEconomyState() };
+    ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState() };
 }
 export function createPlayerVehicle(starterId: string, instanceId: string): PlayerVehicle {
   const starter = STARTER_CARS.find((car) => car.id === starterId);

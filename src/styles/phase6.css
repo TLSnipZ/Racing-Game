@@ -1,0 +1,98 @@
+/* Phase 6: the race board and a readable simulation presentation; final art remains separate. */
+.raceHeading, .raceBoardHeading, .activeRaceTitle { display:flex; align-items:center; justify-content:space-between; gap:20px; }
+.raceHeading { padding:18px 0 24px; }
+.raceHeading h2 { font:italic 800 clamp(40px,5vw,68px)/1 'Barlow Condensed',Impact,sans-serif; margin:12px 0; }
+.raceHeading p, .raceBoardHeading p, .activeRaceTitle p { font-size:12px; line-height:1.65; color:#aab4b9; }
+.raceHeading > svg, .activeRaceTitle > svg { color:#e7b676; flex-shrink:0; }
+.raceCareer { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid #354047; background:#11191d; margin-bottom:24px; }
+.raceCareer > div { padding:20px; border-right:1px solid #354047; min-width:0; }
+.raceCareer > div:last-child { border:0; }
+.raceCareer span { display:block; font-size:9px; letter-spacing:.1em; color:#b1bac0; margin-bottom:9px; }
+.raceCareer strong { font:800 clamp(22px,2.6vw,34px)/1 'Barlow Condensed',Impact,sans-serif; color:#f2e6d1; overflow-wrap:anywhere; }
+.activeRace, .raceReceipt { border:1px solid #586269; background:#10191e; padding:26px; margin:24px 0; }
+.raceReady, .raceReceipt { border-color:#708d69; }
+.activeRaceTitle h3 { font:800 32px/1.15 'Barlow Condensed',Impact,sans-serif; margin:9px 0; }
+.racePlayback { padding:22px 0 5px; }
+.racePlaybackHeading { display:flex; gap:12px; align-items:center; justify-content:space-between; }
+.racePlaybackHeading > span { font-size:10px; color:#adb8c0; letter-spacing:.12em; }
+.racePlaybackHeading > strong { font:italic 800 35px/1 'Barlow Condensed',Impact,sans-serif; color:#f1c38b; }
+.raceSimLabel { font-size:11px; color:#aeb8ba; line-height:1.65; }
+.raceSectors { display:flex; flex-wrap:wrap; gap:6px; margin:18px 0; }
+.raceSectors span { padding:7px 9px; font-size:10px; border:1px solid #3c4950; color:#acb6ba; }
+.raceSectors .currentSector { color:#ffe5c3; border-color:#b77751; background:#3b271f; }
+.raceLanes { padding:0 14px; background:repeating-linear-gradient(90deg,#26313722 0 1px,transparent 1px 25%); }
+.raceLane { padding:15px 0 19px; border-bottom:1px solid #303e44; }
+.raceLaneLabel { display:flex; align-items:center; flex-wrap:wrap; gap:8px; font-size:11px; margin-bottom:14px; }
+.raceLaneLabel strong { color:#e0e5e5; }
+.raceLaneLabel span { color:#9eafb7; }
+.raceLaneLabel small { margin-left:auto; color:#c5cece; }
+.raceLaneTrack { position:relative; height:12px; }
+.raceLaneTrack progress { display:block; width:100%; height:8px; appearance:none; border:0; background:#27323a; color:#9dabab; }
+.raceLaneTrack progress::-webkit-progress-bar { background:#27323a; }
+.raceLaneTrack progress::-webkit-progress-value { background:#839599; }
+.raceLaneTrack progress::-moz-progress-bar { background:#839599; }
+.raceLaneTrack svg { position:absolute; top:-6px; transform:translateX(-50%); color:#d7e0dd; background:#182229; }
+.playerLane .raceLaneLabel strong, .playerLane svg { color:#ffd296; }
+.playerLane progress::-webkit-progress-value { background:#de9561; }
+.playerLane progress::-moz-progress-bar { background:#de9561; }
+.raceActions { display:flex; gap:12px; justify-content:flex-end; padding-top:18px; }
+.racePayout { font:800 25px/1.35 'Barlow Condensed',Impact,sans-serif; color:#e7edc6; }
+.racePayout small { display:block; color:#b5c4bc; font:12px/1.7 Inter,Arial,sans-serif; margin-top:8px; }
+.racePayout > strong { display:block; color:#edbf82; margin-top:10px; }
+.raceTableScroll { max-width:100%; overflow-x:auto; }
+.raceResultsTable { width:100%; border-collapse:collapse; font-size:12px; margin:16px 0; }
+.raceResultsTable caption { text-align:left; color:#b0bdc0; padding:10px 0; font-size:11px; }
+.raceResultsTable th, .raceResultsTable td { padding:12px 10px; border-bottom:1px solid #334147; text-align:left; }
+.raceResultsTable thead th { color:#b5c5c8; font-size:10px; text-transform:uppercase; }
+.raceResultsTable td small { display:block; font-size:10px; color:#a8b7bd; margin-top:5px; }
+.raceResultsTable td:nth-child(n+3) { white-space:nowrap; font-variant-numeric:tabular-nums; }
+.playerResult { background:#35271c; color:#ffe2b4; }
+.raceSectorDetails summary { cursor:pointer; font-size:12px; color:#d4c29f; padding:10px 0; }
+.raceSectorDetails dl div { display:flex; justify-content:space-between; gap:15px; font-size:12px; padding:10px; border-bottom:1px solid #334047; }
+.raceSectorDetails dt small { display:block; color:#91a5ab; margin-top:5px; }
+.raceSectorDetails dd { white-space:nowrap; margin:0; }
+.raceBoardHeading { margin:32px 0 18px; }
+.raceBoardHeading h3 { font:800 32px/1 'Barlow Condensed',Impact,sans-serif; margin:10px 0; }
+.categoryChips { display:flex; gap:8px; max-width:100%; overflow-x:auto; padding:6px 2px 14px; margin:0 0 8px; }
+.categoryChips button { flex:0 0 auto; border:1px solid #495960; background:#142027; color:#c6d1d4; padding:12px 15px; font-size:12px; cursor:pointer; min-height:44px; }
+.categoryChips button[aria-pressed="true"] { border-color:#da9b6b; color:#ffdfb4; background:#392920; }
+.categoryChips b { font-size:10px; color:#b4aaa0; padding-left:6px; }
+.racePolicy { font-size:12px; line-height:1.8; color:#bdb2a5; padding:14px 18px; border-left:2px solid #af7e53; background:#201b16; margin:6px 0 22px; }
+.raceEventGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.raceEventCard { padding:24px; border:1px solid #3b474e; background:linear-gradient(145deg,#162127,#10171b); min-width:0; display:flex; flex-direction:column; }
+.raceEventTop { display:flex; justify-content:space-between; gap:12px; color:#dec499; font-size:10px; text-transform:uppercase; letter-spacing:.08em; }
+.raceEventTop b { font-weight:600; color:#a8b6bd; }
+.raceEventCard h4 { font:800 31px/1.1 'Barlow Condensed',Impact,sans-serif; margin:21px 0 10px; text-transform:uppercase; }
+.raceEventCard > p { color:#b1bec3; font-size:12px; line-height:1.75; }
+.raceEventCard .raceFocus { color:#decaaa; }
+.raceOfferStats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; padding:15px 0; border-block:1px solid #36454b; margin:auto 0 0; }
+.raceOfferStats dt { color:#a8b6bd; font-size:9px; margin-bottom:8px; }
+.raceOfferStats dd { font:800 24px/1 'Barlow Condensed',Impact,sans-serif; margin:0; }
+.raceEventCard .raceRecord { font-size:11px; color:#91b3a4; }
+.raceEventCard .secondaryButton { width:100%; min-height:44px; margin-top:8px; }
+.raceLocked { border-style:dashed; }
+.raceDialog h4 { margin-bottom:9px; color:#d7b985; text-transform:uppercase; font-size:12px; }
+.raceBriefBuild { display:grid; gap:8px; background:#17252d; padding:15px; font-size:12px; }
+.raceBriefBuild small { color:#aebdc3; line-height:1.7; }
+.rivalList { list-style:none; margin:0; padding:0; }
+.rivalList li { display:grid; gap:5px; padding:10px 0; font-size:12px; border-bottom:1px solid #36454b; }
+.rivalList li span { color:#a9bbc2; font-size:11px; }
+.partsCategorySummary { font-size:12px; color:#bac5c6; margin:0 0 18px; }
+@media(max-width:700px) {
+  .raceHeading > svg { display:none; }
+  .raceCareer { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .raceCareer > div { padding:16px; border-bottom:1px solid #354047; }
+  .raceBoardHeading { flex-direction:column; align-items:stretch; }
+  .raceEventGrid { grid-template-columns:1fr; }
+  .activeRace,.raceReceipt { padding:17px; }
+  .raceLanes { padding:0 6px; }
+  .raceLaneLabel span { width:100%; order:3; }
+  .raceActions { justify-content:stretch; }
+  .raceActions button { flex:1; }
+  .raceResultsTable { font-size:10px; }
+  .raceResultsTable th,.raceResultsTable td { padding:10px 4px; }
+  .raceResultsTable td small { font-size:9px; }
+  .raceEventCard { padding:19px; }
+  .raceOfferStats dd { font-size:22px; }
+}
+@media(prefers-reduced-motion:reduce) { .raceLaneTrack svg, .raceLaneTrack progress { transition:none!important; } }

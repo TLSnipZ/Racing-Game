@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, LockKeyhole, Package, SlidersHorizontal, Wrench, X } from 'lucide-react';
 import { findPart, isPartCompatible, PART_BRANDS, PARTS, SLOT_LABELS } from '../data/parts';
-import { getPartRequirement, getVehicleBuildStats, isVehicleBusy, previewPart } from '../domain/tuning';
+import { getPartRequirement, getVehicleBuildStats, getVehicleBusyReason, isVehicleBusy, previewPart } from '../domain/tuning';
 import { TUNING_SLOTS, type TuningSlot, type VehicleBuildStats } from '../domain/tuningTypes';
 import type { GameState } from '../domain/types';
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
@@ -61,8 +61,8 @@ export function Workshop({ game, blocked, onInstall, onRemove }: {
     </div>
     <div className="workshopSummary"><Wrench size={20} /><strong>{target.name}</strong><span>{target.tuning.purchasedPartIds.length} purchased parts · {Object.keys(target.tuning.installedBySlot).length} fitted upgrades</span></div>
     <div className="buildStats" aria-label="Current build stats">{STAT_ROWS.map(({ key, label, unit }) => <div key={key}><span>{label}</span><strong data-testid={`build-${key}`}>{stats[key].toLocaleString('en-US', { maximumFractionDigits: 1 })}<small>{unit}</small></strong></div>)}</div>
-    <p className="tuningNote">Build estimates, not a race result. Reliability is a build rating, not current engine condition. Tuning does not repair wear or change job rewards. Final art and racing arrive later.</p>
-    {(busy || blocked) && <p className="workshopWarning" role="status">{blocked ? 'Save protected: resolve the global warning before buying or fitting parts.' : 'This car is assigned to a delivery. Claim or cancel that job before changing its build.'}</p>}
+    <p className="tuningNote">Build estimates, not a guaranteed race result. Reliability is a build rating, not current engine condition. Tuning does not repair wear or change job rewards. Test your setup in Races; final art arrives later.</p>
+    {(busy || blocked) && <p className="workshopWarning" role="status">{blocked ? 'Save protected: resolve the global warning before buying or fitting parts.' : getVehicleBusyReason(game, target.instanceId)}</p>}
     {feedback && <p className="workshopFeedback" role="status">{feedback}</p>}
     <div className="workshopSubheading"><h3>Fitted setup</h3><span>One upgrade per slot · factory parts are kept</span></div>
     <div className="slotGrid">{TUNING_SLOTS.map((slot) => {
@@ -78,6 +78,12 @@ export function Workshop({ game, blocked, onInstall, onRemove }: {
       <label className="partsFilter"><SlidersHorizontal size={16} /><span className="srOnly">Filter parts by category</span><select value={category} onChange={(e) => setCategory(e.target.value)}>
         <option value="all">All categories</option>{TUNING_SLOTS.map((slot) => <option key={slot} value={slot}>{SLOT_LABELS[slot]}</option>)}
       </select></label></div>
+    <div className="categoryChips" role="group" aria-label="Part categories">
+      <button type="button" aria-label="All part categories" aria-pressed={category === 'all'} onClick={() => setCategory('all')}>All parts <b>{PARTS.length}</b></button>
+      {TUNING_SLOTS.map((slot) => <button type="button" key={slot} aria-label={`Category ${SLOT_LABELS[slot]}`} aria-pressed={category === slot}
+        onClick={() => setCategory(slot)}>{SLOT_LABELS[slot]} <b>{PARTS.filter((part) => part.slot === slot).length}</b></button>)}
+    </div>
+    <p className="partsCategorySummary" role="status">{category === 'all' ? 'All component types' : SLOT_LABELS[category as TuningSlot]} · {partList.length} parts. Compatibility is shown for {target.name}.</p>
     <div className="partsGrid">{partList.map((part) => {
       const compatible = isPartCompatible(part, target.catalogId);
       const fitted = target.tuning.installedBySlot[part.slot] === part.id;
@@ -96,12 +102,10 @@ export function Workshop({ game, blocked, onInstall, onRemove }: {
     <dialog className="partDialog" ref={dialog} aria-labelledby="part-review-title" onClose={() => setReview(null)} onCancel={() => setReview(null)}>
       {reviewedPart && reviewedCar && currentStats && <>
         <div className="dialogHeading"><span className="eyebrow">{PART_BRANDS[reviewedPart.brand].name}</span><button type="button" className="iconButton" aria-label="Close part preview" onClick={close}><X size={20} /></button></div>
-        <h3 id="part-review-title">{reviewedPart.name}</h3><p>Target: <strong>{reviewedCar.name}</strong> · {reviewedCar.instanceId.slice(0, 8)}</p>
-        <p>{reviewedPart.description}</p>
+        <h3 id="part-review-title">{reviewedPart.name}</h3><p>Target: <strong>{reviewedCar.name}</strong> · {reviewedCar.instanceId.slice(0, 8)}</p><p>{reviewedPart.description}</p>
         <table className="comparisonTable"><caption>Current setup compared with this part installed</caption><thead><tr><th>Stat</th><th>Current</th><th>Preview</th><th>Change</th></tr></thead>
           <tbody>{STAT_ROWS.map(({ key, label, unit, lowerBetter }) => {
-            const delta = after ? Math.round((after[key] - currentStats[key]) * 10) / 10 : 0;
-            const good = lowerBetter ? delta < 0 : delta > 0;
+            const delta = after ? Math.round((after[key] - currentStats[key]) * 10) / 10 : 0; const good = lowerBetter ? delta < 0 : delta > 0;
             return <tr key={key}><th scope="row">{label} <small>{unit}</small></th><td>{currentStats[key]}</td><td>{after?.[key] ?? '—'}</td><td className={delta === 0 ? '' : good ? 'positiveChange' : 'negativeChange'}>{delta > 0 ? '+' : ''}{delta}</td></tr>;
           })}</tbody></table>
         <p className="tuningNote">Replaces {reviewedCar.tuning.installedBySlot[reviewedPart.slot] ? findPart(reviewedCar.tuning.installedBySlot[reviewedPart.slot]!)?.name : 'factory setup'} in this slot. Replaced parts are kept.</p>

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { ActiveJob } from '../domain/types';
 
-/** Presentation-only clock shared by the HUD and job panel; never grants rewards. */
-export function useJobClock(active: ActiveJob | null): number {
+type TimedActivity = { runId: number; startedAtMs: number; finishesAtMs: number };
+/** Shared presentation clock for HUD, jobs and races. It never grants rewards or writes a save. */
+export function useJobClock(active: TimedActivity | null): number {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const refresh = () => setNow(Date.now());
