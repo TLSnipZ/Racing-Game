@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "savedAt": 1789156800000,
+  "state": {
+    "cashYen": 18000,
+    "playerLevel": 1,
+    "reputation": 0,
+    "selectedStarterId": "pico-rs",
+    "ownedVehicles": [{
+      "instanceId": "legacy-pico-001",
+      "catalogId": "pico-rs",
+      "name": "Hoshino Pico RS",
+      "year": 1994,
+      "engine": "1.5L NA I4",
+      "drive": "FWD",
+      "hp": 105,
+      "weightKg": 890,
+      "odometerKm": 168420,
+      "engineCondition": 88,
+      "bodyCondition": 82,
+      "transmissionCondition": 83,
+      "originality": 96,
+      "installedParts": ["Factory intake", "Factory exhaust", "Factory ECU", "Factory suspension", "Road tires"]
+    }]
+  }
+}
