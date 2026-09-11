@@ -23,4 +23,8 @@ export type GameState = {
   reputation: number;
   selectedStarterId: string | null;
   ownedVehicles: PlayerVehicle[];
+  activeVehicleId: string | null;
 };
+
+/** Phase 2 schema. Used only while reading existing Save v1 data. */
+export type LegacyGameStateV1 = Omit<GameState, 'activeVehicleId'>;

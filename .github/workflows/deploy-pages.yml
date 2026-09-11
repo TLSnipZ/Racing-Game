@@ -2,7 +2,7 @@ name: Deploy KAGEHAMA to GitHub Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'phase/**']
   workflow_dispatch:
 
 permissions:
@@ -11,39 +11,52 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v6
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
-
+          package-manager-cache: false
       - name: Install dependencies
         run: npm install
-
-      - name: Run tests
+      - name: Run unit tests
         run: npm test
-
-      - name: Build
+      - name: Typecheck and build
         run: npm run build
-
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Test the production build in Chromium
+        run: npm run test:e2e
+      - name: Upload browser test report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: browser-test-report
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore
+          retention-days: 7
       - name: Setup Pages
+        if: github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v5
-
       - name: Upload Pages artifact
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

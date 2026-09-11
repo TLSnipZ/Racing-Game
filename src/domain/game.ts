@@ -10,12 +10,14 @@ export function createNewGameState(): GameState {
     reputation: 0,
     selectedStarterId: null,
     ownedVehicles: [],
+    activeVehicleId: null,
   };
 }
 
 export function createPlayerVehicle(starterId: string, instanceId: string): PlayerVehicle {
   const starter = STARTER_CARS.find((car) => car.id === starterId);
   if (!starter) throw new Error('Unknown starter car.');
+  if (!instanceId.trim() || instanceId.length > 200) throw new Error('Invalid vehicle instance ID.');
 
   return {
     instanceId,
@@ -36,18 +38,20 @@ export function createPlayerVehicle(starterId: string, instanceId: string): Play
 }
 
 export function purchaseStarter(state: GameState, starterId: string, instanceId: string): GameState {
-  if (state.selectedStarterId || state.ownedVehicles.length > 0) {
+  if (state.selectedStarterId !== null || state.ownedVehicles.length > 0) {
     throw new Error('A starter car has already been chosen.');
   }
-
   const starter = STARTER_CARS.find((car) => car.id === starterId);
   if (!starter) throw new Error('Unknown starter car.');
-  if (state.cashYen < starter.priceYen) throw new Error('Not enough cash for this starter.');
-
+  if (!Number.isSafeInteger(state.cashYen) || state.cashYen < starter.priceYen) {
+    throw new Error('Not enough valid cash for this starter.');
+  }
+  const vehicle = createPlayerVehicle(starter.id, instanceId);
   return {
     ...state,
     cashYen: state.cashYen - starter.priceYen,
     selectedStarterId: starter.id,
-    ownedVehicles: [createPlayerVehicle(starter.id, instanceId)],
+    ownedVehicles: [vehicle],
+    activeVehicleId: vehicle.instanceId,
   };
 }

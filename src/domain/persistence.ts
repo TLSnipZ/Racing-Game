@@ -1,138 +1,118 @@
-import type { GameState, PlayerVehicle } from './types';
+import type { GameState, LegacyGameStateV1, PlayerVehicle } from './types';
 
-export const SAVE_VERSION = 1;
+export const SAVE_VERSION = 2;
 export const SAVE_STORAGE_KEY = 'kagehama:save';
+// Transport format remains v1. The envelope inside it has its own schema version.
 export const SAVE_CODE_PREFIX = 'KAGEHAMA1-';
-
-export type SaveEnvelope = {
-  version: number;
-  savedAt: number;
-  state: GameState;
-};
-
+export const MAX_SAVE_LENGTH = 2_000_000;
+export type SaveEnvelope = { version: number; savedAt: number; state: GameState };
 const BASE64_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 function encodeBase64Url(input: string): string {
   const bytes = new TextEncoder().encode(input);
   let output = '';
-
   for (let i = 0; i < bytes.length; i += 3) {
-    const a = bytes[i] ?? 0;
-    const b = bytes[i + 1] ?? 0;
-    const c = bytes[i + 2] ?? 0;
-    const value = (a << 16) | (b << 8) | c;
-
+    const value = ((bytes[i] ?? 0) << 16) | ((bytes[i + 1] ?? 0) << 8) | (bytes[i + 2] ?? 0);
     output += BASE64_ALPHABET[(value >> 18) & 63];
     output += BASE64_ALPHABET[(value >> 12) & 63];
-    output += i + 1 < bytes.length ? BASE64_ALPHABET[(value >> 6) & 63] : '=';
-    output += i + 2 < bytes.length ? BASE64_ALPHABET[value & 63] : '=';
+    if (i + 1 < bytes.length) output += BASE64_ALPHABET[(value >> 6) & 63];
+    if (i + 2 < bytes.length) output += BASE64_ALPHABET[value & 63];
   }
-
-  return output.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+  return output.replace(/\+/g, '-').replace(/\//g, '_');
 }
 
 function decodeBase64Url(input: string): string {
+  if (!/^[A-Za-z0-9_-]+$/.test(input) || input.length % 4 === 1) {
+    throw new Error('Save code contains invalid characters or is incomplete.');
+  }
   const normalized = input.replace(/-/g, '+').replace(/_/g, '/');
-  const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
+  const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
   const bytes: number[] = [];
-
   for (let i = 0; i < padded.length; i += 4) {
     const chars = padded.slice(i, i + 4);
-    const values = chars.split('').map((char) => (char === '=' ? 0 : BASE64_ALPHABET.indexOf(char)));
-    if (values.some((value, index) => value < 0 && chars[index] !== '=')) throw new Error('Save code contains invalid characters.');
-
-    const value = (values[0] << 18) | (values[1] << 12) | (values[2] << 6) | values[3];
+    const v = chars.split('').map((char) => char === '=' ? 0 : BASE64_ALPHABET.indexOf(char));
+    const value = (v[0] << 18) | (v[1] << 12) | (v[2] << 6) | v[3];
     bytes.push((value >> 16) & 255);
     if (chars[2] !== '=') bytes.push((value >> 8) & 255);
     if (chars[3] !== '=') bytes.push(value & 255);
   }
-
-  return new TextDecoder().decode(new Uint8Array(bytes));
+  return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(bytes));
 }
 
-function isFiniteNumber(value: unknown): value is number {
-  return typeof value === 'number' && Number.isFinite(value);
-}
+const isRecord = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
+const isText = (v: unknown): v is string => typeof v === 'string' && v.trim().length > 0 && v.length <= 200;
+const isInteger = (v: unknown, min = 0): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= min;
+const isPercent = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
 
 function isPlayerVehicle(value: unknown): value is PlayerVehicle {
-  if (!value || typeof value !== 'object') return false;
-  const vehicle = value as Partial<PlayerVehicle>;
-  return (
-    typeof vehicle.instanceId === 'string' &&
-    typeof vehicle.catalogId === 'string' &&
-    typeof vehicle.name === 'string' &&
-    typeof vehicle.engine === 'string' &&
-    (vehicle.drive === 'FWD' || vehicle.drive === 'RWD') &&
-    isFiniteNumber(vehicle.year) &&
-    isFiniteNumber(vehicle.hp) &&
-    isFiniteNumber(vehicle.weightKg) &&
-    isFiniteNumber(vehicle.odometerKm) &&
-    isFiniteNumber(vehicle.engineCondition) &&
-    isFiniteNumber(vehicle.bodyCondition) &&
-    isFiniteNumber(vehicle.transmissionCondition) &&
-    isFiniteNumber(vehicle.originality) &&
-    Array.isArray(vehicle.installedParts) &&
-    vehicle.installedParts.every((part) => typeof part === 'string')
-  );
+  if (!isRecord(value)) return false;
+  return isText(value.instanceId) && isText(value.catalogId) && isText(value.name) && isText(value.engine)
+    && (value.drive === 'FWD' || value.drive === 'RWD')
+    && isInteger(value.year, 1) && isInteger(value.hp, 1) && isInteger(value.weightKg, 1)
+    && isInteger(value.odometerKm) && isPercent(value.engineCondition) && isPercent(value.bodyCondition)
+    && isPercent(value.transmissionCondition) && isPercent(value.originality)
+    && Array.isArray(value.installedParts) && value.installedParts.length <= 100 && value.installedParts.every(isText);
+}
+
+function isLegacyGameState(value: unknown): value is LegacyGameStateV1 {
+  if (!isRecord(value)) return false;
+  if (!(isInteger(value.cashYen) && isInteger(value.playerLevel, 1) && isInteger(value.reputation)
+    && (value.selectedStarterId === null || isText(value.selectedStarterId))
+    && Array.isArray(value.ownedVehicles) && value.ownedVehicles.length <= 1000
+    && value.ownedVehicles.every(isPlayerVehicle))) return false;
+  const ids = value.ownedVehicles.map((vehicle) => vehicle.instanceId);
+  return new Set(ids).size === ids.length && (ids.length === 0 || value.selectedStarterId !== null);
 }
 
 export function isGameState(value: unknown): value is GameState {
-  if (!value || typeof value !== 'object') return false;
-  const state = value as Partial<GameState>;
-  return (
-    isFiniteNumber(state.cashYen) &&
-    state.cashYen >= 0 &&
-    isFiniteNumber(state.playerLevel) &&
-    state.playerLevel >= 1 &&
-    isFiniteNumber(state.reputation) &&
-    state.reputation >= 0 &&
-    (state.selectedStarterId === null || typeof state.selectedStarterId === 'string') &&
-    Array.isArray(state.ownedVehicles) &&
-    state.ownedVehicles.every(isPlayerVehicle)
-  );
+  if (!isLegacyGameState(value) || !('activeVehicleId' in value)) return false;
+  return value.ownedVehicles.length === 0 ? value.activeVehicleId === null
+    : isText(value.activeVehicleId) && value.ownedVehicles.some((v) => v.instanceId === value.activeVehicleId);
 }
 
 export function createSaveEnvelope(state: GameState, savedAt = Date.now()): SaveEnvelope {
+  if (!isGameState(state)) throw new Error('Save game state is invalid.');
+  if (!isInteger(savedAt)) throw new Error('Save timestamp is invalid.');
   return { version: SAVE_VERSION, savedAt, state };
 }
 
 export function serializeSave(state: GameState, savedAt = Date.now()): string {
-  return JSON.stringify(createSaveEnvelope(state, savedAt));
+  const raw = JSON.stringify(createSaveEnvelope(state, savedAt));
+  if (raw.length > MAX_SAVE_LENGTH) throw new Error('Save data is too large.');
+  return raw;
 }
 
 export function deserializeSave(raw: string): SaveEnvelope {
+  if (raw.length > MAX_SAVE_LENGTH) throw new Error('Save data is too large.');
   let parsed: unknown;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    throw new Error('Save data is not valid JSON.');
+  try { parsed = JSON.parse(raw); } catch { throw new Error('Save data is not valid JSON.'); }
+  if (!isRecord(parsed)) throw new Error('Save data is invalid.');
+  if (parsed.version !== 1 && parsed.version !== SAVE_VERSION) {
+    throw new Error(`Unsupported save version: ${String(parsed.version)}. Your stored data has not been deleted.`);
   }
-
-  if (!parsed || typeof parsed !== 'object') throw new Error('Save data is invalid.');
-  const envelope = parsed as Partial<SaveEnvelope>;
-  if (envelope.version !== SAVE_VERSION) throw new Error(`Unsupported save version: ${String(envelope.version)}.`);
-  if (!isFiniteNumber(envelope.savedAt)) throw new Error('Save timestamp is invalid.');
-  if (!isGameState(envelope.state)) throw new Error('Save game state is invalid.');
-
-  return envelope as SaveEnvelope;
+  if (!isInteger(parsed.savedAt)) throw new Error('Save timestamp is invalid.');
+  let state: unknown = parsed.state;
+  if (parsed.version === 1) {
+    if (!isLegacyGameState(state)) throw new Error('Legacy save game state is invalid.');
+    state = { ...state, activeVehicleId: state.ownedVehicles[0]?.instanceId ?? null };
+  }
+  if (!isGameState(state)) throw new Error('Save game state is invalid.');
+  return { version: SAVE_VERSION, savedAt: parsed.savedAt, state };
 }
 
 export function exportSaveCode(state: GameState, savedAt = Date.now()): string {
-  return `${SAVE_CODE_PREFIX}${encodeBase64Url(serializeSave(state, savedAt))}`;
+  const code = `${SAVE_CODE_PREFIX}${encodeBase64Url(serializeSave(state, savedAt))}`;
+  if (code.length > MAX_SAVE_LENGTH) throw new Error('Save code is too large.');
+  return code;
 }
 
 export function importSaveCode(code: string): SaveEnvelope {
+  if (code.length > MAX_SAVE_LENGTH) throw new Error('Save code is too large.');
   const trimmed = code.trim();
-  if (!trimmed.startsWith(SAVE_CODE_PREFIX)) throw new Error('This is not a KAGEHAMA v1 save code.');
+  if (!trimmed.startsWith(SAVE_CODE_PREFIX)) throw new Error('This is not a KAGEHAMA save code.');
   const payload = trimmed.slice(SAVE_CODE_PREFIX.length);
   if (!payload) throw new Error('Save code is empty.');
-
-  try {
-    return deserializeSave(decodeBase64Url(payload));
-  } catch (error) {
-    if (error instanceof Error) throw error;
-    throw new Error('Save code could not be decoded.');
-  }
+  return deserializeSave(decodeBase64Url(payload));
 }
 
 export function saveToStorage(storage: Pick<Storage, 'setItem'>, state: GameState): void {
@@ -141,8 +121,7 @@ export function saveToStorage(storage: Pick<Storage, 'setItem'>, state: GameStat
 
 export function loadFromStorage(storage: Pick<Storage, 'getItem'>): SaveEnvelope | null {
   const raw = storage.getItem(SAVE_STORAGE_KEY);
-  if (!raw) return null;
-  return deserializeSave(raw);
+  return raw === null ? null : deserializeSave(raw);
 }
 
 export function clearStorage(storage: Pick<Storage, 'removeItem'>): void {
