@@ -1,5 +1,20 @@
 # Changelog
 
+## Phase 6 — Racing and shop categories (2026-09-12)
+
+- Enabled a separate Races tab with eight Rookie/Club events across Street Sprint, Drag, Touge and Expressway.
+- Added a deterministic sector model based on saved tuned builds, condition and fixed opponent builds; no random rerolls or real driving physics.
+- Added vehicle/event selection, discipline filters and race briefings with explicit entry fees, rival grids and all placements' gross/net prizes.
+- Added a 3-second countdown, compressed progress replay, final classification/gaps, player sector times, race records and gross/net career income.
+- Added atomic entry, exact-once manual settlement, confirmed non-refundable withdrawal and assigned-car mileage, reputation and level advancement.
+- Enforced one job OR race at a time and locked the assigned car for tuning until the activity is settled/withdrawn. Other parked cars remain editable.
+- Kept active races, full simulation snapshots and deadlines intact across view switches, reload and save export/import; added a cross-section Races READY badge.
+- Migrated valid Save v1–v4 data to v5 with empty racing history, preserving old cars, money, tuned parts and pending jobs; retained KAGEHAMA1 and the browser storage key.
+- Added prominent component-category buttons synchronized with the workshop dropdown, with counts, selected states and UI-only filter persistence.
+- Recorded the requested future vehicle-market filtering by manufacturer/brand, model year/year range and body type, with combinable filters and sorting. The market itself remains Phase 8.
+- Added racing model/transaction/migration/validation tests and real-browser race/category/scroll/recovery scenarios while retaining previous regression coverage.
+- Updated README, roadmap and the full Phase 6 contract. Starter, job and part balance are unchanged. Final art/audio, city, additional cars, police, wear and automation remain later milestones.
+
 ## Phase 5 — Interface & Tuning (2026-09-11)
 
 - Replaced bottom scroll anchors with prominent top section tabs and a sticky cash/level/reputation HUD.

@@ -2,55 +2,60 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current implementation milestone: **Phase 5 — Interface & Tuning**. Save v4. Next: **Phase 6 — Racing**.
+Current implementation milestone: **Phase 6 — Racing**. Save schema: **v5**. The first starter → job → income → tuning → race → reward loop now exists.
 
 ## Implemented
 
 | Phase | Scope |
 | --- | --- |
-| 0 — Foundation | React/TypeScript/Vite, dark Japan-inspired design, starter catalog and navigation shell. |
-| 1 — Core Game | ¥50,000, level/rep foundation, one starter purchase and unique vehicle instances. |
-| 2 — Persistence | Local autosave, versioned envelope, KAGEHAMA1 export/import and confirmed reset. |
-| 3 — Garage | Cards, search/sort, dossiers, condition meters, active car, save recovery and browser tests. |
-| 4 — Economy | Three timed jobs, one-time claims, yen/rep, levels, assigned-car mileage, cancellation and receipts. |
-| 5A — Shared interface | Persistent top cash/level/rep HUD and prominent tab navigation. One visible section; hidden panels retain useful local state. Keyboard navigation, job-ready badge and global save recovery. |
-| 5B — First workshop | Fourteen parts, eight slots, three brands, per-car ownership, buy-and-fit preview, free refit/stock restoration, derived stats and v1/v2/v3→v4 migration. |
+| 0 — Foundation | React/TypeScript/Vite, dark Japan-inspired shell, starter catalog and navigation. |
+| 1 — Core Game | ¥50,000, one confirmed choice among three starters and unique owned vehicles. |
+| 2 — Persistence | Autosave, versioned envelope, portable KAGEHAMA1 export/import and confirmed reset. |
+| 3 — Garage | Searchable/sortable vehicle cards, dossiers, condition, fitted parts, explicit active car and protected recovery. |
+| 4 — Economy | Three timed jobs, manual claims, yen/rep/levels, assigned mileage, cancellation and receipts. |
+| 5 — Interface & Tuning | 5A: sticky top HUD/navigation, isolated section tabs, keyboard access and job continuity. 5B: 14 parts/8 slots, per-car ownership, atomic fit/restore, derived stats, trade-offs and old-save migration. |
+| 6 — Racing | Eight Rookie/Club events in four disciplines, deterministic sector simulation, three rivals, entry briefing/fees, compressed replay, one-time settlement, records and Save v5 migration. Visible workshop component-type categories. |
 
-5A and 5B are subdivisions of Phase 5; later phase numbers are unchanged. See [PHASE5.md](PHASE5.md) for exact part rules, balance, compatibility and verification requirements.
+Current race results depend on the saved build and event, not random rerolls. One job OR race may be pending at a time. The assigned car remains locked for tuning until claim/settlement or cancellation/withdrawal. Race entry fees and gross/net prizes are explicit; a fee-free Level 1 sprint remains available. There is no vehicle loss, new wear, fuel, Heat, automation or final artwork in Phase 6. See [PHASE6.md](PHASE6.md) for the full contract; older milestone notes are historical.
 
-## Next — Phase 6: Racing
+## Next presentation milestone — Graphics & Audio I
 
-Create the first simulated race loop, using derived tuned-car stats rather than catalog horsepower alone. Target disciplines remain Touge, Drag, Street Sprint and Expressway. Specify the initial event/opponent catalog, prerequisites, fees/rewards, randomness/determinism and results before implementation. An explicit assigned vehicle/build snapshot should keep results stable, and rewards must be claimed/settled once. Avoid conflicts with delivery jobs and prevent tuning a car during a race. Do not invent fuel, wear, damage, police or loss of vehicles as hidden costs.
+After the first complete earning/tuning/racing loop, give a small representative slice its final visual direction: three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Choose the vehicle-art/layer approach before promising independently changeable paint, wheels and bodykits. Keep gameplay/save contracts intact. This is a targeted pass, not a conversion to freely driven 3D racing and not a promise to finish every asset before city development. Exact sequencing can be refined after playtesting Phase 6.
 
-Integrate a real Races tab inside the existing shell; the shared HUD and saved jobs continue working. The first end-to-end goal is starter → job → parts → race → reward. Ratings introduced in Phase 5 are provisional inputs to balance, not a promise of an exact physical simulation.
+## Next numbered system — Phase 7: Kagehama City
 
-Definition of done: usable on Pages; event outcomes and reward rules documented; invalid actions do not charge or pay; reload/export/import preserve in-progress state as designed; old fixtures migrate; unit/build/browser tests pass; README, roadmap, changelog and compatibility notes are current. Final scope and numbers are not locked yet.
+Implement a city overview with distinct districts, progression gates and links to their activities inside the existing shared tab shell. Resolve district membership and unlock conditions explicitly before implementation. Existing paid/active activities must remain recoverable; no silent reset or hidden entrance costs. The detailed map and new unlocks are not already in the current race board merely because its fictional events have place names.
 
 ## Planned, not implemented
 
 | Phase | Scope |
 | --- | --- |
-| 6 — Racing | Simulated Touge, Drag, Street Sprint and Expressway events; discipline-specific builds. |
-| Graphics & Audio I | Three starter artworks, first garage/race environment, animation and effects after a complete initial gameplay loop. Exact timing stays flexible. |
-| 7 — Kagehama | City map, districts, gates and different racing scenes. |
-| 8 — Car Market | Used listings, unique cars, buy/sell and value model; other starter cars become obtainable. |
+| Graphics & Audio I | Three starter artworks, first garage/race setting, consistent presentation, animation and sound after the first full loop. |
+| 7 — Kagehama | City map, districts, progression gates and their racing scenes. |
+| 8 — Car Market | Individual used listings, buy/sell and value model; structured manufacturer/year/body-type metadata, category filters and sorting. Other starters become obtainable. |
 | 9 — Heat | Police pressure and underground risk/reward without arbitrary save destruction. |
-| 10 — Collection | Rarities distinct from performance, Collection Book, achievements and Icon cars. |
+| 10 — Collection | Rarity separate from performance, Collection Book, achievements and Icon cars. |
 | 11 — Advanced Cars | Auctions, imports, barn finds, restoration and more manufacturers. |
-| 12 — Empire & Automation | Businesses, garage upgrades, staff/crew and unlockable delegated routines; passive/offline production with defined costs, balance and caps. |
+| 12 — Empire & Automation | Businesses, garage upgrades, staff/crew and unlockable delegated routines; passive/offline production with defined costs, balance and a cap. |
 | 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and catalog expansion. |
-| Further graphics expansion | Apply the chosen style to new content; plan visible paint/wheel/bodykit changes before producing incompatible images. |
+| Further graphics expansion | Apply the chosen style across later content; support visible paint/wheel/bodykit changes through a planned asset system. |
 
-## Automation later
+## Vehicle market filters — requested for Phase 8
 
-The goal is to move from earning your first yen personally to managing an automotive empire. Phase 12 is the main milestone for passive businesses and staff-managed routines. Crew-dispatched repeatable work is a candidate: eligible jobs, unlocks, costs, collection rules and limits still need design. Offline earnings require defined eligibility, deterministic catch-up, a cap and duplicate-award protection. No automatic car/part purchases or destructive decisions are implied.
+The future vehicle shop must be filterable by **brand/manufacturer, model year (including a range) and vehicle/body type** such as hatchback, coupe or sedan. Use explicit catalog/listing metadata, not name-string parsing. Filters should combine, show result counts and offer a clear reset; sorting should include at least year and price. Preserve filter state across ordinary tab switches. Filtering must not buy/sell, alter a player's collection or refresh/reroll a listing. Price, drivetrain, mileage, condition and rarity are candidate additional filters where the catalog supports them. Mobile controls and keyboard access belong to the feature, not later cleanup.
 
-Current jobs remain manual. Switching a game section does not count as going offline and does not introduce automation. A smaller earlier automation milestone can be proposed if playtesting reveals excessive repetition, but no earlier phase/date is committed.
+The workshop's requested **component-type categorisation is implemented in Phase 6**: visible buttons and a synchronized dropdown for intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo. Catalog counts and compatibility remain clear. Adding new component types later must extend the catalog/slot contract, not just add cosmetic headings.
 
-## Cross-phase work
+## Later gameplay automation
 
-Final graphics/audio, repairs, part transfers/resale and engine swaps are not included in Phase 5. Vehicle silhouettes remain placeholders. Readability, accessibility, mobile layout and balance improve throughout. Full screen-reader/device coverage remains broader than the automated Chromium checks. A production lockfile and pinned dependencies remain build-hardening work; the inherited `latest` policy is unchanged in this phase. Client clock/code manipulation is not prevented by local saves.
+Automation is progression, not endless manual claiming. Phase 12 is the principal milestone for passive businesses and staff/managers who handle recurring operations. Crew-dispatched repeatable work is a candidate routine; exact eligible jobs, unlocks, costs, collection rules and limits need design first. Offline earnings require eligibility, a cap, deterministic catch-up and duplicate-award protections. Automatic car purchases, tuning purchases or destructive decisions are not implied.
+
+The goal is to move from personally earning the first yen to managing an automotive empire while keeping meaningful decisions about cars, builds, events and investments. Current jobs/races are single manually accepted and settled activities; changing sections is not going offline or unlocking automation. An earlier small automation step may be proposed if playtesting shows excessive repetition, but it has no committed phase/date.
+
+## Cross-phase quality
+
+Readability, accessibility, mobile layout and balance improve throughout development. Current car profiles and race presentation are placeholders for the later art pass. Pinning dependencies and committing a reproducible package lock remain build-hardening work; installs still inherit the original `latest` policy. Save compatibility must be tested before each schema change. Preserve the model-v1 race algorithm for old race snapshots when a new model arrives. Client clock/code manipulation is not prevented by a local-save architecture. Future numbers and priorities may change; planned entries are not available features or promised dates.
 
 ## Working agreement
 
-Inspect the current repository → implement agreed scope → add regression tests → validate on a phase branch → update README/roadmap/changelog/compatibility notes → commit → verify Pages deployment. Never call a deployment live just because a commit or run exists. Keep historical fixtures unchanged. Only update main after a tested tree is ready; do not force-replace someone else's commits. Work continues in this chat with GitHub; no separate coding mode is required.
+Inspect the current repository → implement agreed scope → add regression tests → run unit tests, typecheck/build and browser scenarios → maintain README, roadmap, changelog and migration notes → publish a clear commit → verify the main Pages deployment. Feature branches are checked without deploying the game. Do not report a deployment as live merely because a commit or workflow exists. Keep frozen old-save fixtures and document migration behaviour. Work continues in this chat with GitHub; no separate coding mode is required.
