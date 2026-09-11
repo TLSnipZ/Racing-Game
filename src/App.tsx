@@ -1,7 +1,14 @@
-import { useState } from 'react';
-import { CarFront, ChevronRight, Gauge, Map, Warehouse, Wrench } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { CarFront, ChevronRight, Copy, Download, Gauge, Map, RotateCcw, Upload, Warehouse, Wrench } from 'lucide-react';
 import { STARTER_CARS, type StarterCar } from './data/starters';
 import { createNewGameState, purchaseStarter } from './domain/game';
+import {
+  clearStorage,
+  exportSaveCode,
+  importSaveCode,
+  loadFromStorage,
+  saveToStorage,
+} from './domain/persistence';
 import type { GameState } from './domain/types';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
@@ -12,22 +19,139 @@ function createVehicleId() {
   return `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
+function loadInitialGame(): GameState {
+  try {
+    return loadFromStorage(localStorage)?.state ?? createNewGameState();
+  } catch {
+    clearStorage(localStorage);
+    return createNewGameState();
+  }
+}
+
 export function App() {
   const [selected, setSelected] = useState<StarterCar | null>(null);
-  const [game, setGame] = useState<GameState>(() => createNewGameState());
+  const [game, setGame] = useState<GameState>(loadInitialGame);
   const [error, setError] = useState<string | null>(null);
+  const [saveCode, setSaveCode] = useState('');
+  const [importCode, setImportCode] = useState('');
+  const [saveStatus, setSaveStatus] = useState('AUTOSAVE READY');
 
   const ownedCar = game.ownedVehicles[0] ?? null;
+
+  useEffect(() => {
+    try {
+      saveToStorage(localStorage, game);
+      setSaveStatus(`AUTOSAVED · ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`);
+    } catch {
+      setSaveStatus('AUTOSAVE FAILED');
+    }
+  }, [game]);
 
   function confirmStarter() {
     if (!selected) return;
     try {
       setGame((current) => purchaseStarter(current, selected.id, createVehicleId()));
+      setSelected(null);
       setError(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'Starter purchase failed.');
     }
   }
+
+  function handleExport() {
+    const code = exportSaveCode(game);
+    setSaveCode(code);
+    setSaveStatus('SAVE CODE GENERATED');
+  }
+
+  async function copySaveCode() {
+    if (!saveCode) return;
+    try {
+      await navigator.clipboard.writeText(saveCode);
+      setSaveStatus('SAVE CODE COPIED');
+    } catch {
+      setSaveStatus('COPY FAILED · SELECT THE CODE MANUALLY');
+    }
+  }
+
+  function handleImport() {
+    try {
+      const imported = importSaveCode(importCode);
+      const carName = imported.state.ownedVehicles[0]?.name ?? 'No starter selected';
+      const approved = window.confirm(
+        `Import this save?\n\nCash: ${yen(imported.state.cashYen)}\nLevel: ${imported.state.playerLevel}\nCar: ${carName}\n\nYour current save will be replaced.`,
+      );
+      if (!approved) return;
+
+      setGame(imported.state);
+      setSelected(null);
+      setImportCode('');
+      setSaveCode('');
+      setError(null);
+      setSaveStatus('SAVE IMPORTED');
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Save import failed.');
+    }
+  }
+
+  function handleReset() {
+    const approved = window.confirm('Reset your entire KAGEHAMA save?\n\nThis cannot be undone unless you exported a save code first.');
+    if (!approved) return;
+
+    clearStorage(localStorage);
+    setGame(createNewGameState());
+    setSelected(null);
+    setSaveCode('');
+    setImportCode('');
+    setError(null);
+    setSaveStatus('SAVE RESET');
+  }
+
+  const saveTools = (
+    <section className="savePanel">
+      <div className="sectionTitle">
+        <div><span>02 / SAVE DATA</span><h3>Save management</h3></div>
+        <p>{saveStatus}</p>
+      </div>
+
+      <div className="saveGrid">
+        <article>
+          <div className="saveIcon"><Download /></div>
+          <h4>Export save</h4>
+          <p>Create a portable KAGEHAMA code for backup or another device.</p>
+          <button className="secondaryButton" onClick={handleExport}>GENERATE SAVE CODE</button>
+          {saveCode && (
+            <div className="codeBox">
+              <textarea readOnly value={saveCode} aria-label="Exported save code" />
+              <button onClick={copySaveCode}><Copy size={15} /> COPY</button>
+            </div>
+          )}
+        </article>
+
+        <article>
+          <div className="saveIcon"><Upload /></div>
+          <h4>Import save</h4>
+          <p>Paste a KAGEHAMA1 save code. It is validated before replacing your progress.</p>
+          <textarea
+            className="importBox"
+            value={importCode}
+            onChange={(event) => setImportCode(event.target.value)}
+            placeholder="KAGEHAMA1-..."
+            aria-label="Save code to import"
+          />
+          <button className="secondaryButton" disabled={!importCode.trim()} onClick={handleImport}>VALIDATE & IMPORT</button>
+        </article>
+
+        <article className="dangerCard">
+          <div className="saveIcon"><RotateCcw /></div>
+          <h4>Reset savegame</h4>
+          <p>Return to ¥50,000 and choose a new starter. Export first if you want a way back.</p>
+          <button className="dangerButton" onClick={handleReset}>RESET SAVEGAME</button>
+        </article>
+      </div>
+      {error && <div className="gameError">{error}</div>}
+    </section>
+  );
 
   if (ownedCar) {
     return (
@@ -57,7 +181,7 @@ export function App() {
         <section className="garagePanel">
           <div className="sectionTitle">
             <div><span>01 / GARAGE</span><h3>{ownedCar.name}</h3></div>
-            <p>Phase 1 player vehicle instance: {ownedCar.instanceId.slice(0, 8)}</p>
+            <p>Vehicle ID: {ownedCar.instanceId.slice(0, 8)}</p>
           </div>
 
           <div className="garageGrid">
@@ -87,11 +211,12 @@ export function App() {
             </article>
           </div>
 
-          <div className="phaseNotice">PHASE 1 CORE GAME ACTIVE · SAVES ARRIVE IN PHASE 2</div>
+          <div className="phaseNotice">PHASE 2 PERSISTENCE ACTIVE · YOUR PROGRESS AUTOSAVES IN THIS BROWSER</div>
         </section>
 
+        {saveTools}
         <nav><span><Warehouse />Garage</span><span><Map />City</span><span><Gauge />Races</span><span><Wrench />Workshop</span></nav>
-        <footer>PHASE 1 // CORE GAME · PRE-ALPHA</footer>
+        <footer>PHASE 2 // PERSISTENCE · PRE-ALPHA</footer>
       </main>
     );
   }
@@ -147,8 +272,9 @@ export function App() {
         {error && <div className="gameError">{error}</div>}
       </section>
 
+      {saveTools}
       <nav><span><Warehouse />Garage</span><span><Map />City</span><span><Gauge />Races</span><span><Wrench />Workshop</span></nav>
-      <footer>PHASE 1 // CORE GAME · PRE-ALPHA</footer>
+      <footer>PHASE 2 // PERSISTENCE · PRE-ALPHA</footer>
     </main>
   );
 }
