@@ -1,0 +1,54 @@
+/* Phase 4: economy board, consistent with the existing garage palette. */
+.jobsPanel { margin: 28px 0 50px; scroll-margin-top: 20px; }
+.jobsHeading { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin: 18px 0 22px; }
+.jobsHeading h2 { font: italic 800 clamp(38px,5vw,62px)/1 'Barlow Condensed',Impact,sans-serif; margin: 10px 0 0; }
+.jobsHeading > p { font-size: 12px; line-height: 1.7; color: #b0b7b7; text-align: right; }
+.progressionPanel { display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 26px; padding: 22px; background: #151c20; border: 1px solid #384348; margin-bottom: 20px; }
+.levelEmblem { display: flex; align-items: center; gap: 14px; color: #e4b781; }
+.levelEmblem > span { font-size: 10px; letter-spacing: .1em; }
+.levelEmblem strong { display: block; font: 800 40px/1 'Barlow Condensed',Impact,sans-serif; color: #f1e3ce; }
+.repProgress { min-width: 0; }
+.repProgress > div { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11px; color: #c2cccb; }
+.repProgress p { font-size: 11px; line-height: 1.6; margin: 9px 0 0; color: #aab9ba; }
+.jobsPanel progress { display: block; width: 100%; height: 6px; border: 0; border-radius: 0; margin-top: 10px; appearance: none; background: #303a3e; color: #d5ac75; }
+.jobsPanel progress::-webkit-progress-bar { background: #303a3e; }
+.jobsPanel progress::-webkit-progress-value { background: #d5ac75; }
+.jobsPanel progress::-moz-progress-bar { background: #d5ac75; }
+.jobTotals { display: flex; flex-direction: column; gap: 9px; font-size: 9px; letter-spacing: .05em; color: #aab7b9; }
+.jobTotals span { display: flex; gap: 20px; justify-content: space-between; }
+.jobTotals strong { font-size: 12px; color: #e6ece4; }
+.jobGrid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 14px; }
+.jobCard { min-width: 0; border: 1px solid #414c50; background: #131c21; padding: 23px; display: flex; flex-direction: column; }
+.jobLocked { background: #10171b; border-style: dashed; }
+.jobCardTop { display: flex; justify-content: space-between; gap: 10px; color: #bdac90; font-size: 9px; letter-spacing: .12em; align-items: center; }
+.jobCard h3, .activeJob h3 { font: 800 30px/1.1 'Barlow Condensed',Impact,sans-serif; text-transform: uppercase; margin: 20px 0 12px; }
+.jobCard > p { color: #b2bec1; font-size: 12px; line-height: 1.7; }
+.jobCard > p:first-of-type { min-height: 62px; }
+.jobOfferStats { margin: 14px 0; padding: 15px 0; display: flex; gap: 10px; justify-content: space-between; border-block: 1px solid #303d42; }
+.jobOfferStats dt { font-size: 8px; color: #b2bdbe; letter-spacing: .06em; display: flex; gap: 5px; align-items: center; }
+.jobOfferStats dd { margin: 8px 0 0; color: #f0e1c9; font: 800 25px 'Barlow Condensed',Impact,sans-serif; }
+.jobRoute { display: flex; align-items: center; gap: 7px; font-size: 11px; line-height: 1.7; color: #afc6bc; }
+.jobRoute svg { flex-shrink: 0; }
+.jobCard .jobRequirement { color: #d5c1a5; font-size: 11px; margin: auto 0 12px; padding-top: 19px; }
+.startJobButton, .claimButton { cursor: pointer; background: #a9472d; color: #fff3df; border: 1px solid #e68f62; padding: 13px 16px; font-size: 11px; font-weight: 700; letter-spacing: .06em; min-height: 44px; }
+.startJobButton:disabled, .claimButton:disabled { opacity: 1; background: #243035; border-color: #495b63; color: #aab7bc; cursor: not-allowed; }
+.activeJob { background: #1e201b; border: 1px solid #79613f; padding: 24px; margin-bottom: 20px; }
+.jobReady { background: #15231d; border-color: #597b65; }
+.activeJobHeading { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.activeJob h3 { margin: 10px 0; }
+.activeJob p { color: #bec5bc; font-size: 12px; line-height: 1.7; }
+.jobClock { font: 800 clamp(25px,4vw,45px)/1 'Barlow Condensed',Impact,sans-serif; color: #eedab8; font-variant-numeric: tabular-nums; }
+.jobActions { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-top: 20px; }
+.jobActions > div { display: flex; flex-wrap: wrap; gap: 10px; }
+.claimButton { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.jobPayout { font: 800 30px 'Barlow Condensed',Impact,sans-serif; color: #eadfc8; }
+.jobPayout small { font: 600 12px Inter,Arial,sans-serif; color: #c0cfc4; }
+.jobReceipt { display: flex; align-items: center; gap: 14px; background: #17271e; border-left: 3px solid #89b39b; padding: 16px 20px; margin-bottom: 20px; color: #d8ebdc; font-size: 13px; }
+.jobReceipt p { color: #b4cdba; margin: 6px 0 0; font-size: 12px; line-height: 1.6; }
+.jobReceipt svg { flex-shrink: 0; }
+.jobNote { color: #a9b8ba; font-size: 11px; line-height: 1.8; margin-top: 17px; }
+.phase4 nav { overflow-x: auto; }
+.phase4 nav a, .phase4 nav span { flex-shrink: 0; }
+@media (max-width: 1000px) { .progressionPanel { grid-template-columns: auto minmax(0,1fr); } .jobTotals { grid-column: 1/-1; flex-direction: row; flex-wrap: wrap; gap: 25px; padding-top: 12px; border-top: 1px solid #344348; } .jobGrid { grid-template-columns: 1fr; } .jobCard > p:first-of-type { min-height: 0; } }
+@media (max-width: 540px) { .jobsHeading { align-items: start; flex-direction: column; gap: 4px; } .jobsHeading > p { text-align: left; } .progressionPanel { padding: 17px; gap: 16px; } .activeJob { padding: 18px; } .activeJobHeading { align-items: start; } .activeJobHeading > div { min-width: 0; } .jobActions { align-items: stretch; flex-direction: column; } .jobActions > div { display: grid; grid-template-columns: 1fr 1fr; } .jobCard { padding: 19px; } .phase4 nav a, .phase4 nav span { padding-inline: 13px; } }
+@media (prefers-reduced-motion: reduce) { :root { scroll-behavior: auto; } }

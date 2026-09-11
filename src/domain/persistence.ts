@@ -1,6 +1,7 @@
-import type { GameState, LegacyGameStateV1, PlayerVehicle } from './types';
+import { createEconomyState, isEconomyState } from './economy';
+import type { GameState, LegacyGameStateV1, LegacyGameStateV2, PlayerVehicle } from './types';
 
-export const SAVE_VERSION = 2;
+export const SAVE_VERSION = 3;
 export const SAVE_STORAGE_KEY = 'kagehama:save';
 // Transport format remains v1. The envelope inside it has its own schema version.
 export const SAVE_CODE_PREFIX = 'KAGEHAMA1-';
@@ -22,9 +23,7 @@ function encodeBase64Url(input: string): string {
 }
 
 function decodeBase64Url(input: string): string {
-  if (!/^[A-Za-z0-9_-]+$/.test(input) || input.length % 4 === 1) {
-    throw new Error('Save code contains invalid characters or is incomplete.');
-  }
+  if (!/^[A-Za-z0-9_-]+$/.test(input) || input.length % 4 === 1) throw new Error('Save code contains invalid characters or is incomplete.');
   const normalized = input.replace(/-/g, '+').replace(/_/g, '/');
   const padded = normalized + '='.repeat((4 - normalized.length % 4) % 4);
   const bytes: number[] = [];
@@ -64,10 +63,15 @@ function isLegacyGameState(value: unknown): value is LegacyGameStateV1 {
   return new Set(ids).size === ids.length && (ids.length === 0 || value.selectedStarterId !== null);
 }
 
-export function isGameState(value: unknown): value is GameState {
+function isGameStateV2(value: unknown): value is LegacyGameStateV2 {
   if (!isLegacyGameState(value) || !('activeVehicleId' in value)) return false;
   return value.ownedVehicles.length === 0 ? value.activeVehicleId === null
     : isText(value.activeVehicleId) && value.ownedVehicles.some((v) => v.instanceId === value.activeVehicleId);
+}
+
+export function isGameState(value: unknown): value is GameState {
+  if (!isGameStateV2(value) || !('economy' in value) || !isEconomyState(value.economy, value.ownedVehicles)) return false;
+  return value.selectedStarterId !== null || (value.economy.activeJob === null && value.economy.completedJobs === 0);
 }
 
 export function createSaveEnvelope(state: GameState, savedAt = Date.now()): SaveEnvelope {
@@ -87,7 +91,7 @@ export function deserializeSave(raw: string): SaveEnvelope {
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('Save data is not valid JSON.'); }
   if (!isRecord(parsed)) throw new Error('Save data is invalid.');
-  if (parsed.version !== 1 && parsed.version !== SAVE_VERSION) {
+  if (parsed.version !== 1 && parsed.version !== 2 && parsed.version !== SAVE_VERSION) {
     throw new Error(`Unsupported save version: ${String(parsed.version)}. Your stored data has not been deleted.`);
   }
   if (!isInteger(parsed.savedAt)) throw new Error('Save timestamp is invalid.');
@@ -95,6 +99,11 @@ export function deserializeSave(raw: string): SaveEnvelope {
   if (parsed.version === 1) {
     if (!isLegacyGameState(state)) throw new Error('Legacy save game state is invalid.');
     state = { ...state, activeVehicleId: state.ownedVehicles[0]?.instanceId ?? null };
+  }
+  if (parsed.version === 1 || parsed.version === 2) {
+    if (!isGameStateV2(state)) throw new Error('Legacy v2 save game state is invalid.');
+    // No invented historical income, jobs or elapsed time. Preserve all prior game fields.
+    state = { ...state, economy: createEconomyState() };
   }
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
   return { version: SAVE_VERSION, savedAt: parsed.savedAt, state };
@@ -105,7 +114,6 @@ export function exportSaveCode(state: GameState, savedAt = Date.now()): string {
   if (code.length > MAX_SAVE_LENGTH) throw new Error('Save code is too large.');
   return code;
 }
-
 export function importSaveCode(code: string): SaveEnvelope {
   if (code.length > MAX_SAVE_LENGTH) throw new Error('Save code is too large.');
   const trimmed = code.trim();
@@ -114,16 +122,13 @@ export function importSaveCode(code: string): SaveEnvelope {
   if (!payload) throw new Error('Save code is empty.');
   return deserializeSave(decodeBase64Url(payload));
 }
-
 export function saveToStorage(storage: Pick<Storage, 'setItem'>, state: GameState): void {
   storage.setItem(SAVE_STORAGE_KEY, serializeSave(state));
 }
-
 export function loadFromStorage(storage: Pick<Storage, 'getItem'>): SaveEnvelope | null {
   const raw = storage.getItem(SAVE_STORAGE_KEY);
   return raw === null ? null : deserializeSave(raw);
 }
-
 export function clearStorage(storage: Pick<Storage, 'removeItem'>): void {
   storage.removeItem(SAVE_STORAGE_KEY);
 }

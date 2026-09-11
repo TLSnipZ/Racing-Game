@@ -1,4 +1,5 @@
 import type { StarterCar } from '../data/starters';
+import type { JobId } from '../data/jobs';
 
 export type PlayerVehicle = {
   instanceId: string;
@@ -17,14 +18,40 @@ export type PlayerVehicle = {
   installedParts: string[];
 };
 
-export type GameState = {
+/** Frozen historical schemas: do not add new required fields to these. */
+export type LegacyGameStateV1 = {
   cashYen: number;
   playerLevel: number;
   reputation: number;
   selectedStarterId: string | null;
   ownedVehicles: PlayerVehicle[];
-  activeVehicleId: string | null;
 };
+export type LegacyGameStateV2 = LegacyGameStateV1 & { activeVehicleId: string | null };
 
-/** Phase 2 schema. Used only while reading existing Save v1 data. */
-export type LegacyGameStateV1 = Omit<GameState, 'activeVehicleId'>;
+/** Rewards, route and assigned vehicle are fixed at acceptance. */
+export type ActiveJob = {
+  runId: number;
+  jobId: JobId;
+  vehicleId: string | null;
+  startedAtMs: number;
+  finishesAtMs: number;
+  rewardYen: number;
+  reputationReward: number;
+  distanceKm: number;
+};
+export type JobReceipt = {
+  runId: number;
+  jobId: JobId;
+  rewardYen: number;
+  reputationReward: number;
+  levelBefore: number;
+  levelAfter: number;
+};
+export type EconomyState = {
+  nextRunId: number;
+  activeJob: ActiveJob | null;
+  completedJobs: number;
+  totalEarnedYen: number;
+  lastReceipt: JobReceipt | null;
+};
+export type GameState = LegacyGameStateV2 & { economy: EconomyState };

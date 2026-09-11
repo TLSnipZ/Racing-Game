@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "savedAt": 1789158800000,
+  "state": {
+    "cashYen": 2000,
+    "playerLevel": 1,
+    "reputation": 0,
+    "selectedStarterId": "rz-t",
+    "activeVehicleId": "legacy-akari-002",
+    "ownedVehicles": [{
+      "instanceId": "legacy-akari-002",
+      "catalogId": "rz-t",
+      "name": "Akari RZ-T",
+      "year": 1992,
+      "engine": "1.8L Turbo I4",
+      "drive": "RWD",
+      "hp": 155,
+      "weightKg": 1180,
+      "odometerKm": 189340,
+      "engineCondition": 57,
+      "bodyCondition": 61,
+      "transmissionCondition": 56,
+      "originality": 88,
+      "installedParts": ["Factory intake", "Factory exhaust", "Factory ECU", "Factory turbo", "Worn road tires"]
+    }]
+  }
+}
