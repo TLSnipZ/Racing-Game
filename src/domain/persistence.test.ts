@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 import legacy from '../../tests/fixtures/save-v1.json';
 import { createNewGameState, createPlayerVehicle, purchaseStarter } from './game';
