@@ -1,5 +1,12 @@
 # Changelog
 
+## Planning update — Phase 5 scope (2026-09-11)
+
+- Expanded the next milestone to **Interface & Tuning**: first a prominent top navigation, real separate content sections and a persistent cash/level/rep HUD (5A), then the first performance-parts workshop (5B).
+- Recorded acceptance requirements for job continuity across section changes, mobile/keyboard access, global save warnings and save compatibility.
+- Clarified later progression automation under Phase 12: passive businesses, staff-managed routines and capped offline production; specific repeatable crew jobs remain to be designed.
+- Documentation only: updated README and roadmap. Live gameplay remains Phase 4 / Save v3; no gameplay, UI, balance or save-format changes in this planning update.
+
 ## Phase 4 — Economy (2026-09-11)
 
 - Added Garage Shift, Parts Run and Dockside Delivery with short timers, level gates, clear requirements and integer yen/rep rewards.
