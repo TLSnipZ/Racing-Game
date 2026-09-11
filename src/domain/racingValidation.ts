@@ -10,7 +10,6 @@ export function isRaceBuild(value: unknown): value is RaceBuild {
   return record(value) && int(value.powerPs, 1, 1000000) && int(value.weightKg, 250, 1000000)
     && ['grip', 'handling', 'braking', 'reliability', 'engineCondition', 'transmissionCondition'].every((key) => percent(value[key]));
 }
-
 /** Bounded structural and mathematical validation. This is not server-authoritative anti-cheat. */
 export function isRaceSnapshot(value: unknown): value is ActiveRace {
   if (!record(value) || value.modelVersion !== 1 || !int(value.runId, 1) || !text(value.eventId)
@@ -30,8 +29,10 @@ export function isRaceSnapshot(value: unknown): value is ActiveRace {
       || !text(entrant.name) || !text(entrant.vehicleName) || !text(entrant.catalogId) || !isRaceBuild(entrant.build)
       || !Array.isArray(entrant.sectorTimesMs) || entrant.sectorTimesMs.length !== sectors.length
       || !entrant.sectorTimesMs.every((time) => int(time, 1, 1000000)) || !int(entrant.totalTimeMs, 1, 8000000)) return false;
+    // Retain the validated array narrowing across the comparison callback.
+    const savedTimes = entrant.sectorTimesMs;
     const times = simulateSectors(entrant.build, sectors);
-    return times.every((time, index) => time === entrant.sectorTimesMs[index])
+    return times.every((time, index) => time === savedTimes[index])
       && entrant.totalTimeMs === times.reduce((sum, time) => sum + time, 0);
   });
 }
