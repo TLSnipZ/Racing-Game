@@ -1,0 +1,58 @@
+/* Phase 13A: a distinct endgame invitation board inside Races, not another root tab. */
+.phase13 .rivalIntro { display: flex; align-items: center; justify-content: space-between; gap: 24px; border: 1px solid #645441; background: linear-gradient(120deg,#211e1a,#141d22); padding: 26px; }
+.phase13 .rivalIntro h3 { font: italic 800 clamp(30px,3.8vw,45px)/1.08 'Barlow Condensed',Impact,sans-serif; text-transform: uppercase; color: #f2dfbd; margin: 12px 0; }
+.phase13 .rivalIntro p, .phase13 .rivalPolicy { font-size: 12px; line-height: 1.8; color: #b5c1c3; }
+.phase13 .rivalIntro p { margin: 0; max-width: 490px; }
+.phase13 .rivalCampaign { min-width: 180px; max-width: 260px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; text-align: right; color: #e6c79a; }
+.phase13 .rivalCampaign strong { font-size: 16px; line-height: 1.4; }
+.phase13 .rivalCampaign span { font-size: 10px; line-height: 1.6; color: #c3c8bf; }
+.phase13 .rivalCampaign progress { width: 100%; height: 7px; accent-color: #d6af76; }
+.phase13 .rivalPolicy { margin: 20px 0; }
+.phase13 .rivalGrid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+.phase13 .rivalCard { min-width: 0; display: flex; flex-direction: column; align-items: stretch; padding: 26px; background: #131b20; border: 1px solid #3d4a4f; border-top: 3px solid #997247; }
+.phase13 .rivalCardTop { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 10px; }
+.phase13 .rivalNumber { font: 800 43px/1 'Barlow Condensed',Impact,sans-serif; color: #c6a77d; }
+.phase13 .rivalCardTop > span:last-child { text-align: right; font-size: 9px; letter-spacing: .06em; line-height: 1.6; color: #9bafb3; }
+.phase13 .rivalCardTop b { display: block; color: #dfc4a2; font-size: 10px; margin-top: 4px; }
+.phase13 .rivalCard h4 { font: italic 800 36px/1.1 'Barlow Condensed',Impact,sans-serif; text-transform: uppercase; margin: 5px 0 10px; color: #f2e4cf; overflow-wrap: anywhere; }
+.phase13 .rivalBoss { font-size: 12px; line-height: 1.6; color: #cfb693; }
+.phase13 .rivalCard > p { font-size: 12px; line-height: 1.8; color: #b6c1c4; }
+.phase13 .rivalCard .rivalFocus { font-size: 11px; border-left: 2px solid #876e4b; padding-left: 12px; color: #d4cebd; }
+.phase13 .rivalGoals { list-style: none; padding: 0; margin: 8px 0 12px; display: grid; gap: 8px; }
+.phase13 .rivalGoals li { display: flex; align-items: flex-start; gap: 8px; font-size: 11px; line-height: 1.7; color: #cfcec0; }
+.phase13 .rivalGoals svg { margin-top: 3px; flex-shrink: 0; color: #cfaf80; }
+.phase13 .rivalCard > .rivalQualifier { flex: none; margin: 0 0 12px; align-self: flex-start; min-height: 40px; font-size: 10px; padding: 10px 12px; white-space: normal; }
+.phase13 .rivalTerms { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; border-block: 1px solid #354249; padding: 15px 0; margin: 8px 0; }
+.phase13 .rivalTerms dt { font-size: 9px; line-height: 1.5; color: #9fafb2; }
+.phase13 .rivalTerms dd { font: 800 27px/1.2 'Barlow Condensed',Impact,sans-serif; margin: 4px 0 0; color: #e5c99f; overflow-wrap: anywhere; }
+.phase13 .rivalCard .rivalRecord { font-size: 10px; color: #afc4c5; }
+.phase13 .rivalCard .rivalGate { font-size: 11px; line-height: 1.7; color: #d9c19d; }
+.phase13 .rivalActions { display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-top: 8px; }
+.phase13 .rivalActions button { display: flex; justify-content: center; align-items: center; gap: 8px; flex: none; min-height: 44px; padding: 12px; white-space: normal; font-size: 10px; line-height: 1.6; }
+.phase13 .rivalDefeated { border-top-color: #a9bd91; }
+.phase13 .rivalDefeated .rivalCardTop b { color: #c3dbab; }
+.phase13 .rivalFinale { grid-column: 1 / -1; background: linear-gradient(120deg,#25201a,#141c22); border-color: #92744d; }
+.phase13 .rivalFinale .rivalGoals { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.phase13 .rivalFinale .rivalTerms { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.phase13 .rivalFinale .rivalActions { flex-direction: row; }
+.phase13 .rivalFinale .rivalActions button { flex: 1; }
+.phase13 .rivalChampion, .phase13 .rivalResultNotice, .phase13 .rivalCityNotice { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; border: 1px solid #6c614a; background: #22231d; padding: 18px; margin: 20px 0; }
+.phase13 .rivalChampion { flex-wrap: nowrap; color: #d8d9b0; }
+.phase13 .rivalChampion svg { flex-shrink: 0; }
+.phase13 .rivalChampion strong { font-size: 12px; line-height: 1.6; }
+.phase13 .rivalChampion p, .phase13 .rivalResultNotice p, .phase13 .rivalCityNotice p { font-size: 12px; line-height: 1.8; color: #c8cdc1; margin: 0; }
+.phase13 .rivalBriefTerms { margin: 18px 0; padding: 16px; border: 1px solid #776345; background: #28231c; }
+.phase13 .rivalBriefTerms strong { color: #e6c79a; font-size: 12px; line-height: 1.6; }
+.phase13 .rivalBriefTerms p, .phase13 .rivalBriefTerms li { font-size: 11px; line-height: 1.8; color: #d0c9ba; }
+.phase13 .rivalBriefTerms ul { padding-left: 18px; margin-bottom: 0; }
+@media (max-width: 700px) {
+  .phase13 .rivalIntro { flex-direction: column; align-items: stretch; padding: 20px; gap: 18px; }
+  .phase13 .rivalCampaign { min-width: 0; max-width: none; align-items: flex-start; text-align: left; border-top: 1px solid #574e3f; padding-top: 15px; }
+  .phase13 .rivalGrid { grid-template-columns: minmax(0,1fr); }
+  .phase13 .rivalCard { padding: 20px; }
+  .phase13 .rivalFinale .rivalGoals { grid-template-columns: minmax(0,1fr); }
+  .phase13 .rivalFinale .rivalTerms { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .phase13 .rivalFinale .rivalActions { flex-direction: column; }
+  .phase13 .rivalFinale .rivalActions button { flex: none; }
+  .phase13 .rivalResultNotice button, .phase13 .rivalCityNotice button { width: 100%; white-space: normal; min-height: 44px; }
+}

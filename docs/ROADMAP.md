@@ -2,7 +2,7 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current milestone: **Phase 12 — Empire & Automation**. **Save v10.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
+Current milestone: **Phase 13A — Rival Crews & Bosses**. **Save v10 unchanged.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
 
 ## Implemented
 
@@ -21,6 +21,7 @@ Current milestone: **Phase 12 — Empire & Automation**. **Save v10.** The compl
 | 10 — Collection | Eight-model Collection Book, Common/Rare/Legendary/Icon metadata independent of performance, 18 persistent achievements with manual one-time yen rewards, two gated fixed-price Icon offers and Save v8 evidence-based migration. |
 | 11 — Advanced Cars | Three curated import/auction/barn sources, paid escrow/refunds and reserved delivery slots, exact timed contracts, Level-2 condition restoration, three new models, active Outer Kagehama and Save v9 preserving all previous fields. |
 | 12 — Empire & Automation | Three businesses with one-batch staff and permanent managers, repeated production into eight-hour tills, explicit collection, Levels 1–5, garage expansions 12→18→24→36, active Industrial District and Save v10 with no retrospective income. |
+| 13A — Rival Crews & Bosses | Four crew bosses with existing Club-podium qualifiers, one all-crews finale, five shared once-only achievement rewards, persistent titles and the unchanged v10 state shape. |
 
 Phase 8 preserves race model v1, level thresholds, original starter prices, original build ratings and all job/part/race rewards. The shared catalog adds three new models with their own ratings. See [PHASE8.md](PHASE8.md) for exact market, ownership and migration rules. Previous milestones remain documented historical contracts.
 
@@ -28,7 +29,7 @@ Phase 7 did not change race model v1, old saves, level thresholds, starter price
 
 ## Open presentation milestone — Graphics & Audio I
 
-The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9, Phase 10, Phase 11 or Phase 12.** City, Market, Heat, Collection, Advanced Cars and Empire were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
+The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9, Phase 10, Phase 11, Phase 12 or Phase 13A.** City, Market, Heat, Collection, Advanced Cars, Empire and the first Rival chapter were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
 
 Scope remains three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Define an asset/layer strategy before promising independently changeable paint, wheels and bodykits. Preserve gameplay and saves. This is a targeted pass, not conversion into freely driven 3D racing. Sequencing remains flexible; do not let further feature work silently remove it from the roadmap.
 
@@ -56,11 +57,21 @@ Managed storage is capped at eight hours of current-level output in total, onlin
 
 Permanent sequential garage expansions increase 12 spaces to 18/24/36 for ¥75,000/¥180,000/¥400,000 at Levels 4/6/8. Existing specialist reservations count against the expanded capacity across all acquisition routes. No old cars or escrow are lost. Industrial District opens at Level 3 and links to Empire's Businesses/Staff/Garage subviews; XP/Heat remain in the shared sticky HUD.
 
-## Next numbered milestone — Phase 13+: Endgame
+## Phase 13A — implemented first Endgame chapter
+
+Four level/Club-podium-gated crews and a Level-14 all-crews finale now live under Races → Rival Crews. First-place settlement records a defeat and earns a title; its separate yen bonus is manually claimed once through either the crew board or the same Collection achievement. All five use Standard stakes. Original races, Underground terms, cars, businesses and saved production remain unchanged. Full scope, balance and preservation: [PHASE13A.md](PHASE13A.md).
+
+This is deliberately **13A**, not the whole 13+ roadmap. Finishing the chapter triggers no reset, car loss, seasonal expiry or new property debt. Save v10 reuses race records and the existing achievement ledger; the original 18 rewards remain intact, plus five new ones. Multiple existing builds can win; an Icon car is not mandatory.
+
+## Recommended next milestone — Graphics & Audio I
+
+After the first complete economy, specialist, manager and rival loop, give the three starters, first garage and a race presentation their consistent visual/audio pass. Keep this explicitly open until real assets and feedback are delivered and reviewed. Do not silently count the new crew cards as the promised artwork pass.
+
+## Later numbered scope — Phase 13B+: Further Endgame
 
 Before implementing a reset-based Legacy/Prestige loop, define exactly what persists, what resets, entry requirements, rewards, claim rules and a confirmation/export recovery path. Accepted paid races, specialist escrow, Icon entitlements, collection history, managers and garage investments need explicit treatment. No automatic reset or unexplained loss of property is authorized merely by reaching a threshold.
 
-Start with a bounded playable endgame goal/rival milestone and a documented progression model rather than claiming all bosses, seasonal events and an expanded catalog exist. Higher-level balance should account for capped managed profit and player-controlled business upgrades. Keep historical saved economy/race/Heat contracts stable or provide tested version migrations. More crew systems and richer businesses remain extensions. **Graphics & Audio I is still a separate open milestone and must not disappear behind the numbered systems.**
+The first bounded goal/rival chapter is now delivered as Phase 13A. Further bosses, seasons and an expanded catalog still need their own explicit scope and balance. Higher-level balance should account for capped managed profit and player-controlled business upgrades. Keep historical saved economy/race/Heat contracts stable or provide tested version migrations. More crew systems and richer businesses remain extensions. **Graphics & Audio I is still a separate open milestone and must not disappear behind the numbered systems.**
 
 ## Market and workshop browsing — implemented
 
@@ -73,7 +84,7 @@ The Workshop component categories remain implemented: visible buttons and a sync
 | Phase | Scope |
 | --- | --- |
 | Graphics & Audio I | Targeted first car/garage/race art, animation and audio pass. Open presentation milestone. |
-| 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and catalog expansion. |
+| 13B+ — Further Endgame | Explicitly designed Legacy/Prestige, additional rivals/bosses, seasons and catalog expansion. No reset is currently implemented. |
 | Further graphics expansion | Apply the chosen style to later content; plan visible paint/wheel/bodykit changes through a consistent asset system. |
 
 ## Automation: implemented versus future

@@ -6,17 +6,37 @@ A pre-alpha car-collection, street-racing and automotive-empire game set in a fi
 
 > Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
 
-**Current milestone: Phase 12 — Empire & Automation** · **Save schema: v10** · **Next numbered system: Phase 13+ — Endgame**
+**Current milestone: Phase 13A — Rival Crews & Bosses** · **Save schema: v10 (unchanged)** · **Next presentation milestone: Graphics & Audio I**
 
 **Graphics & Audio I remains an open, separate presentation milestone.** The district map, car profiles and race replay are functional placeholders, not final artwork.
 
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Empire & saves](docs/PHASE12.md) · [Advanced cars](docs/PHASE11.md) · [Collection](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Rival chapter & saves](docs/PHASE13A.md) · [Empire](docs/PHASE12.md) · [Advanced cars](docs/PHASE11.md) · [Collection](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
 ## Play now
 
 Choose one of three inexpensive starters with **¥50,000**, earn yen and reputation, fit performance parts and test your build against three rivals. The first complete loop is **starter → job → income → tuning → race → reward**.
 
-### New: businesses, managers and garage expansion
+### New: Rival Crews & Bosses — first Endgame chapter
+
+**Races → Rival Crews** adds five Boss challenges while **Open events** keeps the original eight. No extra root tab or prestige reset. Inspect a crew, select your car, review the invitation and all payouts, then explicitly confirm entry. City also has a **MEET RIVAL CREWS** shortcut. The first four challenges are independently gated; the finale needs them all.
+
+| Crew / boss | Discipline | Invitation | Entry per attempt | First-win title bonus |
+| --- | --- | --- | ---: | ---: |
+| **Ironline / Daichi** | Drag | Level 6 + settled Dockyard Redline podium | ¥4,000 | ¥20,000 |
+| **Lantern Pact / Ayame** | Touge | Level 8 + settled Hakuro Switchback Club podium | ¥5,000 | ¥30,000 |
+| **Black Static / Souta** | Street Sprint | Level 10 + settled Ward Club Circuit podium | ¥6,000 | ¥45,000 |
+| **Zero Meridian / Kaede** | Expressway | Level 12 + settled Eastline Midnight Club podium | ¥8,000 | ¥60,000 |
+| **Midnight Council / Shin** | Mixed-sector Sprint finale | Level 14 + all four settled crew wins | ¥10,000 | ¥125,000 |
+
+A qualifier podium is **first, second or third**; existing records count. Defeating a crew requires **first overall and SETTLE RESULT**, not merely waiting for the timer. All five use Standard stakes with no added Heat, while ordinary patrol/Lay low entry restrictions still apply. Fixed rivals mean reloading cannot reroll the result. Fees are not refunded on withdrawal, and a poor finish may pay less than entry.
+
+Every race has normal placement prizes. The table's **title bonus is a separate, one-time, manually claimed achievement reward**, available on the crew card or in Collection. Both buttons share one claim; replays never renew it. Five new achievements bring the total to **23**, without changing the original eighteen rewards. The chapter culminates in **Kagehama Night Champion**, a title with no hidden performance multiplier. No cars, businesses, managers, money or save history are reset on completion.
+
+The challenges use the existing tuning and condition model. Tested winning routes include a restored, tuned RZ-T for drag/expressway and Pico R for technical/sprint/finale work: **no compulsory Icon purchase or one-time specialist car**. Every boss has multiple viable model/build combinations. Build guidance and full prize tables are in each briefing.
+
+**Save v10 remains unchanged.** Wins reuse race records and prizes reuse the existing achievement ledger; prior saves load without resetting output, escrow or activities. Business managers and specialist work continue alongside the driver's race. The full chapter contract and all four placements' rewards are in [PHASE13A.md](docs/PHASE13A.md). This is Phase **13A**, not a claim that prestige, every boss, seasons or final art are complete.
+
+### Businesses, managers and garage expansion
 
 **Empire** is a ninth isolated tab with **Businesses**, **Staff & Managers** and **Garage Expansion**. Industrial District opens at **Level 3** and links to these operations. Your sticky cash/level/REP/XP/Heat HUD stays available; the Empire badge flags completed earnings ready to transfer.
 
@@ -58,7 +78,7 @@ Auction bids are binding, can be raised before the original deadline and never t
 
 **Restoration opens at Level 2:** review and pay to restore engine, body, transmission or all three to 100%, immediately. Costs depend on the model and actual deficit and are shown before confirmation. Purchased/fitted upgrades, mileage and originality remain unchanged. An assigned race/job car stays locked until settlement/cancellation; a parked spare can be repaired. No new wear, debts or forced repair costs have been added. Barn restoration is optional and its estimate is shown separately before acquisition.
 
-Outer Kagehama now has its first Level-5 barn lead. Dockside and East Ward link to the import and auction desks. The Collection Book now contains **11 models**, including the fourth manufacturer Mizuno and the Roadster body type. Existing six-car dealer batches, old Icon offers, 18 achievements and all previously accepted races/Heat terms are unchanged.
+Outer Kagehama now has its first Level-5 barn lead. Dockside and East Ward link to the import and auction desks. The Collection Book now contains **11 models**, including the fourth manufacturer Mizuno and the Roadster body type. Existing six-car dealer batches, old Icon offers, the original 18 achievement rewards and all previously accepted races/Heat terms are unchanged.
 
 **Specialist save compatibility:** the historical v8→v9 step adds only empty specialist state. Current v10 additionally retains it unchanged while introducing Empire. Export codes include pending escrow, incoming cars, deadlines, surveyed leads and consumed sources. Read [PHASE11.md](docs/PHASE11.md) for exact terms, capacity protection and restoration pricing.
 
@@ -68,7 +88,7 @@ Outer Kagehama now has its first Level-5 barn lead. Dockside and East Ward link 
 
 **Common → Rare → Legendary → Icon** are collector classifications, not performance modifiers, spawn odds or price multipliers. The 118 PS Tora 85 is Legendary, while the more powerful Pico R is Rare. Badges appear in Garage, Market and Collection. The original six-model used stock generator and its asking prices are unchanged.
 
-There are **18 achievements** with visible criteria and progress. Earn badges through collection, work, trading, tuning, racing and completed Lay low recovery. They stay earned after a sale or stock restoration. Each has a fixed, **manually claimed one-time yen reward**, from ¥1,000 to ¥12,500. The navigation badge counts claimable rewards. Viewing or reloading does not pay them; there is no extra XP, REP or passive stat bonus. Collection reward income is shown separately from job/race/dealer totals.
+There are **23 achievements** (the original 18 plus five Rival Crews titles) with visible criteria and progress. Earn badges through collection, work, trading, tuning, racing and completed Lay low recovery. They stay earned after a sale or stock restoration. Each has a fixed, **manually claimed one-time yen reward**, from ¥1,000 to ¥125,000 (the original eighteen still top out at ¥12,500). The navigation badge counts claimable rewards. Viewing or reloading does not pay them; there is no extra XP, REP or passive stat bonus. Collection reward income is shown separately from job/race/dealer totals.
 
 | One-time Icon offer | Requirements | Exact car | Purchase price |
 | --- | --- | --- | ---: |
@@ -223,7 +243,8 @@ Unreadable/newer saves are protected, not deleted. Failed writes cannot consume 
 - [x] **10 — Collection:** eight-model book, independent rarity badges, 18 one-time manually claimed achievements, two gated Icon purchases and Save v8 migration.
 - [x] **11 — Advanced Cars:** three curated specialist sources, escrow/refunds, reserved deliveries, optional barn recovery and condition restoration; Save v9.
 - [x] **12 — Empire & Automation:** three properties, manual batches, permanent managers, capped eight-hour production, manual till collection and garage expansion to 36; Save v10.
-- [ ] **13+ — Endgame:** Legacy/Prestige, rivals, bosses, events and catalog expansion.
+- [x] **13A — Rival Crews & Bosses:** four crew challenges, a finale, titles and shared one-time bonuses; no reset.
+- [ ] **13B+ — Further Endgame:** designed Legacy/Prestige, seasonal events, more rivals and catalog expansion.
 
 [Detailed roadmap](docs/ROADMAP.md). Business/manager automation is implemented as the first Empire slice. Personal-job delegation, crew squads, automatic racing/trading and broader business content remain extensions, not current features. README, roadmap, changelog and compatibility notes are reviewed with every phase.
 

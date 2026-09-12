@@ -1,5 +1,16 @@
 # Changelog
 
+## Phase 13A — Rival Crews & Bosses (2026-09-12)
+
+- Added a Rival Crews subview inside Races, retaining nine main tabs and all eight original Open events.
+- Added four fixed Crew Boss events with level and existing Club-podium gates, plus a Level-14 finale requiring four settled crew wins. Enforce gates in the shared race entry command, not only buttons.
+- Reused saved model-v1 races, three-rival grids, chosen vehicles, deterministic sector replay, one-time settlement and personal records. Boss events use Standard stakes only; no new Heat, forfeits or reset.
+- Added five persistent titles and one-time manually claimed achievement bonuses, shared between Rival Crews and Collection. The original 18 achievements remain unchanged, for 23 total.
+- Added City/qualifier shortcuts, explicit invitation progress, build guidance, separate prize/bonus terms, loss/replay states and champion chapter completion without deleting any property.
+- Kept Save v10, KAGEHAMA1 and all migrations unchanged: new progress fits existing records/achievement ledgers. Added a genuine released-v10 fixture with active managers, partial income, garage expansion and paid driver/broker work; retained previous fixtures byte-for-byte.
+- Added rule, qualification, multiple-attainable-build, first-win/replay/bonus, 13-event history and compatibility tests, plus production-browser checks for money, failure, navigation, continuity, exports and narrow layouts.
+- Updated README, roadmap and Phase 13A contract. The first Endgame chapter is done; Legacy/Prestige and seasons remain future. Graphics & Audio I is the recommended next separate milestone, still open.
+
 ## Phase 12 — Empire & Automation (2026-09-12)
 
 - Reviewed desktop/mobile/fallback-font screenshots and kept vertical card actions compact instead of stretching to fill their cards; added button-height regression checks. Updated historical tab/schema expectations while retaining exact old-field comparisons and checking the added empty Empire separately.

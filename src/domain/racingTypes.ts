@@ -12,7 +12,7 @@ export type RaceBuild = {
 export type RacePrize = { yen: number; reputation: number };
 export type Rival = { name: string; vehicleName: string; catalogId: string; build: RaceBuild };
 export type RaceEvent = {
-  id: string; name: string; discipline: RaceDiscipline; tier: 'Rookie' | 'Club';
+  id: string; name: string; discipline: RaceDiscipline; tier: 'Rookie' | 'Club' | 'Boss';
   minLevel: number; entryFeeYen: number; playbackMs: number; distanceKm: number;
   description: string; focus: string; sectors: readonly RaceSector[]; prizes: readonly RacePrize[];
   rivals: readonly Rival[];

@@ -56,7 +56,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
   }
   return <header className="gameTopbar" ref={header}>
     <div className="gameHud"><div className="compactBrand"><div className="eyebrow">KAGEHAMA / UNDERGROUND</div>
-      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 12</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
+      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 13A</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
       <div className="playerMeta" aria-label="Player status"><div><span>CASH</span><strong data-testid="cash" title={`¥${game.cashYen.toLocaleString('en-US')}`}>¥{game.cashYen.toLocaleString('en-US')}</strong></div>
         <div className="hudLevel"><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong>
           <HudLevelProgress reputation={game.reputation} playerLevel={game.playerLevel} /></div>
