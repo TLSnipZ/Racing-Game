@@ -1,0 +1,34 @@
+name: Prepare isolated Phase 8 workspace
+on:
+  push:
+    branches: [prepare/8-market-workspace]
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: c97c2f2aa6a81826039ac7caff9f48af82b1c1ea
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm install
+      - name: Package source and dependencies for isolated verification
+        run: |
+          mkdir -p /tmp/phase8-workspace
+          git archive HEAD | tar -x -C /tmp/phase8-workspace
+          cp -a node_modules /tmp/phase8-workspace/
+          cp package-lock.json /tmp/phase8-workspace/local-dependency-lock.json
+          cp "$(command -v node)" /tmp/phase8-workspace/node-local
+          tar -czf /tmp/phase8-workspace.tgz -C /tmp/phase8-workspace .
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase8-workspace
+          path: /tmp/phase8-workspace.tgz
+          retention-days: 1
+          compression-level: 0
