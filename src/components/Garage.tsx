@@ -1,9 +1,8 @@
-import { getReservedVehicleIds } from '../domain/garageCapacity';
+import { getGarageCapacity, getReservedVehicleIds } from '../domain/garageCapacity';
 import { RarityBadge } from './RarityBadge';
 import { useState } from 'react';
 import { Check, KeyRound, Search, Warehouse } from 'lucide-react';
 import { VEHICLE_CATALOG, BODY_TYPES, MANUFACTURERS } from '../data/vehicles';
-import { GARAGE_CAPACITY } from '../domain/marketStock';
 import { getActiveVehicle, getConditionLabel, getOverallCondition, getPowerToWeight, listGarageVehicles, type GarageSort } from '../domain/garage';
 import { getFittedPartNames, getVehicleBuildStats } from '../domain/tuning';
 import type { GameState, PlayerVehicle } from '../domain/types';
@@ -13,7 +12,7 @@ function ConditionMeter({ label, value }: { label: string; value: number }) {
   return <div className="conditionRow"><div><span>{label}</span><strong>{value}%</strong></div>
     <div role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value} className={`conditionTrack ${value < 60 ? 'conditionWorn' : ''}`}><span style={{ width: `${value}%` }} /></div></div>;
 }
-export function Garage({ game, blocked, onActivate, onMarket, onCollection }: { game: GameState; blocked: boolean; onActivate: (id: string) => void; onCollection: () => void; onMarket: () => void }) {
+export function Garage({ game, blocked, onActivate, onMarket, onEmpire, onCollection }: { onEmpire: () => void; game: GameState; blocked: boolean; onActivate: (id: string) => void; onCollection: () => void; onMarket: () => void }) {
   const [inspectedId, setInspectedId] = useState<string | null>(null);
   const [query, setQuery] = useState(''); const [sort, setSort] = useState<GarageSort>('name');
   const active = getActiveVehicle(game);
@@ -61,7 +60,7 @@ export function Garage({ game, blocked, onActivate, onMarket, onCollection }: { 
     <div className="collectionHeader"><div><span className="eyebrow">THE KEYS YOU OWN</span><h3>Vehicle collection</h3></div><div className="garageFilters">
       <label><Search size={15} /><span className="srOnly">Search owned vehicles</span><input type="search" placeholder="Name, year or vehicle ID" value={query} onChange={(e) => setQuery(e.target.value)} /></label>
       <label><span className="srOnly">Sort owned vehicles</span><select value={sort} onChange={(e) => setSort(e.target.value as GarageSort)}><option value="name">Name A–Z</option><option value="power">Power: high first</option><option value="condition">Condition: high first</option><option value="mileage">Mileage: low first</option></select></label></div></div>
-    <div className="ownedGrid">{vehicles.map(card)}<div className="futureCard"><KeyRound size={24} /><h4>More keys. More stories.</h4><p>Find individual used cars at Mercer Used Motors. {game.ownedVehicles.length} / {GARAGE_CAPACITY} garage spaces used.</p><button type="button" className="secondaryButton" onClick={onMarket}>OPEN VEHICLE MARKET</button></div></div>
+    <div className="ownedGrid">{vehicles.map(card)}<div className="futureCard"><KeyRound size={24} /><h4>More keys. More stories.</h4><p>Find individual used cars at Mercer Used Motors. {game.ownedVehicles.length} / {getGarageCapacity(game)} garage spaces used.</p><button type="button" className="secondaryButton" onClick={onMarket}>OPEN VEHICLE MARKET</button><button type="button" className="secondaryButton" onClick={onEmpire}>EXPAND GARAGE</button></div></div>
     {vehicles.length === 0 && <p className="emptySearch" role="status">No owned vehicles match this search. Your active car has not changed.</p>}
   </section>;
 }

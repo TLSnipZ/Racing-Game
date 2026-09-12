@@ -225,8 +225,8 @@ describe('Restoration preserves tuning, money safety and activity snapshots', ()
 });
 describe('Save v9 schema and frozen v8 compatibility', () => {
   it('preserves EVERY released-v8 field and claimed reward while adding only empty specialist state', () => {
-    const before=JSON.stringify(v8),next=deserializeSave(before); const {advanced,...old}=next.state;
-    expect(next.version).toBe(9); expect(SAVE_VERSION).toBe(9); expect(next.savedAt).toBe(v8.savedAt);
+    const before=JSON.stringify(v8),next=deserializeSave(before); const {empire:_empire,advanced,...old}=next.state;
+    expect(next.version).toBe(SAVE_VERSION); expect(SAVE_VERSION).toBe(10); expect(next.savedAt).toBe(v8.savedAt);
     expect(old).toEqual(v8.state); expect(advanced).toEqual(createAdvancedState()); expect(JSON.stringify(v8)).toBe(before);
     expect(importSaveCode('KAGEHAMA1-'+Buffer.from(before).toString('base64url')).state).toEqual(next.state);
   });

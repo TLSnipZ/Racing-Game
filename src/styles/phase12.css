@@ -1,0 +1,70 @@
+/* A dedicated owner-operations view; existing game imagery remains provisional. */
+.empireHeading { display:flex; justify-content:space-between; align-items:center; gap:24px; margin:22px 0; }
+.empireHeading h2 { font:italic 800 clamp(40px,5vw,66px)/1 'Barlow Condensed',Impact,sans-serif; text-transform:uppercase; margin:12px 0; }
+.empireHeading p { color:#b4c2c2; font-size:12px; line-height:1.7; }
+.empireHeading > svg { color:#d7bb8e; flex-shrink:0; }
+.empireSummary { display:grid; grid-template-columns:1.25fr 1.1fr 1fr auto; gap:18px; align-items:center; padding:24px; border:1px solid #54615a; background:linear-gradient(115deg,#1c2b27,#131c1e); }
+.empireSummary > div { min-width:0; }
+.empireSummary span { color:#b7bfa7; font-size:9px; letter-spacing:.1em; }
+.empireSummary strong { display:block; font:800 clamp(25px,3vw,36px)/1.3 'Barlow Condensed',Impact,sans-serif; color:#eee1c5; overflow-wrap:anywhere; }
+.empireSummary small { display:block; font-size:10px; line-height:1.6; color:#bacbc1; }
+.empireSummary strong small { display:inline; }
+.empireModes { display:flex; flex-wrap:wrap; gap:10px; margin:24px 0; }
+.empireModes button { border:1px solid #485454; color:#c4d1ce; background:#172125; padding:13px 18px; font-family:inherit; font-weight:600; font-size:11px; line-height:1.4; cursor:pointer; min-height:44px; }
+.empireModes button[aria-pressed='true'] { background:#cfb184; border-color:#edd2a7; color:#141b1a; }
+.empireExplanation { display:flex; align-items:flex-start; gap:13px; padding:18px; border-left:3px solid #c4a473; background:#18211f; margin-bottom:22px; }
+.empireExplanation svg { flex-shrink:0; color:#d9bf94; }
+.empireExplanation p { margin:0; font-size:12px; line-height:1.8; color:#ddd8c8; }
+.empireExplanation span { display:block; color:#b3c4bc; font-size:11px; }
+.businessGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
+.businessCard,.managerCard,.expansionCard { border:1px solid #40514b; background:#111b1b; padding:24px; min-width:0; display:flex; flex-direction:column; gap:14px; }
+.businessCardTop { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:8px; color:#9eb6ac; letter-spacing:.06em; }
+.businessCardTop b { border:1px solid #667557; padding:5px 7px; color:#d5d4ac; line-height:1.4; }
+.businessCard h3,.managerCard h3,.expansionCard h3 { font:800 clamp(27px,2.7vw,34px)/1.15 'Barlow Condensed',Impact,sans-serif; margin:0; color:#eee2cd; overflow-wrap:anywhere; }
+.businessCard > p,.managerCard p,.expansionCard p { font-size:12px; line-height:1.8; color:#b3c2c0; margin:0; }
+.businessFacts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); margin:0; padding:16px 0; border-block:1px solid #33473e; gap:15px; }
+.businessFacts dt { font-size:9px; color:#b1c0b4; }
+.businessFacts dd { margin:5px 0 0; color:#e2cfad; font-size:13px; font-weight:650; overflow-wrap:anywhere; }
+.businessTill { display:flex; flex-direction:column; gap:5px; }
+.businessTill span { font-size:9px; letter-spacing:.09em; color:#b9c8b9; }
+.businessTill strong { font:800 34px/1.3 'Barlow Condensed',Impact,sans-serif; color:#e1c18e; overflow-wrap:anywhere; }
+.businessTill small { font-size:10px; line-height:1.7; color:#b3c4bd; }
+.businessCard progress { display:block; width:100%; height:6px; accent-color:#c5b17d; }
+.businessCard .batchStatus { font-size:10px; min-height:28px; }
+.businessActions { display:flex; flex-wrap:wrap; gap:10px; }
+.businessActions button,.empireSummary button,.businessCard > button,.managerCard > button,.expansionCard > button { flex:1 1 125px; display:flex; align-items:center; justify-content:center; gap:7px; min-height:44px; max-width:100%; padding:12px; white-space:normal; font-size:10px; line-height:1.55; overflow-wrap:anywhere; }
+/* Direct card buttons sit in a column: do not let row-button flex basis stretch their height. */
+.businessCard > button,.managerCard > button,.expansionCard > button { flex:0 0 auto; }
+.empirePrimary { background:#b25338; border:1px solid #e58c64; color:#fff1da; cursor:pointer; font-weight:700; }
+.empirePrimary:disabled,.empirePanel button:disabled { opacity:.5; cursor:not-allowed; }
+.businessHint,.managerCard > small,.expansionCard > small { display:block; color:#aebeae; font-size:10px; line-height:1.75; }
+.empireNotice { padding:16px; background:#2e281c; border:1px solid #8d794d; color:#ebd7a8; font-size:12px; line-height:1.7; }
+.managerMonogram { display:flex; align-items:center; justify-content:center; width:64px; height:64px; border:1px solid #7f8561; color:#e7c696; font:800 36px 'Barlow Condensed',Impact,sans-serif; background:linear-gradient(135deg,#3c4934,#182923); }
+.managerCard > strong { display:flex; align-items:center; gap:8px; color:#e0c493; font-size:13px; }
+.expansionCard > strong { color:#e3c795; font:800 52px/1 'Barlow Condensed',Impact,sans-serif; }
+.expansionCard > strong span { display:block; margin-top:8px; font:500 10px/1.5 sans-serif; letter-spacing:.1em; }
+.empireLedger { display:flex; flex-wrap:wrap; align-items:center; gap:15px; padding:20px; margin-top:24px; border:1px solid #415049; color:#c8c8ae; font-size:11px; line-height:1.8; }
+.empireLedger span,.empireLedger small { overflow-wrap:anywhere; min-width:0; }
+.empireFootnote { color:#acb9b4; font-size:11px; line-height:1.9; margin:22px 0; }
+.empireDialog { width:min(580px,calc(100vw - 28px)); box-sizing:border-box; max-height:calc(100dvh - 28px); overflow:auto; background:#15201e; border:1px solid #9b895e; color:#ece4d3; padding:28px; }
+.empireDialog::backdrop { background:#050907df; }
+.empireDialogHead { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.empireDialog h3 { font:800 38px/1.15 'Barlow Condensed',Impact,sans-serif; margin:15px 0; overflow-wrap:anywhere; }
+.empireDialog h4 { font-size:15px; margin:12px 0; }
+.empireDialog p { color:#c6cec4; font-size:12px; line-height:1.85; }
+.empireInvoice { display:flex; flex-direction:column; gap:8px; margin:20px 0; padding:20px; border-block:1px solid #4a5b4c; }
+.empireInvoice span { color:#acba9f; font-size:10px; letter-spacing:.1em; }
+.empireInvoice strong { color:#edc791; font:800 38px 'Barlow Condensed',Impact,sans-serif; overflow-wrap:anywhere; }
+.empireInvoice small { color:#b5c7b7; font-size:11px; overflow-wrap:anywhere; }
+.shell.phase12 .futureCard .secondaryButton { margin:8px 0 0; }
+@media(max-width:1100px) { .businessGrid { grid-template-columns:repeat(2,minmax(0,1fr)); } .empireSummary { grid-template-columns:repeat(3,minmax(0,1fr)); } .empireSummary > button { grid-column:1/-1; } }
+@media(max-width:650px) {
+ .businessGrid { grid-template-columns:minmax(0,1fr); }
+ .empireHeading { align-items:flex-start; gap:12px; }.empireHeading > svg { width:28px; }
+ .empireHeading h2 { font-size:38px; overflow-wrap:anywhere; }
+ .empireSummary { grid-template-columns:repeat(2,minmax(0,1fr)); padding:16px; gap:16px; }
+ .empireSummary > div:nth-child(3) { grid-column:1/-1; }.empireSummary strong { font-size:27px; }
+ .businessCard,.managerCard,.expansionCard { padding:20px; }.empireDialog { padding:20px; }
+ .empireModes button { flex:1 1 120px; font-size:10px; padding:12px; }
+}
+@media(prefers-reduced-motion:reduce) { .empirePanel * { scroll-behavior:auto!important; } }

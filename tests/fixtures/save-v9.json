@@ -1,0 +1,548 @@
+{
+  "version": 9,
+  "savedAt": 4000,
+  "state": {
+    "cashYen": 1764300,
+    "playerLevel": 8,
+    "reputation": 560,
+    "selectedStarterId": "tora-85",
+    "ownedVehicles": [
+      {
+        "instanceId": "phase11-tora",
+        "catalogId": "tora-85",
+        "name": "Hoshino Tora 85",
+        "year": 1986,
+        "engine": "1.6L NA I4",
+        "drive": "RWD",
+        "hp": 118,
+        "weightKg": 970,
+        "odometerKm": 213760,
+        "engineCondition": 100,
+        "bodyCondition": 68,
+        "transmissionCondition": 72,
+        "originality": 91,
+        "installedParts": [
+          "Factory intake",
+          "Factory exhaust",
+          "Factory ECU",
+          "Factory suspension",
+          "Aged road tires"
+        ],
+        "tuning": {
+          "purchasedPartIds": [
+            "aoba-panel-filter"
+          ],
+          "installedBySlot": {
+            "intake": "aoba-panel-filter"
+          }
+        }
+      },
+      {
+        "instanceId": "market-v1:0:pico-rs",
+        "catalogId": "pico-rs",
+        "name": "Hoshino Pico RS",
+        "year": 1996,
+        "engine": "1.5L NA I4",
+        "drive": "FWD",
+        "hp": 105,
+        "weightKg": 890,
+        "odometerKm": 170100,
+        "engineCondition": 82,
+        "bodyCondition": 89,
+        "transmissionCondition": 79,
+        "originality": 92,
+        "installedParts": [
+          "Factory intake",
+          "Factory exhaust",
+          "Factory ECU",
+          "Factory suspension",
+          "Road tires"
+        ],
+        "tuning": {
+          "purchasedPartIds": [],
+          "installedBySlot": {}
+        }
+      }
+    ],
+    "activeVehicleId": "phase11-tora",
+    "economy": {
+      "nextRunId": 1,
+      "activeJob": null,
+      "completedJobs": 0,
+      "totalEarnedYen": 0,
+      "lastReceipt": null
+    },
+    "racing": {
+      "nextRunId": 2,
+      "activeRace": {
+        "modelVersion": 1,
+        "runId": 1,
+        "eventId": "hakuro-intro",
+        "eventName": "Hakuro First Descent",
+        "discipline": "touge",
+        "vehicleId": "phase11-tora",
+        "startedAtMs": 3000,
+        "countdownMs": 3000,
+        "playbackMs": 25000,
+        "finishesAtMs": 31000,
+        "entryFeeYen": 1000,
+        "distanceKm": 5,
+        "sectors": [
+          {
+            "name": "Trail-braking entry",
+            "profile": "braking",
+            "baseTimeMs": 10000
+          },
+          {
+            "name": "Lantern hairpins",
+            "profile": "technical",
+            "baseTimeMs": 22000
+          },
+          {
+            "name": "Ridge transitions",
+            "profile": "flow",
+            "baseTimeMs": 14000
+          },
+          {
+            "name": "Final switchbacks",
+            "profile": "technical",
+            "baseTimeMs": 22000
+          }
+        ],
+        "entrants": [
+          {
+            "name": "Kei / Night Clerk",
+            "vehicleName": "Hoshino Pico RS",
+            "catalogId": "pico-rs",
+            "build": {
+              "powerPs": 108,
+              "weightKg": 920,
+              "grip": 51,
+              "handling": 61,
+              "braking": 49,
+              "reliability": 86,
+              "engineCondition": 85,
+              "transmissionCondition": 85
+            },
+            "id": "rival-1",
+            "sectorTimesMs": [
+              9752,
+              20765,
+              13576,
+              20765
+            ],
+            "totalTimeMs": 64858
+          },
+          {
+            "name": "Nori / Side Street",
+            "vehicleName": "Hoshino Tora 85",
+            "catalogId": "tora-85",
+            "build": {
+              "powerPs": 120,
+              "weightKg": 980,
+              "grip": 50,
+              "handling": 64,
+              "braking": 48,
+              "reliability": 76,
+              "engineCondition": 80,
+              "transmissionCondition": 80
+            },
+            "id": "rival-2",
+            "sectorTimesMs": [
+              9920,
+              20887,
+              13601,
+              20887
+            ],
+            "totalTimeMs": 65295
+          },
+          {
+            "name": "Mako / Loose Change",
+            "vehicleName": "Akari RZ-T",
+            "catalogId": "rz-t",
+            "build": {
+              "powerPs": 150,
+              "weightKg": 1190,
+              "grip": 48,
+              "handling": 50,
+              "braking": 48,
+              "reliability": 65,
+              "engineCondition": 70,
+              "transmissionCondition": 70
+            },
+            "id": "rival-3",
+            "sectorTimesMs": [
+              10481,
+              22848,
+              14552,
+              22848
+            ],
+            "totalTimeMs": 70729
+          },
+          {
+            "name": "YOU",
+            "vehicleName": "Hoshino Tora 85",
+            "catalogId": "tora-85",
+            "build": {
+              "powerPs": 124,
+              "weightKg": 970,
+              "grip": 50,
+              "handling": 66,
+              "braking": 47,
+              "reliability": 78,
+              "engineCondition": 100,
+              "transmissionCondition": 72
+            },
+            "id": "player",
+            "sectorTimesMs": [
+              9929,
+              20698,
+              13382,
+              20698
+            ],
+            "totalTimeMs": 64707
+          }
+        ],
+        "prizes": [
+          {
+            "yen": 9750,
+            "reputation": 17
+          },
+          {
+            "yen": 5700,
+            "reputation": 11
+          },
+          {
+            "yen": 3000,
+            "reputation": 6
+          },
+          {
+            "yen": 750,
+            "reputation": 2
+          }
+        ],
+        "heatRisk": {
+          "rulesVersion": 1,
+          "heatBefore": 0,
+          "heatGain": 14,
+          "heatAfter": 14,
+          "policeFineYen": 0,
+          "basePrizes": [
+            {
+              "yen": 6500,
+              "reputation": 14
+            },
+            {
+              "yen": 3800,
+              "reputation": 9
+            },
+            {
+              "yen": 2000,
+              "reputation": 5
+            },
+            {
+              "yen": 500,
+              "reputation": 2
+            }
+          ]
+        }
+      },
+      "completedRaces": 0,
+      "cancelledRaces": 0,
+      "wins": 0,
+      "podiums": 0,
+      "totalEntryFeesYen": 1000,
+      "totalEarnedYen": 0,
+      "records": [],
+      "lastResult": null
+    },
+    "market": {
+      "stockVersion": 1,
+      "generation": 1,
+      "refreshedAtMs": 1000,
+      "listings": [
+        {
+          "id": "market-v1:1:pico-rs",
+          "vehicle": {
+            "instanceId": "market-v1:1:pico-rs",
+            "catalogId": "pico-rs",
+            "name": "Hoshino Pico RS",
+            "year": 1992,
+            "engine": "1.5L NA I4",
+            "drive": "FWD",
+            "hp": 105,
+            "weightKg": 890,
+            "odometerKm": 156400,
+            "engineCondition": 68,
+            "bodyCondition": 61,
+            "transmissionCondition": 66,
+            "originality": 91,
+            "installedParts": [
+              "Factory intake",
+              "Factory exhaust",
+              "Factory ECU",
+              "Factory suspension",
+              "Road tires"
+            ],
+            "tuning": {
+              "purchasedPartIds": [],
+              "installedBySlot": {}
+            }
+          },
+          "askingPriceYen": 32500,
+          "minLevel": 1,
+          "seller": "Mercer Used Motors"
+        },
+        {
+          "id": "market-v1:1:tora-85",
+          "vehicle": {
+            "instanceId": "market-v1:1:tora-85",
+            "catalogId": "tora-85",
+            "name": "Hoshino Tora 85",
+            "year": 1985,
+            "engine": "1.6L NA I4",
+            "drive": "RWD",
+            "hp": 118,
+            "weightKg": 970,
+            "odometerKm": 199400,
+            "engineCondition": 91,
+            "bodyCondition": 92,
+            "transmissionCondition": 92,
+            "originality": 85,
+            "installedParts": [
+              "Factory intake",
+              "Factory exhaust",
+              "Factory ECU",
+              "Factory suspension",
+              "Aged road tires"
+            ],
+            "tuning": {
+              "purchasedPartIds": [],
+              "installedBySlot": {}
+            }
+          },
+          "askingPriceYen": 57700,
+          "minLevel": 1,
+          "seller": "East Ward Trade Counter"
+        },
+        {
+          "id": "market-v1:1:rz-t",
+          "vehicle": {
+            "instanceId": "market-v1:1:rz-t",
+            "catalogId": "rz-t",
+            "name": "Akari RZ-T",
+            "year": 1991,
+            "engine": "1.8L Turbo I4",
+            "drive": "RWD",
+            "hp": 155,
+            "weightKg": 1180,
+            "odometerKm": 119700,
+            "engineCondition": 66,
+            "bodyCondition": 66,
+            "transmissionCondition": 58,
+            "originality": 89,
+            "installedParts": [
+              "Factory intake",
+              "Factory exhaust",
+              "Factory ECU",
+              "Factory turbo",
+              "Worn road tires"
+            ],
+            "tuning": {
+              "purchasedPartIds": [],
+              "installedBySlot": {}
+            }
+          },
+          "askingPriceYen": 73700,
+          "minLevel": 1,
+          "seller": "Bayline Auto Exchange"
+        },
+        {
+          "id": "market-v1:1:senda-s",
+          "vehicle": {
+            "instanceId": "market-v1:1:senda-s",
+            "catalogId": "senda-s",
+            "name": "Akari Senda S",
+            "year": 1998,
+            "engine": "2.0L NA I4",
+            "drive": "RWD",
+            "hp": 145,
+            "weightKg": 1230,
+            "odometerKm": 193900,
+            "engineCondition": 84,
+            "bodyCondition": 80,
+            "transmissionCondition": 83,
+            "originality": 90,
+            "installedParts": [
+              "Factory intake",
+              "Factory exhaust",
+              "Factory ECU",
+              "Factory suspension",
+              "Road tires"
+            ],
+            "tuning": {
+              "purchasedPartIds": [],
+              "installedBySlot": {}
+            }
+          },
+          "askingPriceYen": 90500,
+          "minLevel": 3,
+          "seller": "Mercer Used Motors"
+        },
+        {
+          "id": "market-v1:1:pico-r",
+          "vehicle": {
+            "instanceId": "market-v1:1:pico-r",
+            "catalogId": "pico-r",
+            "name": "Hoshino Pico R",
+            "year": 2001,
+            "engine": "1.8L NA I4",
+            "drive": "FWD",
+            "hp": 165,
+            "weightKg": 1010,
+            "odometerKm": 117900,
+            "engineCondition": 82,
+            "bodyCondition": 83,
+            "transmissionCondition": 87,
+            "originality": 98,
+            "installedParts": [
+              "Factory intake",
+              "Factory exhaust",
+              "Factory ECU",
+              "Factory suspension",
+              "Road tires"
+            ],
+            "tuning": {
+              "purchasedPartIds": [],
+              "installedBySlot": {}
+            }
+          },
+          "askingPriceYen": 136400,
+          "minLevel": 4,
+          "seller": "East Ward Trade Counter"
+        },
+        {
+          "id": "market-v1:1:estate-gt",
+          "vehicle": {
+            "instanceId": "market-v1:1:estate-gt",
+            "catalogId": "estate-gt",
+            "name": "Kazuma Estate GT",
+            "year": 1999,
+            "engine": "2.5L NA I6",
+            "drive": "RWD",
+            "hp": 190,
+            "weightKg": 1400,
+            "odometerKm": 192500,
+            "engineCondition": 71,
+            "bodyCondition": 74,
+            "transmissionCondition": 74,
+            "originality": 94,
+            "installedParts": [
+              "Factory intake",
+              "Factory exhaust",
+              "Factory ECU",
+              "Factory suspension",
+              "Road tires"
+            ],
+            "tuning": {
+              "purchasedPartIds": [],
+              "installedBySlot": {}
+            }
+          },
+          "askingPriceYen": 142300,
+          "minLevel": 5,
+          "seller": "Bayline Auto Exchange"
+        }
+      ],
+      "nextTransactionId": 2,
+      "purchasedCount": 1,
+      "soldCount": 0,
+      "totalSpentYen": 38000,
+      "totalReceivedYen": 0,
+      "lastTrade": {
+        "transactionId": 1,
+        "kind": "buy",
+        "vehicleId": "market-v1:0:pico-rs",
+        "vehicleName": "Hoshino Pico RS",
+        "amountYen": 38000
+      }
+    },
+    "heat": {
+      "value": 14,
+      "nextCooldownId": 1,
+      "cooldown": null,
+      "pendingStop": null,
+      "totalFinesPaidYen": 0,
+      "lastResolution": null
+    },
+    "collection": {
+      "collectedModelIds": [
+        "tora-85",
+        "pico-rs"
+      ],
+      "unlockedAchievementIds": [
+        "first-ride",
+        "first-purchase",
+        "first-part"
+      ],
+      "claimedAchievementIds": [
+        "first-ride"
+      ],
+      "purchasedIconIds": []
+    },
+    "advanced": {
+      "version": 1,
+      "nextActionId": 3,
+      "activeContract": {
+        "version": 1,
+        "runId": 2,
+        "offerId": "sora-import",
+        "kind": "import",
+        "startedAtMs": 2000,
+        "finishesAtMs": 92000,
+        "paidYen": 180000,
+        "escrowYen": 180000,
+        "vehicle": {
+          "instanceId": "specialist-v1:sora-import",
+          "catalogId": "sora-s",
+          "name": "Mizuno Sora S",
+          "year": 1994,
+          "engine": "1.8L NA I4",
+          "drive": "RWD",
+          "hp": 130,
+          "weightKg": 970,
+          "odometerKm": 45000,
+          "engineCondition": 92,
+          "bodyCondition": 90,
+          "transmissionCondition": 91,
+          "originality": 99,
+          "installedParts": [
+            "Factory intake",
+            "Factory exhaust",
+            "Factory ECU",
+            "Factory suspension",
+            "Road tires"
+          ],
+          "tuning": {
+            "purchasedPartIds": [],
+            "installedBySlot": {}
+          }
+        }
+      },
+      "surveyedBarnIds": [],
+      "acquiredOfferIds": [],
+      "totalPaidYen": 191700,
+      "totalRefundedYen": 0,
+      "restorationCount": 1,
+      "restorationSpentYen": 11700,
+      "lastReceipt": {
+        "kind": "ordered",
+        "offerId": "sora-import",
+        "vehicleId": "specialist-v1:sora-import",
+        "chargedYen": 180000,
+        "refundedYen": 0,
+        "actionId": 2
+      }
+    }
+  }
+}

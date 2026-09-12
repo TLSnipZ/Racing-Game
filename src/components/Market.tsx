@@ -1,11 +1,11 @@
-import { getReservedVehicleIds } from '../domain/garageCapacity';
+import { getGarageCapacity, getReservedVehicleIds } from '../domain/garageCapacity';
 import { RarityBadge } from './RarityBadge';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRightLeft, Check, KeyRound, LockKeyhole, RefreshCw, Search, Store, X } from 'lucide-react';
 import { BODY_TYPES, MANUFACTURERS, findVehicleDefinition, type BodyType, type ManufacturerId } from '../data/vehicles';
 import { getBuyRequirement, getRefreshRequirement, getSellRequirement, getVehicleSaleKey } from '../domain/market';
 import { createMarketFilters, filterMarketListings, getMarketFilterError } from '../domain/marketFilters';
-import { GARAGE_CAPACITY, MARKET_REFRESH_MS, getRefreshRemainingMs } from '../domain/marketStock';
+import { MARKET_REFRESH_MS, getRefreshRemainingMs } from '../domain/marketStock';
 import { getVehicleValuation } from '../domain/marketValue';
 import { getOverallCondition } from '../domain/garage';
 import type { MarketSort } from '../domain/marketTypes';
@@ -90,13 +90,13 @@ export function Market({ game, blocked, visible, onBuy, onSell, onRefresh, onGar
   return <section className="marketPanel" aria-labelledby="market-title">
     <div className="marketHeading"><div><span className="eyebrow">EAST WARD / MERCER USED MOTORS</span><h2 id="market-title">Find your next mistake.</h2>
       <p>Different keys. Different stories. Inspect the car before buying the promise.</p></div>
-      <div className="marketCapacity"><KeyRound size={21} /><strong data-testid="garage-capacity">{game.ownedVehicles.length} / {GARAGE_CAPACITY}</strong><span>GARAGE SPACES</span></div></div>
+      <div className="marketCapacity"><KeyRound size={21} /><strong data-testid="garage-capacity">{game.ownedVehicles.length} / {getGarageCapacity(game)}</strong><span>GARAGE SPACES</span></div></div>
     <div className="marketStrip"><Store size={20} /><div><strong>LOCAL USED STOCK · BATCH {game.market.generation + 1}</strong>
       <p>One unique example of each model per batch. Prices reflect year, condition, mileage and originality.</p></div>
       <div className="marketRefresh"><button type="button" className="secondaryButton" disabled={blocked || !!refreshReason}
         onClick={() => open({ kind: 'refresh', generation: game.market.generation })}><RefreshCw size={14} /> REQUEST NEW STOCK</button>
         <small data-testid="market-refresh-status">{refreshReason?.includes('clock') ? refreshReason : seconds > 0 ? `Available in ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}` : 'Available now · free · manual refresh'}</small></div></div>
-    {getReservedVehicleIds(game).length > 0 && <p className="specialistNote">1 garage space reserved for an incoming specialist car. Purchases include that reservation in the 12-space limit.</p>}
+    {getReservedVehicleIds(game).length > 0 && <p className="specialistNote">1 garage space reserved for an incoming specialist car. Purchases include that reservation in the current capacity limit.</p>}
     {game.market.lastTrade && <p className="marketReceipt" data-testid="market-last-trade"><Check size={15} /> LAST TRADE #{game.market.lastTrade.transactionId}: {game.market.lastTrade.kind === 'buy' ? 'BOUGHT' : 'SOLD'} {game.market.lastTrade.vehicleName} · {yen(game.market.lastTrade.amountYen)}</p>}
     {feedback && <div role="status" className="workshopFeedback">{feedback} <button className="secondaryButton" type="button" onClick={onGarage}>OPEN GARAGE</button></div>}
     <div className="marketModes" role="group" aria-label="Market mode"><button type="button" aria-pressed={mode === 'stock'} onClick={() => setMode('stock')}><Store size={16} /> USED STOCK <b>{game.market.listings.length}</b></button>
@@ -149,7 +149,7 @@ export function Market({ game, blocked, visible, onBuy, onSell, onRefresh, onGar
               onClick={() => { if (quote) open({ kind: 'sell', id: car.instanceId, key: getVehicleSaleKey(car, game.activeVehicleId), price: quote.offerYen, activeSale: car.instanceId === game.activeVehicleId }); }}>REVIEW DEALER OFFER</button></div></article>;
       })}</div>
     </>}
-    <p className="tuningNote">Stock changes only after a confirmed request. The first request is available immediately; later requests have a 5-minute cooldown. Closing the page never buys, sells or refreshes anything. These are provisional game prices, not real-world valuations. Imported garages above 12 spaces are kept intact but cannot buy more until below capacity.</p>
+    <p className="tuningNote">Stock changes only after a confirmed request. The first request is available immediately; later requests have a 5-minute cooldown. Closing the page never buys, sells or refreshes anything. These are provisional game prices, not real-world valuations. Oversized imported garages are kept intact. Expand in Empire or make room to buy more.</p>
     <dialog ref={dialog} className="partDialog marketDialog" aria-labelledby="market-review-title" onCancel={() => setReview(null)} onClose={() => setReview(null)}>
       <div className="dialogHeading"><span className="eyebrow">MERCER USED MOTORS / CONFIRMATION</span><button type="button" className="iconButton" aria-label="Close market preview" onClick={close}><X size={20} /></button></div>
       <h3 id="market-review-title">{review?.kind === 'buy' ? 'Confirm vehicle purchase' : review?.kind === 'sell' ? 'Confirm vehicle sale' : 'Request new stock'}</h3>

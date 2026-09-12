@@ -1,5 +1,22 @@
 # Changelog
 
+## Phase 12 — Empire & Automation (2026-09-12)
+
+- Reviewed desktop/mobile/fallback-font screenshots and kept vertical card actions compact instead of stretching to fill their cards; added button-height regression checks. Updated historical tab/schema expectations while retaining exact old-field comparisons and checking the added empty Empire separately.
+
+- Added a ninth Empire section with Businesses, Staff & Managers and Garage Expansion subviews, plus Industrial District/garage shortcuts and a completed-earnings badge.
+- Added East Ward Detail, Bayline Parts Supply and Midnight Dyno Works with explicit Level 3/5/7 purchases, one-batch manual staff and Levels 1–5 upgrades.
+- Added permanently assigned Rei/Jun/Nao managers: one-time hires start automatic repeat bookings with no recurring wages, hidden bills or driver/broker slot use.
+- Added deterministic read-only production from saved batch anchors. Managed tills hold eight hours of current-level profit; unmanaged tills hold one batch. No automatic cash, XP/REP or Heat changes.
+- Added atomic manual per-till/collect-all transfer, stale-revision guards and safe-integer checks. Reloads and unrelated saves never renew the cap; collection preserves incomplete batch time unless storage was full.
+- Added explicit pause semantics: keep completed earnings, discard unfinished batch time, and retain exact old profit through stopped upgrades. Resume starts a fresh batch.
+- Added sequential permanent garage expansions to 18/24/36 spaces, preserving paid specialist reservations and applying capacity to dealer, Icon, import/auction and barn acquisitions.
+- Opened Industrial District at Level 3, kept sticky cash/level/REP/XP/Heat, and retained useful inner-view state on ordinary tab switches.
+- Added Save v10 migration: preserve every previous field and add empty Empire state only. Production anchors, managers, banked earnings, collected totals and expansions travel in unchanged KAGEHAMA1 codes. Malformed current data is protected rather than reset.
+- Added a genuine released-v9 fixture with restored/tuned cars, a paid import and a pending Underground race, preserving all historical fixtures.
+- Added unit and production-browser regressions for accrual boundaries, cap/absence, claims, pause/upgrade, reservations, clock safety, failed/stale writes, full portable saves, prior-world equality and narrow/fallback-font views.
+- Updated README, roadmap and the Phase 12 contract. Graphics & Audio I remains open; crew squads, personal-job delegation, automatic purchases and endgame resets are not implied by manager production.
+
 ## Phase 11 — Advanced Cars (2026-09-12)
 
 - Kept the pending specialist shortcut visible within Used dealer as well as other tabs; clarified that all pending bids, not only winning bids, reserve space.

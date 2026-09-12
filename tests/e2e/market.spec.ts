@@ -171,7 +171,7 @@ test('export, reset and import restore trades, exact stock, cooldown, cars and f
 });
 test('a frozen v5 save migrates without losing tuned parts, money or its unsettled paid race', async ({ page }) => {
   await seedRaw(page, JSON.stringify(legacyV5)); await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);
-  const { advanced: _advanced, collection, heat, market, ...old } = await read(page); expect(old).toEqual(legacyV5.state); expect(heat).toEqual(createHeatState()); expect(market.listings).toHaveLength(6); expect(market.purchasedCount).toBe(0);
+  const { empire: _empire, advanced: _advanced, collection, heat, market, ...old } = await read(page); expect(old).toEqual(legacyV5.state); expect(heat).toEqual(createHeatState()); expect(market.listings).toHaveLength(6); expect(market.purchasedCount).toBe(0);
   await tab(page, 'Market'); expect((await read(page)).racing).toEqual(legacyV5.state.racing);
 });
 test('a malformed current market stays protected and is never auto-deleted or silently rerolled', async ({ page }) => {

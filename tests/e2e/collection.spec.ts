@@ -107,7 +107,7 @@ test('a stale second tab cannot claim the same achievement twice',async({page,co
   await expect(page.locator('.recoveryPanel')).toContainText('Another tab');await expect(page.getByRole('button',{name:'Claim Financially Questionable',exact:true})).toBeDisabled();expect((await read(other)).cashYen).toBe(19000);
 });
 test('v7 migration preserves every old field and recognises only provable achievements without money or free cars',async({page})=>{
-  await seedRaw(page,JSON.stringify(v7));const state=await read(page);const {advanced:_advanced,collection,...old}=state;
+  await seedRaw(page,JSON.stringify(v7));const state=await read(page);const {empire:_empire,advanced:_advanced,collection,...old}=state;
   expect(old).toEqual(v7.state);expect(collection.claimedAchievementIds).toEqual([]);expect(collection.purchasedIconIds).toEqual([]);expect(collection.collectedModelIds).toEqual(['tora-85','pico-rs']);
   await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);await tab(page,'Collection');await section(page,'Achievements');await expect(page.getByRole('button',{name:'Claim Overtime, Overtake'})).toBeEnabled();
 });
