@@ -11,14 +11,14 @@ export type DistrictDefinition = {
   readonly description: string;
   readonly minLevel: number | null;
   readonly future: string | null;
-  readonly services: readonly ('garage' | 'workshop')[];
+  readonly services: readonly ('garage' | 'workshop' | 'market')[];
 };
 
 /** Navigation metadata, not a travel simulation or a second progression currency. */
 export const CITY_DISTRICTS: readonly DistrictDefinition[] = [
   { id: 'east-ward', name: 'East Ward', number: '01', scene: 'BACKSTREET ROOTS', minLevel: 1, future: null,
     description: 'Vending-machine light, narrow side streets and Mercer Garage. Every midnight story starts with a borrowed tool and an unpaid bill.',
-    services: ['garage', 'workshop'] },
+    services: ['garage', 'workshop', 'market'] },
   { id: 'dockside', name: 'Dockside', number: '02', scene: 'TRACTION / FREIGHT', minLevel: 2, future: null,
     description: 'Container yards and harbor lights. Dispatch pays for reliable deliveries; the strip rewards a clean launch.', services: [] },
   { id: 'hakuro', name: 'Hakuro Pass', number: '03', scene: 'BRAKING / BALANCE', minLevel: 2, future: null,

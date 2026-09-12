@@ -113,7 +113,7 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
 
     <div className="raceBoardHeading"><div><span className="eyebrow">ROOKIE / CLUB</span><h3>Choose your event</h3></div>
       <label className="workshopVehicle"><span>RACE VEHICLE</span><select aria-label="Race vehicle" value={target.instanceId} disabled={!!active}
-        onChange={(event) => setTargetId(event.target.value)}>{game.ownedVehicles.map((v) => <option key={v.instanceId} value={v.instanceId}>{v.name} · {v.instanceId.slice(0, 8)}</option>)}</select>
+        onChange={(event) => setTargetId(event.target.value)}>{game.ownedVehicles.map((v) => <option key={v.instanceId} value={v.instanceId}>{v.name} · {v.instanceId.slice(-14)}</option>)}</select>
         <small>Selection does not change your active garage car.</small></label></div>
     <DistrictFilter kind="Race" value={districtFilter} onChange={onDistrictFilter} />
     <div className="categoryChips" role="group" aria-label="Filter races by discipline">

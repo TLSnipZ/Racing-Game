@@ -1,6 +1,7 @@
 import type { StarterCar } from '../data/starters';
 import type { JobId } from '../data/jobs';
 import type { VehicleTuning } from './tuningTypes';
+import type { MarketState } from './marketTypes';
 import type { RacingState } from './racingTypes';
 
 /** Frozen vehicle shape from Save v1-v3. Never attach new required fields here. */
@@ -28,4 +29,5 @@ export type EconomyState = {
 };
 export type LegacyGameStateV3 = LegacyGameStateV2 & { economy: EconomyState };
 export type LegacyGameStateV4 = Omit<LegacyGameStateV3, 'ownedVehicles'> & { ownedVehicles: PlayerVehicle[] };
-export type GameState = LegacyGameStateV4 & { racing: RacingState };
+export type LegacyGameStateV5 = LegacyGameStateV4 & { racing: RacingState };
+export type GameState = LegacyGameStateV5 & { market: MarketState };

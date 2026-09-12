@@ -1,5 +1,20 @@
 # Changelog
 
+## Phase 8 — Used Car Market (2026-09-12)
+
+- Added a seventh Market tab plus Garage and East Ward shortcuts; retained the sticky cash/level/REP/XP header and isolated views.
+- Added explicit model metadata for manufacturer, production years and body type. The three original starters remain purchasable; introduced Akari Senda S sedan, Hoshino Pico R hatch and Kazuma Estate GT wagon, usable in garage/jobs/tuning/racing.
+- Added six individually identified, saved stock examples per batch with year, mileage, engine/body/transmission condition, originality, seller and asking-price snapshots. Purchases preserve exact instance data and do not auto-activate over an existing active car.
+- Added combinable manufacturer/body/year-range/text filters and price/year/mileage/condition sorting, counts, input validation, reset/empty states and filter preservation across ordinary tab changes.
+- Added confirmed atomic purchases and dealer sales, quoted prices, per-car parts allowance, explicit active-car replacement, last-car protection and job/race-assigned-vehicle sale locks. Historical race results remain after ownership changes.
+- Added 12-space purchase capacity without deleting grandfathered larger garages. Unknown historical models are retained without inventing a sale value.
+- Added free, confirmed manual stock requests with a saved 5-minute cooldown after the first request. Stock never rerolls on browsing, reload, offline absence or normal save loading.
+- Added integer valuation v1 from condition/mileage/year/originality; dealer trade-in is 65% of reference plus 20% of purchased-part retail. Selling transfers all car-bound parts to the dealer. Immediate stock flipping is loss-making; no real-time demand/auction model is claimed.
+- Added Save v6 migration from v1–v5 with an unpurchased initial lot and empty trade history; preserved prior fields including paid race snapshots and tuned parts. Kept KAGEHAMA1, storage key, prior fixtures and race model v1 unchanged.
+- Shared existing vehicle validation with market snapshot validation; added bounded IDs/stock/accounting checks and stale/double-command protection. Failed storage writes preserve vehicles, stock, cooldown and money.
+- Added valuation/generation/transactions/filters/locks/overflow/migration tests and production-browser purchase/sale/refresh/backup/old-save/stale-tab/storage-failure/layout checks, retaining earlier scenarios. Updated README, roadmap and the complete Phase 8 contract.
+- Graphics & Audio I remains explicitly open. Starter prices, original ratings, job rewards, part prices/effects and race balance remain unchanged. Next numbered system: Phase 9 — Heat.
+
 ## Phase 7 — Kagehama City and HUD XP (2026-09-12)
 
 - Added a small level XP bar directly beneath the level number in the persistent top HUD. It uses existing REP progression, shows remaining REP and displays MAX at the current level cap; no second XP currency or new save field.

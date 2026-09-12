@@ -21,19 +21,20 @@ export function SaveManagement({ game, blocked, onImport, onReset }: {
     try {
       const { state } = importSaveCode(importCode);
       const job = state.economy.activeJob;
+      const market = state.market;
       const race = state.racing.activeRace;
-      if (!window.confirm(`Import this save?\n\nCash: ¥${state.cashYen.toLocaleString('en-US')}\nLevel: ${state.playerLevel}\nVehicles: ${state.ownedVehicles.length}\nActive: ${getActiveVehicle(state)?.name ?? 'None'}\nPurchased parts: ${state.ownedVehicles.reduce((n, car) => n + car.tuning.purchasedPartIds.length, 0)}\nPending job: ${job ? `${job.jobId} (#${job.runId})` : 'None'}\nPending race: ${race ? `${race.eventName} (#${race.runId}), entry already paid` : 'None'}\nRace finishes: ${state.racing.completedRaces}\n\nYour current save, including parts, race records and any pending job or race, will be replaced.`)) return;
+      if (!window.confirm(`Import this save?\n\nCash: ¥${state.cashYen.toLocaleString('en-US')}\nLevel: ${state.playerLevel}\nVehicles: ${state.ownedVehicles.length}\nActive: ${getActiveVehicle(state)?.name ?? 'None'}\nMarket batch: ${market.generation + 1} (${market.listings.length} unsold listings)\nMarket trades: ${market.purchasedCount} bought / ${market.soldCount} sold\nPurchased parts: ${state.ownedVehicles.reduce((n, car) => n + car.tuning.purchasedPartIds.length, 0)}\nPending job: ${job ? `${job.jobId} (#${job.runId})` : 'None'}\nPending race: ${race ? `${race.eventName} (#${race.runId}), entry already paid` : 'None'}\nRace finishes: ${state.racing.completedRaces}\n\nYour current save, including market stock/history, parts, race records and any pending job or race, will be replaced.`)) return;
       if (onImport(state)) { setImportCode(''); setSaveCode(''); setError(''); setMessage('Save imported and saved in this browser.'); }
     } catch (caught) { setError(caught instanceof Error ? caught.message : 'Import failed.'); }
   }
   function reset() {
-    if (!window.confirm('Reset your entire KAGEHAMA save?\n\nCars, parts, money, progress, race records and any pending job or race will be reset. This cannot be undone unless you exported a save code first.')) return;
+    if (!window.confirm('Reset your entire KAGEHAMA save?\n\nCars, market stock/history, parts, money, progress, race records and any pending job or race will be reset. This cannot be undone unless you exported a save code first.')) return;
     if (onReset()) { setImportCode(''); setSaveCode(''); setError(''); setMessage('Save reset. Choose your new starter.'); }
   }
   return <section id="save-data" className="savePanel phase3SavePanel" aria-label="Save management">
     <div className="sectionTitle"><div><span>SAVE DATA · SCHEMA V{SAVE_VERSION}</span><h3>Save management</h3></div><p>Previous KAGEHAMA1 codes are still supported.</p></div>
     <div className="saveGrid">
-      <article><div className="saveIcon"><Download /></div><h4>Export save</h4><p>Back up cars, tuning, progress, race records and your pending activity, or move your save to another device.</p>
+      <article><div className="saveIcon"><Download /></div><h4>Export save</h4><p>Back up cars, market stock, tuning, progress, race records and your pending activity, or move your save to another device.</p>
         <button type="button" className="secondaryButton" disabled={blocked} onClick={generate}>GENERATE SAVE CODE</button>
         {saveCode && <div className="codeBox"><textarea readOnly value={saveCode} aria-label="Exported save code" onFocus={(e) => e.target.select()} /><button type="button" onClick={copy}><Copy size={15} /> COPY</button></div>}
       </article>

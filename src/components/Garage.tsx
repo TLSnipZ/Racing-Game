@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Check, KeyRound, Search, Warehouse } from 'lucide-react';
-import { STARTER_CARS } from '../data/starters';
+import { VEHICLE_CATALOG, BODY_TYPES, MANUFACTURERS } from '../data/vehicles';
+import { GARAGE_CAPACITY } from '../domain/marketStock';
 import { getActiveVehicle, getConditionLabel, getOverallCondition, getPowerToWeight, listGarageVehicles, type GarageSort } from '../domain/garage';
 import { getFittedPartNames, getVehicleBuildStats } from '../domain/tuning';
 import type { GameState, PlayerVehicle } from '../domain/types';
@@ -10,7 +11,7 @@ function ConditionMeter({ label, value }: { label: string; value: number }) {
   return <div className="conditionRow"><div><span>{label}</span><strong>{value}%</strong></div>
     <div role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value} className={`conditionTrack ${value < 60 ? 'conditionWorn' : ''}`}><span style={{ width: `${value}%` }} /></div></div>;
 }
-export function Garage({ game, blocked, onActivate }: { game: GameState; blocked: boolean; onActivate: (id: string) => void }) {
+export function Garage({ game, blocked, onActivate, onMarket }: { game: GameState; blocked: boolean; onActivate: (id: string) => void; onMarket: () => void }) {
   const [inspectedId, setInspectedId] = useState<string | null>(null);
   const [query, setQuery] = useState(''); const [sort, setSort] = useState<GarageSort>('name');
   const active = getActiveVehicle(game);
@@ -19,7 +20,7 @@ export function Garage({ game, blocked, onActivate }: { game: GameState; blocked
   const uniqueModels = new Set(game.ownedVehicles.map((v) => v.catalogId)).size;
   if (!inspected) return <section id="garage" className="garageEmpty"><Warehouse size={36} /><h2>Your garage is empty.</h2><p>No owned vehicles in this save. Use the Saves tab to import a backup.</p></section>;
   const isActive = inspected.instanceId === game.activeVehicleId;
-  const catalog = STARTER_CARS.find((car) => car.id === inspected.catalogId);
+  const catalog = VEHICLE_CATALOG.find((car) => car.id === inspected.catalogId);
   const condition = getOverallCondition(inspected);
   const build = getVehicleBuildStats(inspected); const fittedParts = getFittedPartNames(inspected);
   function card(vehicle: PlayerVehicle) {
@@ -47,7 +48,7 @@ export function Garage({ game, blocked, onActivate }: { game: GameState; blocked
         <ConditionMeter label="Engine" value={inspected.engineCondition} /><ConditionMeter label="Body" value={inspected.bodyCondition} /><ConditionMeter label="Transmission" value={inspected.transmissionCondition} /><ConditionMeter label="Originality" value={build.originality} />
         <p className="detailNote">Condition is the average of engine, body and transmission. Build originality includes fitted changes; kept factory parts allow restoration. Tuning does not repair wear.</p></article>
       <article className="detailPanel"><div className="detailTitle"><h4>Vehicle dossier</h4><span>OWNED</span></div>
-        <dl className="dossier"><div><dt>Model ID</dt><dd>{inspected.catalogId}</dd></div><div><dt>Vehicle ID</dt><dd><code>{inspected.instanceId}</code></dd></div><div><dt>Engine</dt><dd>{inspected.engine}</dd></div><div><dt>Drivetrain</dt><dd>{inspected.drive}</dd></div>
+        <dl className="dossier"><div><dt>Manufacturer / type</dt><dd>{catalog ? `${MANUFACTURERS[catalog.manufacturer]} / ${BODY_TYPES[catalog.bodyType]}` : 'Historical model'}</dd></div><div><dt>Model ID</dt><dd>{inspected.catalogId}</dd></div><div><dt>Vehicle ID</dt><dd><code>{inspected.instanceId}</code></dd></div><div><dt>Engine</dt><dd>{inspected.engine}</dd></div><div><dt>Drivetrain</dt><dd>{inspected.drive}</dd></div>
           <div><dt>Build year</dt><dd>{inspected.year}</dd></div><div><dt>Base power</dt><dd>{inspected.hp} PS</dd></div><div><dt>Base weight</dt><dd>{inspected.weightKg} kg</dd></div></dl>
         <p className="detailNote">The saved factory baseline stays separate from tuning. Displayed build values are derived from fitted parts, not repeatedly added to this baseline.</p></article>
       <article className="detailPanel"><div className="detailTitle"><h4>Installed parts</h4><span>{fittedParts.length} FITTED</span></div><ul className="installedList">{fittedParts.map((part, i) => <li key={`${i}-${part}`}><Check size={14} />{part}</li>)}</ul>
@@ -56,7 +57,7 @@ export function Garage({ game, blocked, onActivate }: { game: GameState; blocked
     <div className="collectionHeader"><div><span className="eyebrow">THE KEYS YOU OWN</span><h3>Vehicle collection</h3></div><div className="garageFilters">
       <label><Search size={15} /><span className="srOnly">Search owned vehicles</span><input type="search" placeholder="Name, year or vehicle ID" value={query} onChange={(e) => setQuery(e.target.value)} /></label>
       <label><span className="srOnly">Sort owned vehicles</span><select value={sort} onChange={(e) => setSort(e.target.value as GarageSort)}><option value="name">Name A–Z</option><option value="power">Power: high first</option><option value="condition">Condition: high first</option><option value="mileage">Mileage: low first</option></select></label></div></div>
-    <div className="ownedGrid">{vehicles.map(card)}<div className="futureCard"><KeyRound size={24} /><h4>More keys. More stories.</h4><p>Keep your first ride. Additional cars become available with the used market in Phase 8.</p><span>MARKET PLANNED · NO EXTRA CARS GRANTED</span></div></div>
+    <div className="ownedGrid">{vehicles.map(card)}<div className="futureCard"><KeyRound size={24} /><h4>More keys. More stories.</h4><p>Find individual used cars at Mercer Used Motors. {game.ownedVehicles.length} / {GARAGE_CAPACITY} garage spaces used.</p><button type="button" className="secondaryButton" onClick={onMarket}>OPEN VEHICLE MARKET</button></div></div>
     {vehicles.length === 0 && <p className="emptySearch" role="status">No owned vehicles match this search. Your active car has not changed.</p>}
   </section>;
 }
