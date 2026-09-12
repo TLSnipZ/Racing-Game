@@ -1,5 +1,18 @@
 # Changelog
 
+## Phase 7 — Kagehama City and HUD XP (2026-09-12)
+
+- Added a small level XP bar directly beneath the level number in the persistent top HUD. It uses existing REP progression, shows remaining REP and displays MAX at the current level cap; no second XP currency or new save field.
+- Enabled City as a real section with four district scenes, level-access previews, two explicitly future locations and settled personal race records.
+- Added explicit race/job district metadata and read-only city selectors. East Ward opens at Level 1, Dockside/Hakuro at Level 2 and Eastline at Level 3; individual activities retain their original higher requirements.
+- Added City shortcuts to district-filtered race/job boards and Mercer services, without travelling, charging money, starting activities, changing the active car or rewarding clicks.
+- Combined race district and discipline filters, with counts and empty-state reset; added job district filtering. Pending activities and receipts remain outside filtered offers and can be resumed from City.
+- Preserved selected districts and filters on ordinary tab switches; reset UI preferences on reload/full import/reset. Kept existing paid/unsettled activities recoverable despite lower imported levels or unrelated district previews.
+- Tightened shared-shell width and top-offset rules for the new XP row, including narrow displays and very large valid balances.
+- Kept Save v5, KAGEHAMA1, all historical migrations/fixtures, race model v1 and all starter/job/part/race balance unchanged.
+- Added district membership/access/filter/read-only/XP unit tests and production-browser city, level-boundary, pending-result, filtering, recovery and 320/390/1440-pixel layout checks. Retained all previous regression suites.
+- Updated README, roadmap and the Phase 7 contract. Graphics & Audio I remains explicitly open; the numbered City system was implemented first. The schematic map is not final artwork. Next numbered system: Phase 8, including requested manufacturer/year/body-type vehicle-market filters.
+
 ## Phase 6 — Racing and shop categories (2026-09-12)
 
 - Enabled a separate Races tab with eight Rookie/Club events across Street Sprint, Drag, Touge and Expressway.

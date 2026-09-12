@@ -1,4 +1,5 @@
 import { getLevelProgress, LEVEL_CAP } from '../domain/progression';
+import '../styles/phase7-layout.css';
 
 /** XP is the existing cumulative reputation, not a new resource or saved counter. */
 export function HudLevelProgress({ reputation, playerLevel }: { reputation: number; playerLevel: number }) {
