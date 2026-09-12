@@ -11,9 +11,9 @@ import legacy from '../../tests/fixtures/save-v4.json';
 const initial = () => purchaseStarter(createNewGameState(), 'pico-rs', 'pico-1');
 
  describe('City membership and access', () => {
-  it('has six distinct previews and five implemented districts', () => {
+  it('has six distinct implemented districts', () => {
     expect(new Set(CITY_DISTRICTS.map((d) => d.id)).size).toBe(6);
-    expect(CITY_DISTRICTS.filter((d) => d.minLevel !== null)).toHaveLength(5);
+    expect(CITY_DISTRICTS.filter((d) => d.minLevel !== null)).toHaveLength(6);
     expect(CITY_DISTRICTS.map((d) => d.id)).toEqual([...DISTRICT_IDS]);
   });
   it('explicitly assigns every existing event exactly once without name parsing', () => {
@@ -30,17 +30,17 @@ const initial = () => purchaseStarter(createNewGameState(), 'pico-rs', 'pico-1')
     expect(getDistrictJobs('east-ward').map((j) => j.id)).toEqual(['garage-shift', 'parts-run']);
     expect(getDistrictJobs('dockside').map((j) => j.id)).toEqual(['dock-delivery']);
   });
-  it.each([[1, 1], [2, 3], [3, 4], [5, 5], [20, 5]] as const)('opens the expected districts at Level %s', (level, count) => {
+  it.each([[1, 1], [2, 3], [3, 5], [5, 6], [20, 6]] as const)('opens the expected districts at Level %s', (level, count) => {
     expect(getUnlockedDistricts({ ...initial(), playerLevel: level, reputation: reputationForLevel(level) })).toHaveLength(count);
   });
   it('opens nothing before the starter choice even at a high imported level', () => {
     expect(getUnlockedDistricts({ ...createNewGameState(), playerLevel: 20, reputation: 3800 })).toHaveLength(0);
   });
-  it('keeps previews locked until their future implementation, including at the cap', () => {
+  it('opens the industrial district at Level 3 without inventing race events', () => {
     for (const id of ['industrial']) {
-      const access = getDistrictAccess({ ...initial(), playerLevel: 20, reputation: Number.MAX_SAFE_INTEGER }, id);
-      expect(access.unlocked).toBe(false); expect(access.reason).toContain('planned');
-      expect(access.percent).toBe(0); expect(getDistrictRaces(id as 'industrial')).toHaveLength(0);
+      const access = getDistrictAccess({ ...initial(), playerLevel: 3, reputation: 60 }, id);
+      expect(access.unlocked).toBe(true); expect(access.reason).toBeNull();
+      expect(access.percent).toBe(100); expect(getDistrictRaces(id as 'industrial')).toHaveLength(0);
     }
   });
   it('shows level and cumulative REP to a locked district without charging', () => {
@@ -74,7 +74,7 @@ const initial = () => purchaseStarter(createNewGameState(), 'pico-rs', 'pico-1')
     const before = serializeSave(pending, 2000);
     for (const id of DISTRICT_IDS) { getDistrictAccess(pending, id); getDistrictRaces(id); getDistrictJobs(id); getDistrictRecords(pending, id); }
     getLevelProgress(pending.reputation, pending.playerLevel);
-    expect(serializeSave(pending, 2000)).toBe(before); expect(SAVE_VERSION).toBe(9);
+    expect(serializeSave(pending, 2000)).toBe(before); expect(SAVE_VERSION).toBe(10);
     expect(importSaveCode(exportSaveCode(pending)).state).toEqual(pending);
   });
   it('loads the frozen old tuned save with the same access without adding fake city rewards', () => {

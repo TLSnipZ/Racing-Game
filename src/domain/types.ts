@@ -1,3 +1,4 @@
+import type { EmpireState } from './empireTypes';
 import type { AdvancedState } from './advancedTypes';
 import type { CollectionState } from './collectionTypes';
 import type { HeatState } from './heatTypes';
@@ -36,4 +37,5 @@ export type LegacyGameStateV5 = LegacyGameStateV4 & { racing: RacingState };
 export type LegacyGameStateV6 = LegacyGameStateV5 & { market: MarketState };
 export type LegacyGameStateV7 = LegacyGameStateV6 & { heat: HeatState };
 export type LegacyGameStateV8 = LegacyGameStateV7 & { collection: CollectionState };
-export type GameState = LegacyGameStateV8 & { advanced: AdvancedState };
+export type LegacyGameStateV9 = LegacyGameStateV8 & { advanced: AdvancedState };
+export type GameState = LegacyGameStateV9 & { empire: EmpireState };

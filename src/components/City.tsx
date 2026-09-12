@@ -9,7 +9,8 @@ import { getRaceRequirement } from '../domain/racing';
 import type { GameState } from '../domain/types';
 
 const yen = (value: number) => `¥${value.toLocaleString('en-US')}`;
-export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onService, onResume, onSpecialist }: {
+export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onService, onResume, onEmpire, onSpecialist }: {
+  onEmpire: () => void;
   game: GameState; blocked: boolean; jobReady: boolean; raceReady: boolean;
   onRaces: (district: DistrictId) => void; onJobs: (district: DistrictId) => void;
   onSpecialist: (view: SpecialistView) => void;
@@ -29,7 +30,7 @@ export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onSe
   return <section className="cityPanel" aria-labelledby="city-title">
     <div className="cityHeading"><div><span className="eyebrow">KAGEHAMA BAY / DISTRICT DIRECTORY</span>
       <h2 id="city-title">Know your streets.</h2><p>One city. Different scenes. Find the place for your build.</p></div>
-      <div className="cityAccessCount"><strong>{getUnlockedDistricts(game).length} / 5</strong><span>DISTRICTS OPEN</span></div></div>
+      <div className="cityAccessCount"><strong>{getUnlockedDistricts(game).length} / {CITY_DISTRICTS.filter((area) => area.minLevel !== null).length}</strong><span>DISTRICTS OPEN</span></div></div>
     <div className="cityIntro"><MapPin size={19} aria-hidden="true" /><p>
       {next ? `Next access: Level ${next.minLevel}. Earn reputation in jobs or races to open more of the city.` : 'Every current district is open. Club invitations keep their own level requirements.'}
       <small>This is a directory, not travel. Exploring costs nothing and never starts an activity.</small></p></div>
@@ -69,6 +70,7 @@ export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onSe
           <dl className="districtStats"><div><dt>Race invitations</dt><dd>{races.length}</dd></div><div><dt>Job contacts</dt><dd>{jobs.length}</dd></div>
             <div><dt>Events completed</dt><dd>{records.length} / {races.length}</dd></div></dl>
           <div className="districtLinks">
+            {district.id === 'industrial' && <button type="button" className="cityPrimary" disabled={cannotOpen} onClick={onEmpire}>OPEN BUSINESS DISTRICT <ArrowUpRight size={15} /></button>}
             {district.id === 'outskirts' && <button type="button" className="cityPrimary" disabled={cannotOpen} onClick={() => { if (!cannotOpen) onSpecialist('barns'); }}>EXPLORE BARN FINDS</button>}
             {district.id === 'dockside' && <button type="button" className="secondaryButton" disabled={cannotOpen} onClick={() => { if (!cannotOpen) onSpecialist('imports'); }}>OPEN IMPORT DESK</button>}
             {district.id === 'east-ward' && <button type="button" className="secondaryButton" disabled={cannotOpen} onClick={() => { if (!cannotOpen) onSpecialist('auctions'); }}>OPEN AUCTION DESK</button>}

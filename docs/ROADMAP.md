@@ -2,7 +2,7 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current milestone: **Phase 11 — Advanced Cars**. **Save v9.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
+Current milestone: **Phase 12 — Empire & Automation**. **Save v10.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
 
 ## Implemented
 
@@ -20,6 +20,7 @@ Current milestone: **Phase 11 — Advanced Cars**. **Save v9.** The complete sta
 | 9 — Heat & Police | Driver-global Heat HUD; optional Underground stakes on seven paid events, frozen bonus/Heat/fine terms, deterministic patrol decisions, legal-job recovery and free timed Lay low; Save v7 preserves every prior field. |
 | 10 — Collection | Eight-model Collection Book, Common/Rare/Legendary/Icon metadata independent of performance, 18 persistent achievements with manual one-time yen rewards, two gated fixed-price Icon offers and Save v8 evidence-based migration. |
 | 11 — Advanced Cars | Three curated import/auction/barn sources, paid escrow/refunds and reserved delivery slots, exact timed contracts, Level-2 condition restoration, three new models, active Outer Kagehama and Save v9 preserving all previous fields. |
+| 12 — Empire & Automation | Three businesses with one-batch staff and permanent managers, repeated production into eight-hour tills, explicit collection, Levels 1–5, garage expansions 12→18→24→36, active Industrial District and Save v10 with no retrospective income. |
 
 Phase 8 preserves race model v1, level thresholds, original starter prices, original build ratings and all job/part/race rewards. The shared catalog adds three new models with their own ratings. See [PHASE8.md](PHASE8.md) for exact market, ownership and migration rules. Previous milestones remain documented historical contracts.
 
@@ -27,7 +28,7 @@ Phase 7 did not change race model v1, old saves, level thresholds, starter price
 
 ## Open presentation milestone — Graphics & Audio I
 
-The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9, Phase 10 or Phase 11.** City, Market, Heat, Collection and Advanced Cars were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
+The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9, Phase 10, Phase 11 or Phase 12.** City, Market, Heat, Collection, Advanced Cars and Empire were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
 
 Scope remains three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Define an asset/layer strategy before promising independently changeable paint, wheels and bodykits. Preserve gameplay and saves. This is a targeted pass, not conversion into freely driven 3D racing. Sequencing remains flexible; do not let further feature work silently remove it from the roadmap.
 
@@ -47,15 +48,23 @@ Market now separates dealer, imports, auctions and barn leads. Import a fixed So
 
 Pending imports/auctions reserve a space across all acquisition routes. Broker work is independent of driver jobs/races, never an automatic earning chain. Level-2 Workshop restoration repairs selected condition to 100% with an explicit before/after quote, preserving tuning, mileage and originality and blocking assigned cars. Collection history, old dealer stock, accepted race/Heat contracts and all claimed rewards remain intact. The initial specialist system has three curated sources; additional lots/imports/leads and richer opponent bidding are later extensions, not already implemented.
 
-## Next numbered system — Phase 12: Empire & Automation
+## Phase 12 — implemented first Empire slice
 
-Design the first businesses, expandable garage and delegated routines. Define purchase costs, unlocks, upgrade returns, manager prerequisites, manual versus automatic collection, offline cap and exact-once accrual before adding passive earnings. Specialist escrow and reserved delivery spaces must survive a garage-capacity expansion. Ongoing driver and broker activities must not be replaced, repriced or completed by unrelated business commands.
+Three businesses open at Levels 3/5/7: East Ward Detail, Bayline Parts Supply and Midnight Dyno Works. Buy once, manually dispatch one booking, then hire Rei/Jun/Nao to repeat bookings automatically. Operating staff are included; no recurring bills or wages. Completed profit sits in a per-business till, not cash. Individual or collect-all actions move it to the wallet exactly once after successful storage. See [PHASE12.md](PHASE12.md) for prices, upgrades and rules v1.
 
-Start with a small playable business/manager loop, not a claim that all crew/endgame systems already exist. Save migration must preserve current cars, condition repairs, specialist contracts, sources, achievement claims, market stock and Heat snapshots. Balance active racing/work against passive returns. Readability, mobile navigation and the open Graphics & Audio I milestone remain part of the plan.
+Managed storage is capped at eight hours of current-level output in total, online and offline combined; unmanaged storage holds one batch. Extra waiting after full is discarded. Reloads, saves, exports and unrelated gameplay never restart the allowance. Pausing preserves completed yen and discards unfinished batch time, explicitly disclosed. Upgrade only while stopped; past money is not multiplied. Managed repeat production does not occupy or complete driver/broker activities and gives no REP or Heat reduction.
+
+Permanent sequential garage expansions increase 12 spaces to 18/24/36 for ¥75,000/¥180,000/¥400,000 at Levels 4/6/8. Existing specialist reservations count against the expanded capacity across all acquisition routes. No old cars or escrow are lost. Industrial District opens at Level 3 and links to Empire's Businesses/Staff/Garage subviews; XP/Heat remain in the shared sticky HUD.
+
+## Next numbered milestone — Phase 13+: Endgame
+
+Before implementing a reset-based Legacy/Prestige loop, define exactly what persists, what resets, entry requirements, rewards, claim rules and a confirmation/export recovery path. Accepted paid races, specialist escrow, Icon entitlements, collection history, managers and garage investments need explicit treatment. No automatic reset or unexplained loss of property is authorized merely by reaching a threshold.
+
+Start with a bounded playable endgame goal/rival milestone and a documented progression model rather than claiming all bosses, seasonal events and an expanded catalog exist. Higher-level balance should account for capped managed profit and player-controlled business upgrades. Keep historical saved economy/race/Heat contracts stable or provide tested version migrations. More crew systems and richer businesses remain extensions. **Graphics & Audio I is still a separate open milestone and must not disappear behind the numbered systems.**
 
 ## Market and workshop browsing — implemented
 
-The requested **manufacturer, model-year/range and body-type filters** now combine with text search and sorting in the Market. They use explicit catalog metadata, show counts and reset states, and never buy/sell/refresh by browsing. Source stock and price snapshots persist through reload and exports. The original other two starters are normally purchasable, not gifts. The shared catalog includes three new models. Garage expansion, negotiation, separate parts transfers and a live supply/demand simulation are not yet included. The first fixed specialist auction/import/barn sources and restoration are now implemented separately.
+The requested **manufacturer, model-year/range and body-type filters** now combine with text search and sorting in the Market. They use explicit catalog metadata, show counts and reset states, and never buy/sell/refresh by browsing. Source stock and price snapshots persist through reload and exports. The original other two starters are normally purchasable, not gifts. The shared catalog includes three new models. Garage expansion is now implemented in Empire; negotiation, separate parts transfers and a live supply/demand simulation remain later work. The first fixed specialist auction/import/barn sources and restoration are now implemented separately.
 
 The Workshop component categories remain implemented: visible buttons and a synchronized dropdown cover intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo. New car models use compatible existing parts; the two turbo upgrades remain RZ-T-only. More categories require real slot/catalog support.
 
@@ -64,19 +73,18 @@ The Workshop component categories remain implemented: visible buttons and a sync
 | Phase | Scope |
 | --- | --- |
 | Graphics & Audio I | Targeted first car/garage/race art, animation and audio pass. Open presentation milestone. |
-| 12 — Empire & Automation | Businesses, garage upgrades, staff/crew, delegated routines, capped passive/offline income; activate relevant Industrial District content. |
 | 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and catalog expansion. |
 | Further graphics expansion | Apply the chosen style to later content; plan visible paint/wheel/bodykit changes through a consistent asset system. |
 
-## Automation later
+## Automation: implemented versus future
 
-Progression should move from earning the first yen personally to managing an automotive empire. Phase 12 is the principal milestone for passive businesses and staff/managers. Crew-dispatched repeatable work is a candidate; exact eligible jobs, unlocks, costs, collection rules and limits must be designed first. Offline earnings require eligibility, deterministic catch-up, a cap and duplicate-award protection. Automatic car/part purchases or destructive decisions are not implied.
+The first progression step from doing every task personally to owning staff-run businesses is now playable. Managers permanently assigned to the three owned businesses repeat customer bookings into capped tills. The player collects earnings manually; no automatic spending, property sales, racing, police resolution or daily bills occur. Offline catch-up is deterministic, bounded and protected against duplicate claims under normal play.
 
-Current jobs/races remain manually accepted and settled. Lay low is also manually started/completed and is recovery, not production automation. Tab changes are not offline time or automation. A smaller early automation step may be proposed if playtesting shows excessive repetition, but no earlier phase/date is committed.
+Crew-dispatched personal jobs, configurable crews, passive stat modifiers, more businesses, automatic wallet transfers and server-based economies have **not** been implemented. Current personal jobs/races and Lay low remain explicitly accepted/completed; specialist contracts also keep manual resolution. Future delegation needs separate requirements, costs, car locks and limits before it can reuse those systems. A running manager is not permission to control unrelated player activities.
 
 ## Cross-phase quality
 
-Readability, accessibility, mobile layout and balance improve throughout. HUD XP is existing cumulative REP, not an extra saved currency; cap and legacy-level behavior must remain defined. Future city restrictions beyond existing level gates must be enforced in the domain, not only hidden in the UI.
+Readability, accessibility, mobile layout and balance improve throughout. Production rules v1 keep their timing/output contract; future balance changes require versioned rules or an explicit migration, not silently multiplying already-earned money. Banked profit, current partial batches, cap overflow and clock rollback require regression tests. HUD XP is existing cumulative REP, not an extra saved currency; cap and legacy-level behavior must remain defined. Future city restrictions beyond existing level gates must be enforced in the domain, not only hidden in the UI.
 
 Car silhouettes, the district schematic and race replay remain provisional artwork. Pinning dependencies/committing a reproducible lockfile remain build-hardening work; the inherited `latest` policy is unchanged. Preserve all historical fixtures and the model-v1 algorithm for existing race snapshots. Client clocks/codes are user-controlled; local-save validation is not server anti-cheat. Planned items are not released features or promised dates.
 

@@ -1,3 +1,5 @@
+import { createEmpireState } from './empireState';
+import { isEmpireState } from './empireValidation';
 import { createAdvancedState } from './advancedState';
 import { isAdvancedState, isAdvancedLinked } from './advancedValidation';
 import { isCollectionState, migrateCollection } from './collectionProgress';
@@ -10,9 +12,9 @@ import { createMarketState } from './marketStock';
 import { isMarketState } from './marketValidation';
 import { createRacingState } from './racing';
 import { isRacingState } from './racingValidation';
-import type { GameState, LegacyGameStateV1, LegacyGameStateV2, LegacyGameStateV3, LegacyGameStateV4, LegacyGameStateV5, LegacyGameStateV6, LegacyGameStateV7, LegacyGameStateV8 } from './types';
+import type { GameState, LegacyGameStateV1, LegacyGameStateV2, LegacyGameStateV3, LegacyGameStateV4, LegacyGameStateV5, LegacyGameStateV6, LegacyGameStateV7, LegacyGameStateV8, LegacyGameStateV9 } from './types';
 
-export const SAVE_VERSION = 9;
+export const SAVE_VERSION = 10;
 export const SAVE_STORAGE_KEY = 'kagehama:save';
 // The transport stays v1; the envelope inside it has its own schema version.
 export const SAVE_CODE_PREFIX = 'KAGEHAMA1-';
@@ -82,8 +84,12 @@ function isGameStateV8(value: unknown): value is LegacyGameStateV8 {
   if (!isGameStateV7(value) || !('collection' in value) || !isCollectionState(value.collection)) return false;
   return value.selectedStarterId !== null || Object.values(value.collection).every((ids) => ids.length === 0);
 }
-export function isGameState(value: unknown): value is GameState {
+function isGameStateV9(value: unknown): value is LegacyGameStateV9 {
   return isGameStateV8(value) && 'advanced' in value && isAdvancedState(value.advanced) && isAdvancedLinked(value.advanced, value);
+}
+export function isGameState(value: unknown): value is GameState {
+  return isGameStateV9(value) && 'empire' in value && isEmpireState(value.empire)
+    && (value.selectedStarterId !== null || value.empire.revision === 0);
 }
 export function createSaveEnvelope(state: GameState, savedAt = Date.now()): SaveEnvelope {
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
@@ -100,11 +106,15 @@ export function deserializeSave(raw: string): SaveEnvelope {
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('Save data is not valid JSON.'); }
   if (!isRecord(parsed)) throw new Error('Save data is invalid.');
-  if (![1, 2, 3, 4, 5, 6, 7, 8, SAVE_VERSION].includes(parsed.version as number)) {
+  if (![1, 2, 3, 4, 5, 6, 7, 8, 9, SAVE_VERSION].includes(parsed.version as number)) {
     throw new Error(`Unsupported save version: ${String(parsed.version)}. Your stored data has not been deleted.`);
   }
   if (!isInteger(parsed.savedAt)) throw new Error('Save timestamp is invalid.');
   let state: unknown = parsed.state;
+  if (parsed.version !== SAVE_VERSION && isRecord(state) && 'empire' in state
+    && (!isEmpireState(state.empire) || state.empire.revision !== 0)) {
+    throw new Error('Legacy save cannot carry an empire ledger.');
+  }
   if (parsed.version === 1) {
     if (!isLegacyGameState(state)) throw new Error('Legacy save game state is invalid.');
     state = { ...state, activeVehicleId: state.ownedVehicles[0]?.instanceId ?? null };
@@ -134,10 +144,14 @@ export function deserializeSave(raw: string): SaveEnvelope {
     if (!isGameStateV7(state)) throw new Error('Legacy v7 save game state is invalid.');
     state = migrateCollection(state);
   }
-  if (parsed.version !== SAVE_VERSION) {
+  if ([1, 2, 3, 4, 5, 6, 7, 8].includes(parsed.version as number)) {
     if (!isGameStateV8(state)) throw new Error('Legacy v8 save game state is invalid.');
     if ('advanced' in state && JSON.stringify(state.advanced) !== JSON.stringify(createAdvancedState())) throw new Error('Legacy save cannot carry a specialist contract or ledger.');
     state = { ...state, advanced: createAdvancedState() };
+  }
+  if (parsed.version !== SAVE_VERSION) {
+    if (!isGameStateV9(state)) throw new Error('Legacy v9 save game state is invalid.');
+    state = { ...state, empire: createEmpireState() };
   }
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
   return { version: SAVE_VERSION, savedAt: parsed.savedAt, state };

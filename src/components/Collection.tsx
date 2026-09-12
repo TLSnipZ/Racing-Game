@@ -6,7 +6,7 @@ import { MANUFACTURERS, BODY_TYPES, findVehicleDefinition, VEHICLE_CATALOG, type
 import { getAchievementProgress, getClaimableAchievements, getCollectedModelIds, getTotalCollectionRewards } from '../domain/collectionProgress';
 import { createBookFilters, listCollectionModels } from '../domain/collectionFilters';
 import { createIconVehicle, getIconRequirement } from '../domain/collection';
-import { GARAGE_CAPACITY } from '../domain/marketStock';
+import { getGarageCapacity } from '../domain/garageCapacity';
 import { RARITIES, type AchievementStatus, type CollectionStatus, type Rarity } from '../domain/collectionTypes';
 import type { GameState } from '../domain/types';
 import { VehicleSilhouette } from './VehicleSilhouette';
@@ -123,7 +123,7 @@ export function Collection({ game, blocked, onClaim, onIcon, onMarket, onGarage,
         return <article key={icon.id} className="iconCard" aria-label={`Icon ${model.name}`}><div className="bookCardTop"><RarityBadge catalogId={model.id} /><span>{purchased ? 'OFFER PURCHASED' : 'ONE-TIME OFFER'}</span></div><VehicleSilhouette catalogId={model.id} />
           <h3>{model.name}</h3><p>{model.description}</p><div className="bookSpecs"><span>{icon.year} · {model.hp} PS</span><span>{model.weightKg.toLocaleString('en-US')} kg · {model.drive}</span></div>
           <ul className="iconRequirements"><li>{game.playerLevel >= icon.minLevel ? <Check size={14} /> : <LockKeyhole size={14} />} Level {icon.minLevel}</li>
-            <li>{progress.unlocked ? <Check size={14} /> : <LockKeyhole size={14} />} {goal.name} · {progress.value}/{progress.target}</li><li><KeyRound size={14} /> {game.ownedVehicles.length}/{GARAGE_CAPACITY} garage spaces used</li></ul>
+            <li>{progress.unlocked ? <Check size={14} /> : <LockKeyhole size={14} />} {goal.name} · {progress.value}/{progress.target}</li><li><KeyRound size={14} /> {game.ownedVehicles.length}/{getGarageCapacity(game)} garage spaces used</li></ul>
           <p className="iconGoalText">{goal.requirement} The achievement reward does not need to be claimed.</p><strong className="iconPrice">{yen(icon.priceYen)}</strong>
           <p className="iconGoalText">95% engine/body/transmission · 100% originality · 10,000 km · Stock parts</p>
           <p className="iconGate">{blocked ? 'Resolve the save warning first.' : requirement ?? 'Invitation ready. Inspect the exact car before confirming.'}</p>
