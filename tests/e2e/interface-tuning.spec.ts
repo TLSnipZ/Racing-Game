@@ -18,18 +18,20 @@ async function buy(page: Page, name: string, owned = false) {
 
 test('real tabs expose exactly one panel and never mutate the session', async ({ page }) => {
   await seed(page, initial()); const before = await stored(page);
-  for (const name of ['Jobs', 'Races', 'Workshop', 'Saves', 'Garage'] as const) {
+  for (const name of ['Jobs', 'City', 'Races', 'Workshop', 'Saves', 'Garage'] as const) {
     await tab(page, name); await expect(page.getByRole('tabpanel')).toHaveCount(1);
     await expect(page.getByRole('tabpanel')).toHaveAttribute('id', `panel-${name.toLowerCase()}`);
     await expect(page.getByTestId('cash')).toHaveText('¥18,000'); expect(await stored(page)).toBe(before);
   }
   await expect(page.getByRole('button', { name: 'Start Garage Shift' })).toHaveCount(0);
   await expect(page.getByRole('button', { name: 'RESET SAVEGAME' })).toHaveCount(0);
-  await expect(page.getByRole('tab', { name: 'City', exact: true })).toBeDisabled(); await expect(page.getByRole('tab', { name: 'Races', exact: true })).toBeEnabled();
+  await expect(page.getByRole('tab', { name: 'City', exact: true })).toBeEnabled(); await expect(page.getByRole('tab', { name: 'Races', exact: true })).toBeEnabled();
 });
 test('arrow, Home and End keys operate the tabs and skip unavailable systems', async ({ page }) => {
   await seed(page, initial()); await page.getByRole('tab', { name: 'Garage', exact: true }).focus();
   await page.keyboard.press('ArrowRight'); await expect(page.getByRole('tab', { name: 'Jobs', exact: true })).toBeFocused();
+  await page.keyboard.press('ArrowRight'); await expect(page.getByRole('tab', { name: 'City', exact: true })).toBeFocused();
+  await expect(page.getByRole('tabpanel')).toHaveAttribute('id', 'panel-city');
   await page.keyboard.press('ArrowRight'); await expect(page.getByRole('tab', { name: 'Races', exact: true })).toBeFocused();
   await expect(page.getByRole('tabpanel')).toHaveAttribute('id', 'panel-races');
   await page.keyboard.press('ArrowRight'); await expect(page.getByRole('tab', { name: 'Workshop', exact: true })).toBeFocused();

@@ -1,0 +1,95 @@
+/* Phase 7: compact level XP and a functional coastal district directory. */
+.phase7 .playerMeta { align-items: start; }
+.phase7 .playerMeta > .hudLevel { min-width: 104px; }
+.phase7 .playerMeta .hudXp { display: block; width: 104px; max-width: 100%; }
+.hudXp progress { display: block; appearance: none; width: 100%; height: 5px; border: 0; border-radius: 3px; overflow: hidden; background: #303b3a; accent-color: #dfb67c; }
+.hudXp progress::-webkit-progress-bar { background: #303b3a; border-radius: 3px; }
+.hudXp progress::-webkit-progress-value { background: #dfb67c; border-radius: 3px; }
+.hudXp progress::-moz-progress-bar { background: #dfb67c; border-radius: 3px; }
+.hudXp small { display: block; color: #c9b391; font-size: 9px; font-weight: 500; letter-spacing: 0; line-height: 1.5; margin-top: 5px; overflow-wrap: anywhere; }
+.cityHeading { display: flex; justify-content: space-between; align-items: center; gap: 24px; margin: 18px 0 22px; }
+.cityHeading h2 { font: italic 800 clamp(42px,5vw,66px)/1 'Barlow Condensed',Impact,sans-serif; text-transform: uppercase; margin: 12px 0; }
+.cityHeading p, .cityIntro p, .cityPending p { color: #b0bcbf; font-size: 12px; line-height: 1.7; margin: 0; }
+.cityAccessCount { min-width: 115px; text-align: right; }
+.cityAccessCount strong { display: block; color: #e4c399; font: 800 38px/1 'Barlow Condensed',Impact,sans-serif; }
+.cityAccessCount span { font-size: 9px; color: #a5b3b5; letter-spacing: .1em; }
+.cityIntro { display: flex; gap: 13px; align-items: center; border: 1px solid #354448; background: #111d20; padding: 15px 18px; margin-bottom: 20px; }
+.cityIntro svg { color: #d8ba8f; flex-shrink: 0; }
+.cityIntro small { display: block; color: #99adae; font-size: 10px; }
+.cityWorkspace { display: grid; grid-template-columns: 1.45fr 1fr; gap: 20px; align-items: start; }
+.cityMap { min-width: 0; border: 1px solid #40545c; padding: 20px; background: repeating-linear-gradient(0deg,transparent 0 29px,#8eaeb40a 30px),repeating-linear-gradient(90deg,transparent 0 29px,#8eaeb40a 30px),radial-gradient(ellipse at 105% 60%,#1c424d 0,transparent 65%),#10191e; }
+.cityMapTop { display: flex; justify-content: space-between; align-items: center; gap: 15px; padding-bottom: 17px; color: #b4c8ce; font-size: 9px; letter-spacing: .13em; }
+.cityMapTop b { font-size: 14px; white-space: nowrap; color: #e6c9a2; }
+.districtNodes { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 26px 28px; }
+.districtNodes::before { content: ''; position: absolute; left: calc(50% - 2px); top: 35px; bottom: 35px; width: 4px; background: #5a757b; opacity: .45; pointer-events: none; }
+.districtNode { position: relative; display: flex; flex-direction: column; gap: 9px; padding: 18px; min-width: 0; min-height: 164px; text-align: left; background: #152328; border: 1px solid #45606a; color: #e7eded; cursor: pointer; }
+.districtNode::after { content: ''; position: absolute; top: 50%; right: -29px; width: 28px; height: 3px; background: #5a757b; opacity: .5; pointer-events: none; }
+.districtNode:nth-child(even)::after { display: none; }
+.districtNode:hover { border-color: #d8bc92; }
+.districtNode[aria-pressed='true'] { border-color: #e6bc82; box-shadow: inset 0 0 0 1px #e6bc82; background: #243035; }
+.districtNodeTop { display: flex; align-items: center; justify-content: space-between; color: #b0cbd0; }
+.districtNodeTop b { font: 800 27px/1 'Barlow Condensed',Impact,sans-serif; color: #c6b293; }
+.districtNode > strong { font: 800 24px/1.1 'Barlow Condensed',Impact,sans-serif; }
+.districtScene { color: #bdcbd0; font-size: 8px; line-height: 1.6; letter-spacing: .08em; }
+.districtNode small { font-size: 8px; letter-spacing: .04em; line-height: 1.5; margin-top: auto; color: #b9d8b6; }
+.areaLocked { background: #151e23; border-style: dashed; }
+.areaLocked small { color: #d0b59b; }
+.cityMapBottom { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 20px; font-size: 8px; line-height: 1.6; color: #abc1c8; letter-spacing: .06em; }
+.districtDetails { min-width: 0; background: #121a1f; border: 1px solid #414b4c; padding: 28px; }
+.districtDetails h3 { font: italic 800 38px/1.1 'Barlow Condensed',Impact,sans-serif; margin: 15px 0; text-transform: uppercase; color: #f0e1ca; }
+.districtDetails > p { font-size: 12px; color: #b5c0c4; line-height: 1.8; }
+.districtStatus { display: flex; align-items: center; gap: 8px; font-size: 10px; color: #b8d9b6; padding: 14px 0; }
+.districtGate { display: grid; grid-template-columns: 18px 1fr; gap: 12px; background: #2a241d; border: 1px solid #76624a; padding: 16px; margin: 20px 0; font-size: 12px; line-height: 1.7; color: #e5c299; }
+.districtGate progress, .districtGate small { grid-column: span 2; width: 100%; }
+.districtGate progress { height: 6px; accent-color: #e5c299; }
+.districtGate small { color: #d8c7b4; font-size: 10px; }
+.districtStats { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 10px; border-block: 1px solid #344249; padding: 17px 0; }
+.districtStats dt { font-size: 9px; line-height: 1.5; color: #a3b5ba; }
+.districtStats dd { font: 800 26px 'Barlow Condensed',Impact,sans-serif; margin: 5px 0 0; color: #e4d2b5; }
+.districtLinks { display: flex; flex-direction: column; gap: 10px; margin-top: 23px; }
+.districtLinks button, .cityPending button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; white-space: normal; line-height: 1.5; }
+.cityPrimary { background: #be5237; color: #fff0de; border: 1px solid #e38a62; padding: 12px; font-size: 10px; font-weight: 700; cursor: pointer; }
+.cityPrimary:disabled { opacity: .5; cursor: not-allowed; }
+.cityPending { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; border: 1px solid #675b42; background: #211f17; padding: 18px; margin-bottom: 20px; }
+.cityPending span { display: block; font-size: 9px; color: #d6bd87; letter-spacing: .1em; margin-bottom: 6px; }
+.cityPending strong { color: #f1e5cc; font-size: 14px; }
+.cityPending p { font-size: 10px; }
+.cityActivityDirectory { margin-top: 34px; }
+.cityActivityGrid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px; }
+.cityActivityCard { border: 1px solid #34444c; background: #11191e; padding: 22px; min-width: 0; }
+.cityActivityCard h4 { font: 800 27px 'Barlow Condensed',Impact,sans-serif; margin: 10px 0; }
+.cityActivityCard p { font-size: 12px; color: #b5c2c6; line-height: 1.7; }
+.cityActivityCard > strong { display: block; font-size: 11px; color: #e1c39c; }
+.cityActivityCard small { display: block; font-size: 10px; color: #9ab0b6; margin-top: 8px; line-height: 1.5; }
+.cityActivityCard .cityActivityState { color: #c2cdbd; border-top: 1px solid #344249; padding-top: 12px; font-size: 10px; margin-bottom: 0; }
+.cityFootnote, .cityFuture { color: #afbdbe; font-size: 11px; line-height: 1.8; margin-top: 24px; }
+.districtFilter { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px; margin: 20px 0; background: #101b20; border: 1px solid #384951; }
+.districtFilter label { display: flex; align-items: center; gap: 10px; font-size: 11px; color: #d4e1df; }
+.districtFilter select { background: #16242b; color: #e4e9e5; border: 1px solid #4d636b; padding: 10px; max-width: 100%; min-height: 40px; font: inherit; }
+.districtFilter small { font-size: 10px; color: #aebfc0; line-height: 1.6; }
+.districtEmpty { border: 1px dashed #4b6068; color: #b8c7c9; padding: 22px; font-size: 12px; line-height: 1.8; }
+.districtEmpty button { margin-left: 12px; }
+@media (max-width: 1000px) { .cityWorkspace { grid-template-columns: 1fr; } .districtNodes { grid-template-columns: repeat(3,minmax(0,1fr)); } .districtNodes::before, .districtNode::after { display: none; } }
+@media (max-width: 650px) {
+  .phase7 .playerMeta > .hudLevel { min-width: 76px; }
+  .phase7 .playerMeta .hudXp { width: 82px; }
+  .hudXp small { font-size: 8px; }
+  .cityHeading { align-items: start; gap: 12px; }
+  .cityHeading h2 { font-size: 39px; }
+  .cityHeading p { font-size: 11px; }
+  .cityAccessCount { min-width: 70px; }
+  .cityAccessCount strong { font-size: 30px; }
+  .cityAccessCount span { font-size: 8px; }
+  .cityIntro { align-items: start; }
+  .cityMap { padding: 14px; }
+  .districtNodes { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .districtNode { padding: 13px; min-height: 158px; }
+  .districtNode > strong { font-size: 23px; }
+  .districtDetails { padding: 20px; }
+  .cityActivityGrid { grid-template-columns: 1fr; }
+  .cityPending { align-items: stretch; flex-direction: column; }
+  .districtFilter { align-items: stretch; flex-direction: column; }
+  .districtFilter label { justify-content: space-between; }
+  .districtFilter select { max-width: 70%; }
+}
+@media (prefers-reduced-motion: reduce) { .phase7 *, .phase7 *::before, .phase7 *::after { scroll-behavior: auto !important; } }

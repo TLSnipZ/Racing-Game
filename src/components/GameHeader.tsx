@@ -1,8 +1,9 @@
 import { useLayoutEffect, useRef, type KeyboardEvent } from 'react';
 import { BriefcaseBusiness, Database, Gauge, Map, Warehouse, Wrench } from 'lucide-react';
+import { HudLevelProgress } from './HudLevelProgress';
 import type { GameState } from '../domain/types';
 
-export type SectionTab = 'garage' | 'jobs' | 'races' | 'workshop' | 'saves';
+export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'saves';
 const ITEMS = [
   { id: 'garage', label: 'Garage', Icon: Warehouse },
   { id: 'jobs', label: 'Jobs', Icon: BriefcaseBusiness },
@@ -15,7 +16,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }
   game: GameState; tab: SectionTab; hasStarted: boolean; jobReady: boolean; raceReady: boolean; onTab: (tab: SectionTab) => void;
 }) {
   const header = useRef<HTMLElement>(null);
-  const disabled = (id: string) => id === 'city' || (!hasStarted && (id === 'jobs' || id === 'workshop' || id === 'races'));
+  const disabled = (id: string) => !hasStarted && id !== 'garage' && id !== 'saves';
   useLayoutEffect(() => {
     const element = header.current;
     if (!element) return;
@@ -37,20 +38,20 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }
     button?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
   }
   return <header className="gameTopbar" ref={header}>
-    <div className="gameHud"><div className="compactBrand"><div className="eyebrow">EAST WARD / UNDERGROUND</div>
-      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 06</span></div>
+    <div className="gameHud"><div className="compactBrand"><div className="eyebrow">KAGEHAMA / UNDERGROUND</div>
+      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 07</span></div>
       <div className="playerMeta" aria-label="Player status"><div><span>CASH</span><strong data-testid="cash" title={`¥${game.cashYen.toLocaleString('en-US')}`}>¥{game.cashYen.toLocaleString('en-US')}</strong></div>
-        <div><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong></div>
+        <div className="hudLevel"><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong>
+          <HudLevelProgress reputation={game.reputation} playerLevel={game.playerLevel} /></div>
         <div><span>REP</span><strong data-testid="reputation" title={game.reputation.toLocaleString('en-US')}>{game.reputation.toLocaleString('en-US')}</strong></div></div>
     </div>
     <nav className="topNav" aria-label="Game navigation"><div className="sectionTabs" role="tablist" aria-label="Game sections">
       {ITEMS.map(({ id, label, Icon }) => <button type="button" key={id} id={`tab-${id}`} data-tab={id} role="tab" aria-label={label}
         aria-selected={id === tab} aria-controls={`panel-${id}`} disabled={disabled(id)} tabIndex={id === tab ? 0 : -1}
-        onKeyDown={keyDown} onClick={() => onTab(id as SectionTab)} title={id === 'city' ? 'City arrives in Phase 7' : disabled(id) ? 'Choose a starter first' : label}>
+        onKeyDown={keyDown} onClick={() => onTab(id as SectionTab)} title={disabled(id) ? 'Choose a starter first' : label}>
         <Icon size={19} aria-hidden="true" /><span>{label}</span>
         {id === 'jobs' && jobReady && <b className="readyBadge" data-testid="job-ready-badge" aria-hidden="true">READY</b>}
         {id === 'races' && raceReady && <b className="readyBadge" data-testid="race-ready-badge" aria-hidden="true">READY</b>}
-        {id === 'city' && <small aria-hidden="true">SOON</small>}
       </button>)}
     </div></nav>
     <span className="srOnly" role="status">{jobReady ? 'Your job reward is ready to claim in Jobs.' : raceReady ? 'Your race result is ready to settle in Races.' : ''}</span>

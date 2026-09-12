@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { CarFront, Flag, Trophy, X } from 'lucide-react';
-import { DISCIPLINE_LABELS, findRaceEvent, RACE_EVENTS } from '../data/races';
+import { DistrictFilter } from './DistrictFilter';
+import type { DistrictFilter as CityFilter } from '../data/city';
+import { getDistrictRaces } from '../domain/city';
+import { DISCIPLINE_LABELS, findRaceEvent } from '../data/races';
 import { getRaceBuildKey, getRaceRequirement, getVehicleRaceBuild } from '../domain/racing';
 import { getPlayerPosition, getRaceProgress, getRaceStandings, isRaceReady } from '../domain/raceModel';
 import { RACE_DISCIPLINES, type ActiveRace, type RaceBuild, type RaceDiscipline } from '../domain/racingTypes';
@@ -34,12 +37,14 @@ function RacePlayback({ race, now }: { race: ActiveRace; now: number }) {
   </div>;
 }
 
-export function Races({ game, now, blocked, onStart, onSettle, onCancel }: {
+export function Races({ game, now, blocked, onStart, onSettle, onCancel, districtFilter, onDistrictFilter, discipline, onDiscipline }: {
+  districtFilter: CityFilter; onDistrictFilter: (value: CityFilter) => void;
+  discipline: RaceDiscipline | 'all'; onDiscipline: (value: RaceDiscipline | 'all') => void;
   game: GameState; now: number; blocked: boolean;
   onStart: (eventId: string, vehicleId: string, buildKey: string) => boolean;
   onSettle: (runId: number) => boolean; onCancel: (runId: number) => boolean;
 }) {
-  const [discipline, setDiscipline] = useState<RaceDiscipline | 'all'>('all');
+  const setDiscipline = onDiscipline;
   const [targetId, setTargetId] = useState<string | null>(null);
   const [review, setReview] = useState<{ eventId: string; vehicleId: string; buildKey: string } | null>(null);
   const [reviewError, setReviewError] = useState('');
@@ -110,12 +115,13 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel }: {
       <label className="workshopVehicle"><span>RACE VEHICLE</span><select aria-label="Race vehicle" value={target.instanceId} disabled={!!active}
         onChange={(event) => setTargetId(event.target.value)}>{game.ownedVehicles.map((v) => <option key={v.instanceId} value={v.instanceId}>{v.name} · {v.instanceId.slice(0, 8)}</option>)}</select>
         <small>Selection does not change your active garage car.</small></label></div>
+    <DistrictFilter kind="Race" value={districtFilter} onChange={onDistrictFilter} />
     <div className="categoryChips" role="group" aria-label="Filter races by discipline">
-      <button type="button" aria-pressed={discipline === 'all'} onClick={() => setDiscipline('all')}>All events <b>{RACE_EVENTS.length}</b></button>
-      {RACE_DISCIPLINES.map((d) => <button type="button" key={d} aria-pressed={discipline === d} onClick={() => setDiscipline(d)}>{DISCIPLINE_LABELS[d]} <b>{RACE_EVENTS.filter((e) => e.discipline === d).length}</b></button>)}
+      <button type="button" aria-pressed={discipline === 'all'} onClick={() => setDiscipline('all')}>All events <b>{getDistrictRaces(districtFilter).length}</b></button>
+      {RACE_DISCIPLINES.map((d) => <button type="button" key={d} aria-pressed={discipline === d} onClick={() => setDiscipline(d)}>{DISCIPLINE_LABELS[d]} <b>{getDistrictRaces(districtFilter, d).length}</b></button>)}
     </div>
     <p className="racePolicy">One job OR race at a time. Entry is charged once before the start; prizes are gross payouts. A poor finish can pay less than the fee. East Ward Shakedown is always fee-free.</p>
-    <div className="raceEventGrid">{RACE_EVENTS.filter((e) => discipline === 'all' || e.discipline === discipline).map((event) => {
+    <div className="raceEventGrid">{getDistrictRaces(districtFilter, discipline).map((event) => {
       const requirement = blocked ? 'Resolve the save warning first.' : getRaceRequirement(game, event, target.instanceId);
       const record = game.racing.records.find((r) => r.eventId === event.id);
       return <article key={event.id} className={`raceEventCard ${game.playerLevel < event.minLevel ? 'raceLocked' : ''}`} aria-label={`${event.name} event`}>
@@ -131,6 +137,8 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel }: {
         }}>RACE BRIEFING</button>
       </article>;
     })}</div>
+    {getDistrictRaces(districtFilter, discipline).length === 0 && <p className="districtEmpty" role="status">No events match these district and discipline filters.
+      <button type="button" className="secondaryButton" onClick={() => { onDistrictFilter('all'); onDiscipline('all'); }}>Clear race filters</button></p>}
     {reviewError && !review && <p className="gameError" role="alert">{reviewError}</p>}
     <p className="tuningNote">These are abstract simulated times, not real driving physics. There are no random failures, police, fuel bills, wear, damage or vehicle loss. Final race artwork and audio come later.</p>
 
