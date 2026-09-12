@@ -1,0 +1,23 @@
+name: Prepare pinned Phase 10 source
+on:
+  push:
+    branches: [prepare/10-collection-source]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: 8972ee465c6f33e823557139c61763456f60a0cb
+          persist-credentials: false
+      - name: Archive pinned application source only
+        run: git archive --format=zip HEAD -o /tmp/phase10-source.zip
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase10-source
+          path: /tmp/phase10-source.zip
+          retention-days: 1
+          compression-level: 0
