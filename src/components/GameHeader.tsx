@@ -27,6 +27,16 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
     resize(); const observer = new ResizeObserver(resize); observer.observe(element);
     return () => { observer.disconnect(); document.documentElement.style.removeProperty('--game-header-height'); };
   }, []);
+  // Programmatic section shortcuts must also reveal the selected tab on narrow screens.
+  // Move only the navigation row, never the document's vertical scroll position.
+  useLayoutEffect(() => {
+    const button = header.current?.querySelector<HTMLElement>(`#tab-${tab}`);
+    const row = button?.parentElement;
+    if (!button || !row) return;
+    const target = button.getBoundingClientRect(); const viewport = row.getBoundingClientRect();
+    if (target.left < viewport.left) row.scrollLeft -= viewport.left - target.left;
+    else if (target.right > viewport.right) row.scrollLeft += target.right - viewport.right;
+  }, [tab]);
   function keyDown(event: KeyboardEvent<HTMLButtonElement>) {
     const ids = ITEMS.filter((item) => !disabled(item.id)).map((item) => item.id);
     const index = ids.findIndex((id) => id === event.currentTarget.dataset.tab);
