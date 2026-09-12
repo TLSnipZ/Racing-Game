@@ -166,7 +166,6 @@ export function App() {
       {hasStarted && <div className="specialistModes" role="group" aria-label="Market sections">{([
         ['dealer', 'Used dealer'], ['imports', 'Imports'], ['auctions', 'Auctions'], ['barns', 'Barn Finds'],
       ] as const).map(([id, name]) => <button type="button" key={id} aria-pressed={marketSection === id} onClick={() => setMarketSection(id)}>{name}</button>)}</div>}
-      {hasStarted && marketSection === 'dealer' && game.advanced.activeContract && <aside className="specialistNotice"><p>{specialistReady ? 'Specialist contract READY.' : 'Specialist contract in progress. Reserved space is protected.'}</p><button type="button" className="secondaryButton" onClick={openPendingSpecialist}>OPEN SPECIALIST CONTRACT</button></aside>}
       <div hidden={marketSection !== 'dealer'}>{hasStarted && <Market key={viewEpoch} game={game} blocked={blocked} visible={tab === 'market' && marketSection === 'dealer'}
         onBuy={(id, generation, price) => session.command((current) => buyMarketVehicle(current, id, generation, price))}
         onSell={(id, key, price, replacement) => session.command((current) => sellMarketVehicle(current, id, key, price, replacement))}
