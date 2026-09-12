@@ -1,0 +1,42 @@
+name: Materialize final Phase 8 review tree
+on:
+  push:
+    branches: [prepare/8-market-final-chat]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: node scripts/phase8-finalize.mjs
+      - name: Commit clean source to dedicated review ref
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src tests CHANGELOG.md scripts/phase8-finalize.mjs .github/workflows/phase8-finalize.yml
+          git commit -m 'test: preserve exact legacy fields and finalize market documentation'
+          git push origin HEAD:refs/heads/staging/8-market-chat-final-20260912
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase8-source-review
+          path: |
+            src/
+            tests/
+            docs/
+            README.md
+            CHANGELOG.md
+            package.json
+            tsconfig*.json
+            vite.config.ts
+            playwright.config.ts
+            .github/workflows/deploy-pages.yml
+          include-hidden-files: true
+          retention-days: 7
