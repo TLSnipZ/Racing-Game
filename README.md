@@ -2,127 +2,118 @@
 
 **[🎮 PLAY KAGEHAMA IN YOUR BROWSER](https://tlsnipz.github.io/Racing-Game/)**
 
-A pre-alpha car-collection, street-racing and automotive-empire game set in a fictional Japanese coastal city.
+A pre-alpha car-collection, street-racing and automotive-empire browser game set in a fictional Japanese coastal city.
 
-> Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
+> Japan at midnight × JDM culture × touge × expressway × collecting × tycoon.
 
-**Current milestone: Phase 7 — Kagehama City & HUD XP** · **Save schema: v5 (unchanged)** · **Next numbered system: Phase 8 — Car Market**
+**Current milestone: Phase 8 — Car Market** · **Save: v6** · **Next numbered system: Phase 9 — Heat**
 
-**Graphics & Audio I remains an open, separate presentation milestone.** Phase 7 implements the next numbered system first; its district network is a functional schematic, not final illustrated city/car artwork.
-
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [City & XP contract](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Market contract](docs/PHASE8.md) · [City/XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Build & deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
 ## Play now
 
-Choose one of three inexpensive starters with **¥50,000**, earn yen and reputation, fit performance parts and test your build against three rivals. The first complete loop is **starter → job → income → tuning → race → reward**.
+**Choose a starter → earn money/REP → tune → race → collect rewards → buy another car.** Start with ¥50,000 and one confirmed purchase from the original three starter cars. Your collection now grows through normal market purchases, not free vehicle grants.
 
-### New: level XP in the persistent HUD
+### New: the used-car market
 
-A small **XP progress bar sits directly below the level number** in the top HUD, in all six sections and while scrolling. The label shows the REP remaining to the next level; the accessible description gives the target level. **Reputation is your level XP**, not a second currency. Job claims and race settlements update the same progression selector used by the Jobs panel. At the current Level 20 cap the bar is full and says **MAX**; money and reputation can still increase.
+Open **Market** in the top navigation. Each batch has **nine individual offers from six models**, with their own years, mileage, conditions, originality, sellers and prices. The stock includes the two starter models you did not choose.
 
-For example, Level 1 with 4 REP has a 20%-filled bar and needs 16 more REP for Level 2. Level 2 begins at 20 total REP and needs another 40 REP for Level 3. Thresholds remain `10 × level × (level − 1)`. This interface change does not rebalance rewards or rewrite existing levels.
+| Model | Brand | Body type | Listing years | Buy from |
+| --- | --- | --- | --- | --- |
+| Pico RS | Hoshino | Hatchback | 1992–1995 | Level 2 |
+| Tora 85 | Hoshino | Coupe | 1984–1987 | Level 2 |
+| RZ-T | Akari | Coupe | 1990–1994 | Level 2 |
+| Mira S | Hoshino | Sedan | 1996–1999 | Level 3 |
+| Riku Tourer | Mikado | Wagon | 1995–2000 | Level 4 |
+| Nami GT | Akari | Coupe | 1998–2002 | Level 5 |
 
-### New: Kagehama City
+**Filter by manufacturer, body type and year range together.** Set both years equal for an exact year. Search by model/listing/seller and sort by price, year, mileage or condition. Counts, include-purchased toggle and clear filters help recover empty searches. Ordinary section switches keep these choices.
 
-**City** opens after the starter purchase. Inspect district nodes to see their scene, access requirements, existing job/race invitations, fees, services and settled personal race records.
+Use **INSPECT & BUY** to review the exact vehicle, cost, remaining cash and garage space. Confirming adds that individual car and deducts its price once. It does not switch your existing active ride. Activate it in Garage, select it in Workshop, or choose it for a race. All new models support existing non-turbo parts; turbo upgrades remain RZ-T-only.
 
-| District | Opens | Current activities |
-| --- | --- | --- |
-| East Ward | Level 1 | Sprint invitations, Garage Shift, Parts Run, your garage and Mercer Workshop |
-| Dockside | Level 2 | Drag invitations; Dockside Delivery still requires Level 3 |
-| Hakuro Pass | Level 2 | Touge invitations |
-| Eastline Expressway | Level 3 | Expressway invitations |
-| Industrial District | Future preview only | Business/crew locations planned for Phase 12 |
-| Outer Kagehama | Future preview only | Barn finds/restoration planned for Phase 11 |
+The initial garage supports **12 cars**. Bigger valid legacy imports are kept intact but cannot buy more until below capacity. In **SELL CARS**, review the dealer offer before confirming. The car and all its purchased parts leave together, including stored replacements. The dealer credits 20% of part catalog costs, not their full purchase price. Selling your active car names the replacement in advance. **You cannot sell your last car or a car assigned to an unsettled job/race.** Old settled records remain.
 
-Individual events keep their existing level requirements. Club invitations do not become available just because their district is open. The two future districts remain previews even at maximum level.
+Prices vary with condition, mileage, model year and originality; asking prices also include a small listing-demand factor. The dealer spread makes immediate buy/sell a loss. These are provisional game values, not real-world pricing. No restoration-profit loop, buyback, auction or automatic trading is implemented yet.
 
-The city is a **directory, not travel**: no tolls, timers, rewards for clicking areas or changes to the active car. District shortcuts open the real Jobs/Races tabs with the matching filter, never start or pay for an activity. The race district filter combines with discipline; a clear-filter control recovers an empty result. Job districts filter only offers. **Pending activities always stay visible**, irrespective of filters, and can also be resumed from City.
+**Stock never rerolls on reload.** New listings require a confirmed ¥1,000 sourcing fee at Level 2, followed by a 5-minute cooldown. This replaces unsold offers but never your owned cars. Cooldown expiry only enables the button, not an automatic refresh. The [market contract](docs/PHASE8.md) defines all valuation, capacity and save rules.
 
 ### Racing
 
-Open **Races**, choose an owned vehicle and inspect **RACE BRIEFING** before confirming **ENTER RACE**. A 3-second countdown precedes a compressed sector replay. The finish table shows positions, simulated times and gaps; **SETTLE RESULT** saves the prize, REP, assigned-car mileage and personal record.
+**Races → select vehicle → RACE BRIEFING → ENTER RACE.** Eight events span Rookie and Club tiers in **Street Sprint, Drag, Touge and Expressway**, each against three rivals. **East Ward Shakedown is free at Level 1** after starter selection. Other events require Levels 2–6 and show fees plus gross/net prizes for every placement before entry.
 
-| Discipline | Build focus | Rookie invitation | Club invitation |
-| --- | --- | --- | --- |
-| Street Sprint | Acceleration, handling and braking | East Ward Shakedown | Ward Club Circuit |
-| Drag | Launch grip, power-to-weight and power | Dockyard 402 | Dockyard Redline |
-| Touge | Grip, handling, braking and low weight | Hakuro First Descent | Hakuro Switchback Club |
-| Expressway | Power and high-speed consistency | Eastline After Hours | Eastline Midnight Club |
+After a 3-second countdown, the compressed replay shows participant progress. **SETTLE RESULT** collects the prize/REP, updates the assigned car's mileage and saves personal records. A poor paid finish may earn less than the fee; withdrawal does not refund it.
 
-There are **8 events**. **East Ward Shakedown is fee-free at Level 1** after the starter choice. Other events require Levels 2–6 and charge a displayed fee. The briefing shows gross prizes and net earnings for all four positions. A poor finish can pay less than the entry fee; withdrawal does **not** refund it.
+The same build, condition, course and rivals produce the same times. Different sectors emphasize power, weight, grip, brakes or handling. These are abstract game ratings, not realistic driving physics, steering or 3D driving. No random breakdowns, fuel costs, new wear, police or vehicle loss are introduced. Race model v1 and old snapshots are unchanged by Phase 8.
 
-The same build, condition, rivals and course give the same times: reloading does not reroll defeat. These are abstract game ratings, **not real driving physics or a freely driven 3D game**. There are no random breakdowns, fuel costs, new wear, damage, police or car loss. Race model v1, fees and rewards are unchanged in Phase 7. See [PHASE6.md](docs/PHASE6.md).
+Only **one job OR race** can be pending, including completed activities waiting to be claimed. Its assigned car stays locked for tuning/sale until settlement or cancellation. Trading/tuning another parked car does not alter the running activity.
 
-Only **one job OR race** can be pending, including a finished but unclaimed activity. The assigned car stays locked for tuning until settlement/cancellation. Another parked car can be tuned. Changing the active garage vehicle never swaps the existing race participant.
+### City, HUD and garage
 
-### Categorised workshop
+Cash, level, REP and a small **XP bar below the level number** remain visible with the top navigation while scrolling. **REP is level XP**, not a separate currency. The bar shows remaining REP and MAX at the current Level 20 cap; REP/money can continue growing.
 
-**14 parts, 8 slots, 3 fictional brands:** Aoba Streetworks, Senka Dynamics and Kurogane Boost. Component buttons and a synchronized dropdown filter **intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo**. Counts and selected categories stay visible.
+**Garage, Jobs, City, Races, Workshop, Market and Saves** are separate in-game tabs. Arrow keys/Home/End operate navigation; narrow screens can scroll the tab row. READY badges indicate claimable jobs/races without automatic payout. Save recovery remains global.
 
-Choose the individual vehicle to tune and review current versus proposed power, weight, power-to-weight, grip, handling, braking, reliability and originality before **BUY & INSTALL**. Parts belong to that car, not every copy of a model. One upgrade fits a slot. Swapping retains the old part; refitting owned parts and **RESTORE STOCK** are free, without refunds. Turbo upgrades fit the Akari RZ-T only. Level, cash, compatibility and activity restrictions are explicit.
+City is a free district directory, not travel. East Ward opens at Level 1, Dockside/Hakuro at 2 and Eastline at 3. Individual activities keep their higher gates. City shortcuts filter race/job boards without entering them; pending activities stay reachable under any filter. Industrial District and Outer Kagehama are clearly future previews.
 
-Factory baselines stay separate from derived values so upgrades never compound on reload. Reliability is not current engine condition. Parts do not repair wear or increase job rewards. Resale/transfers, engine swaps, repairs and final art remain later work. [PHASE5.md](docs/PHASE5.md) lists unchanged prices/effects.
+Garage has individual vehicle dossiers, condition, factory data, current build stats, search/sort and explicit active-car selection. Inspecting does not activate a car. Manufacturer/body metadata now covers the expanded collection. Current vehicle silhouettes, city schematic and race graphics are **placeholders**. **Graphics & Audio I is still an open presentation milestone**, not completed by the market.
 
-### Jobs and starters
+### Workshop
 
-| Job | Unlock | Duration | Payment | REP | Vehicle use |
-| --- | --- | ---: | ---: | ---: | --- |
-| Garage Shift | Starter / Level 1 | 15s | ¥1,500 | +4 | On foot; no mileage |
-| Parts Run | Level 2 | 30s | ¥3,000 | +8 | Assigned car; +6 km on claim |
-| Dockside Delivery | Level 3 | 45s | ¥5,500 | +14 | Assigned car; +12 km on claim |
+**14 parts / eight slots / three fictional brands:** Aoba Streetworks, Senka Dynamics and Kurogane Boost. Visible component buttons and a synchronized dropdown filter intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo.
 
-Jobs have no entry fee, require a manual claim and do not auto-repeat. Cancellation pays nothing. Five Garage Shifts unlock Level 2. Jobs and races share reputation/levels; there is no extra cash bonus for levelling up. All existing starter/job/part balances are unchanged.
+Choose the individual car, review current versus proposed values, then **BUY & INSTALL**. Ownership is per car; only one upgrade fits a slot. Replacements are kept, refitting owned parts is free, and **RESTORE STOCK** is free without a refund. The saved factory baseline stays separate, preventing reload from compounding upgrades. Reliability is not engine condition; parts do not repair wear or increase job income. Prices/effects of existing parts remain unchanged; [Phase 5](docs/PHASE5.md) documents them.
 
-| Starter | Layout | Base power | Price | Cash left |
+### First jobs and starters
+
+| Job | Level | Time | Yen / REP | Vehicle use |
+| --- | ---: | ---: | --- | --- |
+| Garage Shift | 1 + starter | 15s | ¥1,500 / +4 | On foot |
+| Parts Run | 2 | 30s | ¥3,000 / +8 | Assigned car; +6 km on claim |
+| Dockside Delivery | 3 | 45s | ¥5,500 / +14 | Assigned car; +12 km on claim |
+
+Job acceptance is free; claims are manual and no auto-repeat exists. Five Garage Shifts unlock Level 2. Reputation thresholds remain `10 × level × (level − 1)`; no extra level-up cash bonus.
+
+| Original starter | Layout | PS | Price | Cash left |
 | --- | --- | ---: | ---: | ---: |
-| Hoshino Pico RS | FWD | 105 PS | ¥32,000 | ¥18,000 |
-| Hoshino Tora 85 | RWD | 118 PS | ¥42,000 | ¥8,000 |
-| Akari RZ-T | RWD Turbo | 155 PS | ¥48,000 | ¥2,000 |
+| Hoshino Pico RS | FWD | 105 | ¥32,000 | ¥18,000 |
+| Hoshino Tora 85 | RWD | 118 | ¥42,000 | ¥8,000 |
+| Akari RZ-T | RWD Turbo | 155 | ¥48,000 | ¥2,000 |
 
-You receive **one starter, not three free cars**. Owned instances retain their own condition, mileage, factory data and tuning. Additional-car acquisition remains Phase 8; its shop must filter by **manufacturer/brand, model year/year range and body type**, with combined filters and sorting. The market is not implemented yet.
+Original starter selection, job rewards, part prices and race balance are unchanged. The broader market offers separately priced used examples.
 
-## Interface and saves
+## Saves
 
-Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races without paying them automatically. Global save warnings link to recovery tools.
+**Valid v1–v5 saves migrate automatically to v6. No reset needed.** V5 gains only initial marketplace data; old cars, tuned parts, money, levels/REP, job receipts and paid/unsettled race snapshots remain intact. No free owned cars, past trades, payments or cooldown are invented. Earlier migrations remain supported.
 
-District inspection, garage search/sort and activity filters survive ordinary tab switches. City links intentionally choose the destination district and clear a conflicting race-discipline filter. Reload, successful import and reset return to Garage and default city/filter views. These view preferences are not gameplay save data.
+Progress autosaves in **this browser/device** under `kagehama:save`. Gameplay writes must succeed before visible progress changes. Browsing, filters and timer rendering do not write gameplay state.
 
-Progress autosaves in **this browser on this device**, under `kagehama:save`. Gameplay commands must write successfully **before** publishing visible changes. Tab/filter/XP rendering does not write gameplay data.
+**Export** a `KAGEHAMA1-...` code in Saves to retain the whole collection, tuning, stock, trade history, refresh deadline, records and pending activity. **Import** replaces the entire snapshot after confirmation, not merges. **Reset** returns to ¥50,000 and starter choice, clearing vehicles, parts, activities and market history. Export before selling a treasured car or resetting.
 
-- **Export:** generate a `KAGEHAMA1-...` code in Saves, including tuning, race records and any pending activity.
-- **Import:** review the confirmation before replacing the whole save, not merging it.
-- **Reset:** confirmation returns to ¥50,000, Level 1 and starter selection, clearing cars, parts, jobs and races. Export a backup first.
-
-**Save v5 is unchanged; no reset or new migration is needed for Phase 7.** Valid v1–v4 saves still migrate through the tested existing chain. Cars, tuning, cash, REP, levels, job receipts and race snapshots remain intact. No city unlock rewards or second XP balance are invented.
-
-Leaving the page readies at most the one pending activity. Its original build, rivals, prizes and deadline remain saved. Returning never auto-repeats or pays it. Importing an older code deliberately restores an older snapshot. No cloud account or server-authoritative anti-cheat exists; device clocks/codes remain user-controlled.
-
-Unreadable/newer saves are protected, not deleted. Failed writes cannot consume money, parts or rewards. Clock rollback prevents premature completion but permits cancellation/withdrawal. Use one browser tab at a time: detected external changes block stale writes, not a distributed lock. Clearing site data/private browsing may remove progress; keep exported backups.
+Old codes remain snapshots: importing one restores old progress. Cooldown expiry and time away never auto-repeat jobs/races or change stock. Unreadable/newer saves are protected, not deleted. Failed writes retain cash/cars/stock and rewards. Detected external tab changes block stale writes, but this is not a distributed lock; use one browser tab at a time. There is no cloud account or server anti-cheat. Clocks/codes are player-controlled, and clearing site data/private browsing can remove local progress.
 
 ## Roadmap
 
-- [x] **0 — Foundation:** React/TypeScript/Vite, midnight-Japan shell and catalog.
-- [x] **1 — Core Game:** player state, starter purchase and vehicle instances.
-- [x] **2 — Persistence:** autosave, portable codes and confirmed reset.
-- [x] **3 — Garage:** dossiers, active car and regression tests.
-- [x] **4 — Economy:** timed jobs, yen/REP, levels and mileage.
-- [x] **5 — Interface & Tuning:** persistent HUD, real tabs and first workshop.
-- [x] **6 — Racing:** four disciplines/eight events, replay/results/records and component categories.
-- [x] **7 — Kagehama City:** district overview, access previews, filtered activity shortcuts and HUD XP.
-- [ ] **Graphics & Audio I:** separate targeted presentation pass; not completed by the schematic city view.
-- [ ] **8 — Car Market:** used listings, buying/selling, values and brand/year/body-type filters.
-- [ ] **9 — Heat:** police pressure and underground risk/reward.
-- [ ] **10 — Collection:** rarities, Collection Book, achievements and Icon cars.
-- [ ] **11 — Advanced Cars:** auctions, imports, barn finds and restoration.
-- [ ] **12 — Empire & Automation:** businesses, staff/crew, delegated routines and capped offline production.
-- [ ] **13+ — Endgame:** Legacy/Prestige, rivals, bosses, events and catalog expansion.
+| Phase | Status / scope |
+| --- | --- |
+| 0–2 | Complete: foundation, core starter game and persistence |
+| 3 | Complete: collection/garage and active vehicle |
+| 4 | Complete: jobs, income and progression |
+| 5 | Complete: persistent tabs/HUD and tuning |
+| 6 | Complete: four disciplines/eight events and component categories |
+| 7 | Complete: city districts, activity filters and HUD XP |
+| 8 | Complete: individual used cars, purchase/sale, valuation, combined filters and Save v6 |
+| Graphics & Audio I | Open: targeted first car/garage/race art, animation and sound |
+| 9 | Planned: Heat, police pressure and risk/reward |
+| 10 | Planned: Collection Book, rarities, achievements and Icon cars |
+| 11 | Planned: auctions, imports, barn finds and restoration |
+| 12 | Planned: businesses, staff/crew, capacity upgrades and capped automation/offline earnings |
+| 13+ | Planned: Legacy/Prestige, rivals, bosses, events and catalog expansion |
 
-[Detailed roadmap](docs/ROADMAP.md). Automation remains later progression, with exact routines/costs/caps designed before implementation. README, roadmap, changelog and compatibility notes are reviewed with every phase.
+[Detailed roadmap](docs/ROADMAP.md). Automation remains later progression, with rules and limits defined before implementation. README, roadmap, changelog and save notes are maintained with each phase.
 
-## Development and verification
+## Development
 
-**Playing requires no installation.** The workflow checks feature branches and publishes `main` only after successful tests, build and browser checks. Use Node.js 24, matching CI:
+**Playing requires no installation.** CI checks feature branches; only a successful main build deploys Pages. Node.js 24 matches CI:
 
 ```bash
 npm install
@@ -133,12 +124,8 @@ npm run test:e2e
 npm run dev
 ```
 
-PowerShell: use `npm.cmd` / `npx.cmd` when script policy blocks `.ps1` shims; no policy change is required. Browser tests exercise the production build at `/Racing-Game/`; build first. CI attaches reports/screenshots. `phase/**` branches do not deploy. A local `git pull` only updates your copy. Dependency pinning/a committed lockfile remain documented build-hardening work.
+PowerShell may use `npm.cmd` / `npx.cmd` without changing execution policy. Browser tests use the production build at `/Racing-Game/`. CI attaches reports/screenshots. Local `git pull` only syncs your copy. Dependency pinning/a committed lockfile remain separate build-hardening work.
 
-## Architecture
+`src/data/` holds explicit catalogs/metadata. `src/domain/` holds pure commands, market snapshots/valuation, progression, racing model, validation and migrations. `src/hooks/` owns durable saves and clocks. `src/components/` contains section views. Frozen old-save fixtures are under `tests/fixtures/`; browser regressions under `tests/e2e/`.
 
-`src/data/` contains vehicle/job/part/race catalogs and explicit district metadata. `src/domain/` contains pure commands, read-only city selectors, progression, derived stats, model-v1 racing, validation and migrations. `src/hooks/` owns durable session writes and the presentation clock. `src/components/` provides the shared HUD and views. Historical fixtures remain in `tests/fixtures/`; production-build regressions are in `tests/e2e/`.
-
-## Principles
-
-JDM culture is the heart of the setting. Fictional manufacturers create an original universe. Rarity is separate from raw performance; builds should suit different disciplines. Content is data-driven, and save compatibility/tests are core infrastructure.
+JDM culture and fictional manufacturers define the setting. Rarity stays separate from speed. Data-driven content, build variety, compatibility and tests are core project principles.

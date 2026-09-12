@@ -2,64 +2,61 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current milestone: **Phase 7 — Kagehama City & HUD XP**. **Save v5 is unchanged.** The complete starter → job → tuning → race → reward loop now has a district directory.
+**Current: Phase 8 — Car Market / Save v6. Next numbered system: Phase 9 — Heat.** Graphics & Audio I remains an open separate presentation milestone.
 
 ## Implemented
 
 | Phase | Scope |
 | --- | --- |
-| 0 — Foundation | React/TypeScript/Vite, Japan-night shell, catalog and navigation. |
-| 1 — Core Game | ¥50,000, three starter choices, one real purchase and vehicle instances. |
-| 2 — Persistence | Autosave, versioned saves, KAGEHAMA1 export/import and confirmed reset. |
-| 3 — Garage | Cards, search/sort, dossiers, condition, fitted parts, active vehicle and protected recovery. |
-| 4 — Economy | Three timed jobs, manual claims, yen/REP/levels, assigned mileage and receipts. |
-| 5 — Interface & Tuning | Sticky HUD and isolated tabs; 14 parts/8 slots, per-car ownership, fit/restore, derived stats and old-save migration. |
-| 6 — Racing | Eight events/four disciplines, deterministic sectors, three rivals, fees/prizes, compressed replay, one-time settlement, records and component categories. |
-| 7 — Kagehama City | Four districts with existing-level access, two future previews, explicit activity membership, filtered shortcuts, retained pending activities and a small REP-based level XP bar in the sticky HUD. |
+| 0 — Foundation | React/TypeScript/Vite, Japan-night shell and catalogs |
+| 1 — Core Game | ¥50,000, three starter choices, one purchase and unique vehicle instances |
+| 2 — Persistence | Autosave, versioned saves, portable KAGEHAMA1 codes and confirmed reset |
+| 3 — Garage | Cards, search/sort, dossiers, active car and protected save recovery |
+| 4 — Economy | Three timed jobs, one-time manual claims, yen/REP/levels and mileage |
+| 5 — Interface & Tuning | Sticky HUD, separate tabs, 14 parts/eight slots, per-car ownership and derived stats |
+| 6 — Racing | Eight events/four disciplines, deterministic sectors, fees/prizes, replay, records and component categories |
+| 7 — City & XP | District network, four level-gated scenes/two future previews, filtered shortcuts and a small REP-based level XP bar |
+| 8 — Car Market | Nine individual saved listings/six models, combined manufacturer/body/year filters, normal car acquisition, confirmed dealer sales, valuation, 12-car capacity, manual stock sourcing and v1–v5→v6 migration |
 
-Phase 7 does not change race model v1, old saves, level thresholds, starter prices or job/part/race rewards. District browsing is not travel and does not grant money or start activities. The active job/race remains recoverable even through an unrelated or locked-district preview. See [PHASE7.md](PHASE7.md); previous contracts remain historical records of their milestones.
+The original three starter prices, job/part/race balances, progression and race model v1 remain unchanged in Phase 8. New models add variety, not free cars. Garage supports their explicit manufacturer/body metadata; existing non-turbo tuning works on them. See [PHASE8.md](PHASE8.md) for exact stock lifecycle, values, sale safeguards and compatibility.
 
-## Open presentation milestone — Graphics & Audio I
+## Completed market browsing requirement
 
-The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7.** For the next numbered-system request, City was implemented before this separate presentation milestone; its map is a functional schematic. No final car/garage images or audio have been silently substituted or marked done.
+Manufacturer/brand, body type and inclusive year range combine, including equal years for a single year. Search, counts, purchased-listing toggle, sorting by price/year/mileage/condition and clear filters are implemented. These use explicit metadata, not model-name parsing. Ordinary tab switches retain filters; reload/import/reset use defaults. Browsing never regenerates stock or performs a trade.
 
-Scope remains three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Define an asset/layer strategy before promising independently changeable paint, wheels and bodykits. Preserve gameplay and saves. This is a targeted pass, not conversion into freely driven 3D racing. Sequencing remains flexible; do not let further feature work silently remove it from the roadmap.
+Workshop categories remain implemented: intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo, with visible buttons and dropdown. New component types need real slot/catalog support. Auction/private listings, part resale/transfers, real restoration-profit flipping and sophisticated demand/economy remain later scope.
 
-## Next numbered system — Phase 8: Car Market
+## Open — Graphics & Audio I
 
-Build the first actual vehicle shop: individual used listings, buying/selling and a documented valuation model. The other starter models must become obtainable through normal play, not free grants. Define initial stock, listing identity/lifecycle, garage capacity, prices, refresh policy and sale proceeds before implementation. Cars keep individual condition, mileage and tuning; a vehicle assigned to an unsettled activity must not be sold. Prevent double purchases, negative cash, lost instances and silent rerolls. Preserve pending saves and prepare a tested migration only if new persistent market data requires it.
+A focused presentation pass is now possible on the complete job→tuning→race→acquisition loop. It remains **not done**: current car silhouettes, district schematic and replay graphics are placeholders. Scope: three consistent starter artworks, initial Japanese garage, one race setting, better animation and audio. Decide a shared asset/layer strategy before independently changeable paint/wheels/bodykits are promised. Expand that strategy to the newer market cars afterwards. This is not a conversion to freely driven 3D racing.
 
-### Required market browsing
+Numbered feature work must not silently erase this milestone. Its timing stays flexible after playtesting; do not mark it complete merely because a new screen is styled.
 
-Filter by **brand/manufacturer, model year including a range, and vehicle/body type** (hatchback, coupe, sedan, etc.). Use explicit metadata, never name-string parsing. Filters combine, show counts and have a clear reset. Sorting includes year and price. Preserve ordinary tab-switch filters. Browsing must never buy/sell or reroll stock. Price, drivetrain, mileage, condition and rarity are candidate additional filters where supported. Mobile and keyboard controls belong to the initial feature.
+## Next numbered system — Phase 9: Heat
 
-The Workshop component-type categories are already implemented, not future work: visible buttons and a synchronized dropdown cover intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo. New types require real slot/catalog support.
+Design police pressure and underground risk/reward around the existing activities. Specify which events are illegal, how Heat is gained/reduced, thresholds, event chances or deterministic rules, warnings and exact penalties before implementation. Avoid random irreversible vehicle/save loss. Expose risks before paying entry fees; distinguish Heat from XP/REP and money. Respect the current one-job-OR-race contract and snapshots: new systems must not retrospectively alter accepted fees/prizes or confiscate a locked participant.
 
-## Planned, not implemented
+Potential low-risk choices, cooldown activities and capped penalties need balance analysis before release. Add a tested schema migration only for necessary persistent fields. Include UI previews, boundary tests, repeated-click/storage-failure checks and legacy fixtures. Nothing in this roadmap means Heat already exists in Phase 8.
 
-| Phase | Scope |
+## Later milestones
+
+| Phase | Planned scope |
 | --- | --- |
-| Graphics & Audio I | Targeted first car/garage/race art, animation and audio pass. Open presentation milestone. |
-| 8 — Car Market | Unique used listings, buying/selling, values and manufacturer/year/body-type filtering. |
-| 9 — Heat | Police pressure and underground risk/reward without arbitrary save destruction. |
-| 10 — Collection | Rarity separate from performance, Collection Book, achievements and Icon cars. |
-| 11 — Advanced Cars | Auctions, imports, barn finds, restoration and more manufacturers; activate relevant Outer Kagehama content. |
-| 12 — Empire & Automation | Businesses, garage upgrades, staff/crew, delegated routines, capped passive/offline income; activate relevant Industrial District content. |
-| 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and catalog expansion. |
-| Further graphics expansion | Apply the chosen style to later content; plan visible paint/wheel/bodykit changes through a consistent asset system. |
+| 9 — Heat | Police pressure and underground risk/reward with explicit, bounded consequences |
+| 10 — Collection | Rarity independent of performance, Collection Book, achievements and Icon cars |
+| 11 — Advanced Cars | Auctions, imports, barn finds, restoration and more manufacturers; activate Outer Kagehama content |
+| 12 — Empire & Automation | Businesses, garage/capacity upgrades, staff/crew, delegated routines and capped passive/offline earnings; activate Industrial District content |
+| 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and expanded catalog |
+| Graphics expansion | Consistent new car/city/business assets with planned paint/wheel/bodykit layers |
 
-## Automation later
-
-Progression should move from earning the first yen personally to managing an automotive empire. Phase 12 is the principal milestone for passive businesses and staff/managers. Crew-dispatched repeatable work is a candidate; exact eligible jobs, unlocks, costs, collection rules and limits must be designed first. Offline earnings require eligibility, deterministic catch-up, a cap and duplicate-award protection. Automatic car/part purchases or destructive decisions are not implied.
-
-Current jobs/races remain manually accepted and settled. Tab changes are not offline time or automation. A smaller early automation step may be proposed if playtesting shows excessive repetition, but no earlier phase/date is committed.
+Automation should move the player from personally earning the first yen to managing an automotive empire. Crew-dispatched recurring work remains a candidate; define eligible routines, costs, unlocks, collection and offline limits before implementing. Current jobs/races and market trades are manual. No automatic purchases or destructive decisions are implied. An earlier small automation step may be proposed if playtesting becomes repetitive, but none is committed yet.
 
 ## Cross-phase quality
 
-Readability, accessibility, mobile layout and balance improve throughout. HUD XP is existing cumulative REP, not an extra saved currency; cap and legacy-level behavior must remain defined. Future city restrictions beyond existing level gates must be enforced in the domain, not only hidden in the UI.
+Readability, mobile layout, keyboard access, balance and save recovery improve throughout. HUD XP uses existing REP; cap and grandfathered levels remain supported. Preserve all historical fixtures and race-model-v1 snapshots. Larger old garages are retained rather than truncated by the new purchase cap. Global save codes/clocks are client-controlled, not server anti-cheat. Full multi-device/screen-reader coverage exceeds Chromium automation.
 
-Car silhouettes, the district schematic and race replay remain provisional artwork. Pinning dependencies/committing a reproducible lockfile remain build-hardening work; the inherited `latest` policy is unchanged. Preserve all historical fixtures and the model-v1 algorithm for existing race snapshots. Client clocks/codes are user-controlled; local-save validation is not server anti-cheat. Planned items are not released features or promised dates.
+Pinning dependencies and adding a reproducible lockfile remain build-hardening work; this phase keeps the inherited toolchain policy. Validate before changing libraries. Planned content has no promised dates.
 
 ## Working agreement
 
-Inspect current repository → implement agreed scope → add regression tests → validate a clean phase-branch tree with unit tests, typecheck/build and browser scenarios → maintain README/roadmap/changelog/compatibility notes → publish a clear commit → verify the main Pages deployment. Never call a deployment live merely because a commit or run exists. Do not force-replace another contributor's work. Work continues in this chat with GitHub; no separate coding mode is required.
+Inspect current repo → implement agreed scope → tests/fixtures → validate clean phase branch with unit/build/browser checks → maintain README/roadmap/changelog/save notes → publish a clear commit → verify main Pages deployment. Do not claim publication based on a commit or queued run alone. Do not force-replace another contributor's commits. No temporary preparation script/workflow belongs in the release tree. Development continues in this chat with GitHub, not a separate coding mode.
