@@ -4,6 +4,8 @@ import { createNewGameState, createPlayerVehicle, purchaseStarter } from '../../
 import { startSpecialistContract, getSpecialistQuoteKey, finishSpecialistContract } from '../../src/domain/advanced';
 import { findAdvancedOffer } from '../../src/data/advancedCars';
 import { createAdvancedState } from '../../src/domain/advancedState';
+import { createEmpireState } from '../../src/domain/empireState';
+import { SAVE_VERSION } from '../../src/domain/persistence';
 import { getRestorationQuote } from '../../src/domain/restoration';
 import { getVehicleBuildStats, installPart } from '../../src/domain/tuning';
 import { startRace, getRaceBuildKey } from '../../src/domain/racing';
@@ -19,7 +21,7 @@ async function review(page:Page,car='Mizuno Sora S'){await page.getByRole('butto
 async function ready(page:Page){const s=await read(page);await page.clock.runFor(Math.max(0,s.advanced.activeContract!.finishesAtMs-await page.evaluate(()=>Date.now())));}
 
 test('specialist and restoration sections are read-only real subviews of the existing tabs',async({page})=>{
- await seed(page,rich());const before=await stored(page);await expect(page.getByRole('tab')).toHaveCount(8);
+ await seed(page,rich());const before=await stored(page);await expect(page.getByRole('tab')).toHaveCount(9);
  for(const section of ['Imports','Auctions','Barn Finds'] as const){await market(page,section);await expect(page.getByRole('heading',{level:2})).toHaveCount(1);await expect(page.getByRole('tabpanel')).toHaveCount(1);}
  await tab(page,'Garage');await tab(page,'Market');await expect(page.getByRole('group',{name:'Market sections'}).getByRole('button',{name:'Barn Finds'})).toHaveAttribute('aria-pressed','true');
  await restoration(page);await expect(page.getByRole('heading',{name:'Bring it back.'})).toBeVisible();expect(await stored(page)).toBe(before);
@@ -122,8 +124,8 @@ test('failed incoming delivery leaves the full paid contract for a successful la
  await page.reload();await market(page,'Imports');await page.getByRole('button',{name:'COMPLETE CONTRACT'}).click();expect((await read(page)).ownedVehicles).toHaveLength(2);
 });
 test('old v8 collection rewards, Heat, paid races and stock survive migration with only empty new fields',async({page})=>{
- await seedRaw(page,JSON.stringify(v8));const s=await read(page),{empire:_empire,advanced,...old}=s;
- expect(old).toEqual(v8.state);expect(advanced).toEqual(createAdvancedState());await expect(page.locator('.saveIndicator')).toContainText('SAVE V9');
+ await seedRaw(page,JSON.stringify(v8));const s=await read(page),{empire,advanced,...old}=s;
+ expect(old).toEqual(v8.state);expect(advanced).toEqual(createAdvancedState());expect(empire).toEqual(createEmpireState());await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);
 });
 test('export reset and import preserve exact escrow, reserved car, deadline and model/reward history',async({page})=>{
  await clock(page);await seed(page,start('crest-auction',300000));const before=await read(page);await tab(page,'Saves');await page.getByRole('button',{name:'GENERATE SAVE CODE'}).click();const code=await page.getByRole('textbox',{name:'Exported save code'}).inputValue();

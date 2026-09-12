@@ -131,6 +131,8 @@ for(const [name,width,height] of [['desktop',1440,1000],['mobile',390,844],['nar
   let s=automated();s=act(s,'buy','bayline-parts');s=act(s,'manager','bayline-parts');await seed(page,s);await tab(page,'Empire');await page.clock.runFor(90000);
   for(const view of ['Businesses','Staff & Managers','Garage Expansion']){
    await section(page,view);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+   for(const button of await page.locator('.businessCard > button, .managerCard > button, .expansionCard > button').all()){const box=await button.boundingBox();expect(box!.height).toBeGreaterThanOrEqual(44);expect(box!.height).toBeLessThanOrEqual(80);}
+   await page.evaluate(()=>window.scrollTo(0,0));
    await page.screenshot({path:`test-results/empire-${view.split(' ')[0].toLowerCase()}-${name}.png`,fullPage:true});
    await page.evaluate(()=>window.scrollTo(0,600));await expect(page.getByTestId('cash')).toBeInViewport();await expect(page.getByRole('progressbar',{name:'Level XP progress',exact:true})).toBeInViewport();expect((await page.locator('.gameTopbar').boundingBox())!.y).toBe(0);
   }
