@@ -16,6 +16,13 @@ test('blocked webfonts and high balances never overflow the 320px garage or shar
     await expect(page.getByTestId('cash')).toBeInViewport();
     await expect(page.getByRole('progressbar', { name: 'Level XP progress', exact: true })).toBeInViewport();
   }
+  await tab(page, 'Collection');
+  for (const name of ['Collection Book', 'Achievements', 'Icon Showroom']) {
+    await page.getByRole('group', { name: 'Collection sections' }).getByRole('button', { name: new RegExp(`^${name}`) }).click();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await expect(page.getByRole('progressbar', { name: 'Level XP progress', exact: true })).toBeInViewport();
+    await page.screenshot({ path: `test-results/collection-fallback-${name.replaceAll(' ', '-').toLowerCase()}.png` });
+  }
   expect(await stored(page)).toBe(before);
   await tab(page, 'Garage');
   await page.screenshot({ path: 'test-results/narrow-fallback-hud.png' });

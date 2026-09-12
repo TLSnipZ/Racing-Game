@@ -5,7 +5,8 @@
 .rarity-legendary { color:#d4b7ed; background:#2d2239; }
 .rarity-icon { color:#f0cd86; background:#372c16; }
 .bookHeader { display:flex; align-items:center; justify-content:space-between; gap:24px; margin:20px 0 25px; }
-.bookHeader h2 { font:italic 800 clamp(38px,4.8vw,66px)/1 'Barlow Condensed',Impact,sans-serif; margin:15px 0; text-transform:uppercase; }
+.bookHeader > div { min-width:0; max-width:100%; }
+.bookHeader h2 { overflow-wrap:anywhere; font:italic 800 clamp(38px,4.8vw,66px)/1 'Barlow Condensed',Impact,sans-serif; margin:15px 0; text-transform:uppercase; }
 .bookHeader p { font-size:13px; line-height:1.8; color:#b3c2c4; }
 .bookSeal { display:flex; align-items:center; gap:14px; border:1px solid #8a7650; padding:20px; color:#dec698; transform:rotate(-3deg); font-size:10px; line-height:1.6; letter-spacing:.15em; flex-shrink:0; }
 .collectorSummary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:#40504f; border:1px solid #40504f; }
@@ -88,7 +89,7 @@
 .iconBuy:disabled { opacity:.45; cursor:not-allowed; }
 @media (max-width:1100px) { .bookGrid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:700px) {
- .bookSeal { display:none; } .bookHeader { margin:15px 0; } .bookHeader h2 { font-size:42px; }
+ .bookSeal { display:none; } .bookHeader { margin:15px 0; } .bookHeader h2 { font-size:clamp(32px,9vw,42px); }
  .bookFilters { grid-template-columns:1fr; padding:16px; } .bookGrid,.achievementGrid,.iconGrid { grid-template-columns:1fr; }
  .collectorSummary > div { padding:12px; } .collectorSummary span { font-size:8px; letter-spacing:.04em; line-height:1.6; }
  .collectorSummary strong { font-size:30px; } .collectorSummary strong small { font-size:18px; }
@@ -97,3 +98,6 @@
  .iconIntroduction { align-items:start; padding:18px; gap:12px; } .iconCard { padding:19px; }
  .iconDialog { padding:18px; } .iconDialogActions { flex-direction:column; }
 }
+
+/* Long fallback-font labels must wrap rather than enlarge a narrow archive card. */
+.collectorPanel h3,.collectorSummary span,.iconRequirements li { overflow-wrap:anywhere; }

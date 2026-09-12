@@ -159,6 +159,7 @@ export function Market({ game, blocked, visible, onBuy, onSell, onRefresh, onGar
           <div><dt>Purchased parts allowance (20% of retail)</dt><dd>{yen(saleQuote.partsOfferYen)}</dd></div></dl>
         <div className="marketQuote"><span>You receive</span><strong>{yen(review.price)}</strong><span>All amounts rounded down to ¥100 for trade-in</span></div>
         <p className="workshopWarning">Selling removes this exact car and all {saleCar.tuning.purchasedPartIds.length} purchased parts from your garage. This is not reversible through the dealer. Past race records remain.</p>
+        {findVehicleDefinition(saleCar.catalogId)?.acquisition === 'icon' && <p className="workshopWarning">This is an Icon car. Selling it does not renew its one-time showroom offer. Its Collection Book entry stays collected.</p>}
         {review.activeSale && <label className="marketReplacement"><span>Choose your next active vehicle</span><select aria-label="Replacement active vehicle" value={replacement} onChange={(e) => setReplacement(e.target.value)}>
           <option value="">Choose a remaining car…</option>{game.ownedVehicles.filter((car) => car.instanceId !== saleCar.instanceId).map((car) => <option key={car.instanceId} value={car.instanceId}>{car.name} · {car.instanceId}</option>)}</select></label>}</>}
       {review?.kind === 'refresh' && <><p>Replace the remaining unsold listings with <strong>six new individual used cars</strong>. Your purchased vehicles, active car, cash and pending activity do not change.</p>
