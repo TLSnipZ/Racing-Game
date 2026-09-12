@@ -1,0 +1,44 @@
+name: Apply Phase 11 browser-review polish
+on:
+  push:
+    branches: [prepare/11-advanced-review]
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Apply exact reviewed anchors
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def patch(path, old, new):
+              p=Path(path); s=p.read_text(); assert s.count(old)==1,(path,s.count(old)); p.write_text(s.replace(old,new))
+          patch('src/App.tsx', "game.advanced.activeContract && tab !== 'market'", "game.advanced.activeContract && (tab !== 'market' || marketSection === 'dealer')")
+          patch('src/components/AdvancedCars.tsx', 'Delivery and winning bids reserve a garage space.', 'Imports and all pending auction bids reserve a garage space.')
+          p=Path('tests/e2e/advanced.spec.ts')
+          p.write_text(p.read_text()+'''\ntest('a pending contract stays directly reachable from the ordinary dealer view',async({page})=>{
+           await clock(page);await seed(page,start());await market(page,'Used dealer');
+           await expect(page.getByRole('complementary',{name:'Specialist activity notice',exact:true})).toBeVisible();
+           await page.getByRole('button',{name:'OPEN SPECIALIST CONTRACT',exact:true}).click();
+           await expect(page.getByRole('article',{name:'Current specialist contract',exact:true})).toBeVisible();
+           await expect(page.getByRole('group',{name:'Market sections',exact:true}).getByRole('button',{name:'Imports',exact:true})).toHaveAttribute('aria-pressed','true');
+          });
+          ''')
+          patch('docs/PHASE11.md', 'A global notice and Market READY badge keep pending contracts reachable from other tabs.', 'A global notice and Market READY badge keep pending contracts reachable from other tabs and from the ordinary Used dealer view.')
+          p=Path('CHANGELOG.md');s=p.read_text();i=s.index('\n\n',s.index('## Phase 11'))+2;s=s[:i]+'- Kept the pending specialist shortcut visible within Used dealer as well as other tabs; clarified that all pending bids, not only winning bids, reserve space.\n'+s[i:];p.write_text(s)
+          PY
+      - name: Verify and store the clean reviewed tree
+        run: |
+          git rm .github/workflows/phase11-review.yml
+          git add -A
+          tree=$(git write-tree)
+          test "$tree" = b1b70caec2cc63502fa5921cf020ebbed5050db8
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: keep specialist contracts reachable from ordinary dealer view'
+          git push origin HEAD:refs/heads/staging/11-advanced-reviewed
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
