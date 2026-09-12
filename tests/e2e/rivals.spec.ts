@@ -63,7 +63,7 @@ test('claim in Rival Crews and Collection uses one ledger, never two payments',a
   await seed(page,raceToEnd(qualifiedRivalWorld(),first.event.id));await board(page);const before=await read(page);
   await page.getByRole('button',{name:'Claim rival bonus Ironline',exact:true}).evaluate((b:HTMLButtonElement)=>{b.click();b.click();});
   const claimed=await read(page);expect(claimed.cashYen).toBe(before.cashYen+20000);expect(claimed.racing).toEqual(before.racing);expect(claimed.reputation).toBe(before.reputation);
-  await tab(page,'Collection');await page.getByRole('button',{name:'Achievements',exact:true}).click();await page.getByRole('combobox',{name:'Achievement category',exact:true}).selectOption('rivals');
+  await tab(page,'Collection');await page.getByRole('group',{name:'Collection sections',exact:true}).getByRole('button',{name:/^Achievements(?: \d+)?$/}).click();await page.getByRole('combobox',{name:'Achievement category',exact:true}).selectOption('rivals');
   await expect(page.locator('.achievementCard')).toHaveCount(5);await expect(page.getByRole('button',{name:'Claim Launch Authority',exact:true})).toBeDisabled();
   await page.reload();expect(await read(page)).toEqual(claimed);
 });
