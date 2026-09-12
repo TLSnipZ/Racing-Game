@@ -1,3 +1,4 @@
+import { createHeatState } from './heat';
 import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 import v1 from '../../tests/fixtures/save-v1.json';
@@ -26,7 +27,7 @@ const raw = (state: unknown, version = SAVE_VERSION) => JSON.stringify({ version
 describe('Save v6 market and historical compatibility', () => {
   it.each([v1, v2, v3, v4, v5])('reads the frozen v$version snapshot without losing previous fields or inventing purchases', (old) => {
     const before = JSON.stringify(old); const result = deserializeSave(before);
-    expect(result.version).toBe(6); expect(result.savedAt).toBe(old.savedAt);
+    expect(result.version).toBe(SAVE_VERSION); expect(result.savedAt).toBe(old.savedAt);
     expect(result.state.cashYen).toBe(old.state.cashYen); expect(result.state.playerLevel).toBe(old.state.playerLevel); expect(result.state.reputation).toBe(old.state.reputation);
     expect(result.state.market).toEqual(createMarketState(old.state.ownedVehicles.map((v) => v.instanceId)));
     expect(result.state.ownedVehicles.map(({ tuning: _tuning, ...car }) => car)).toEqual(old.state.ownedVehicles.map((car) => { const { tuning: _tuning, ...base } = car as typeof car & { tuning?: unknown }; return base; }));
@@ -36,8 +37,8 @@ describe('Save v6 market and historical compatibility', () => {
     expect(importSaveCode(SAVE_CODE_PREFIX + Buffer.from(before).toString('base64url')).state).toEqual(result.state);
   });
   it('preserves every v5 field, including a paid race, tuned parts, fee and exact sector results', () => {
-    const { market, ...result } = deserializeSave(JSON.stringify(v5)).state;
-    expect(result).toEqual(v5.state); expect(market.purchasedCount).toBe(0); expect(market.soldCount).toBe(0);
+    const { heat, market, ...result } = deserializeSave(JSON.stringify(v5)).state;
+    expect(result).toEqual(v5.state); expect(heat).toEqual(createHeatState()); expect(market.purchasedCount).toBe(0); expect(market.soldCount).toBe(0);
   });
   it('round-trips traded stock, car tuning and a pending race without recalculating or awarding it', () => {
     let state = traded(); const car = state.ownedVehicles[0];

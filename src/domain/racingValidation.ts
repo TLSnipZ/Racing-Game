@@ -1,3 +1,4 @@
+import { isRaceHeatContract } from './heatValidation';
 import { findRaceEvent, RACE_EVENTS } from '../data/races';
 import { getPlayerPosition, simulateSectors } from './raceModel';
 import { RACE_DISCIPLINES, SECTOR_PROFILES, type ActiveRace, type RaceBuild, type RaceReceipt, type RacingState } from './racingTypes';
@@ -22,6 +23,7 @@ export function isRaceSnapshot(value: unknown): value is ActiveRace {
     || !value.sectors.every((s) => record(s) && text(s.name) && SECTOR_PROFILES.includes(s.profile as never) && int(s.baseTimeMs, 1, 60000))) return false;
   if (!Array.isArray(value.prizes) || value.prizes.length !== 4 || !value.prizes.every((p) => record(p)
     && int(p.yen, 0, 1000000000) && int(p.reputation, 0, 1000000000))) return false;
+  if ('heatRisk' in value && !isRaceHeatContract(value.heatRisk, value.eventId, value.prizes as ActiveRace['prizes'])) return false;
   if (!Array.isArray(value.entrants) || value.entrants.length !== 4) return false;
   const sectors = value.sectors as ActiveRace['sectors'];
   return value.entrants.every((entrant, i) => {

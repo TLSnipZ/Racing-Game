@@ -120,7 +120,7 @@ test('reset restores default city and filter views without changing the save sch
   await page.getByRole('button', { name: 'Choose Hoshino Pico RS' }).click(); await page.getByRole('button', { name: 'BUY & ENTER KAGEHAMA' }).click();
   await tab(page, 'Races'); await expect(page.getByRole('combobox', { name: 'Race district', exact: true })).toHaveValue('all');
   await tab(page, 'City'); await expect(page.getByRole('button', { name: 'Inspect East Ward', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  expect(JSON.parse((await stored(page))!).version).toBe(6);
+  expect(JSON.parse((await stored(page))!).version).toBe(7);
 });
 for (const [name, width, height] of [['desktop', 1440, 1000], ['mobile', 390, 844], ['narrow', 320, 780]] as const) {
   test(`${name} city and XP stay readable with sticky HUD in all seven tabs`, async ({ page }) => {

@@ -2,7 +2,7 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current milestone: **Phase 8 — Used Car Market**. **Save v6.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
+Current milestone: **Phase 9 — Heat & Police**. **Save v7.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
 
 ## Implemented
 
@@ -17,6 +17,7 @@ Current milestone: **Phase 8 — Used Car Market**. **Save v6.** The complete st
 | 6 — Racing | Eight events/four disciplines, deterministic sectors, three rivals, fees/prizes, compressed replay, one-time settlement, records and component categories. |
 | 7 — Kagehama City | Four districts with existing-level access, two future previews, explicit activity membership, filtered shortcuts, retained pending activities and a small REP-based level XP bar in the sticky HUD. |
 | 8 — Used Car Market | Six models/three manufacturers/four body types; individual saved listings, combined brand/year/body/search filters, price/year/mileage/condition sorting, confirmed buy/sell, active replacement, assigned/last-car locks, 12-space purchase capacity, manual 5-minute stock refresh and Save v6 migration. |
+| 9 — Heat & Police | Driver-global Heat HUD; optional Underground stakes on seven paid events, frozen bonus/Heat/fine terms, deterministic patrol decisions, legal-job recovery and free timed Lay low; Save v7 preserves every prior field. |
 
 Phase 8 preserves race model v1, level thresholds, original starter prices, original build ratings and all job/part/race rewards. The shared catalog adds three new models with their own ratings. See [PHASE8.md](PHASE8.md) for exact market, ownership and migration rules. Previous milestones remain documented historical contracts.
 
@@ -24,13 +25,17 @@ Phase 7 did not change race model v1, old saves, level thresholds, starter price
 
 ## Open presentation milestone — Graphics & Audio I
 
-The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7 or Phase 8.** City and Market were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
+The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8 or Phase 9.** City, Market and Heat were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
 
 Scope remains three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Define an asset/layer strategy before promising independently changeable paint, wheels and bodykits. Preserve gameplay and saves. This is a targeted pass, not conversion into freely driven 3D racing. Sequencing remains flexible; do not let further feature work silently remove it from the roadmap.
 
-## Next numbered system — Phase 9: Heat
+## Phase 9 — implemented risk contract
 
-Design and implement visible police pressure and underground risk/reward. Before coding, define which activities generate Heat, limits/decay, thresholds, fees or penalties, deterministic saved events and recovery options. Existing paid race snapshots and saves must stay valid. Do not silently add vehicle loss, random catastrophic destruction or bills to ordinary jobs. Player decisions and all costs must be explicit. No police system is implemented by the Market phase.
+Standard races and ordinary jobs retain their original terms. Optional Level-3+ Underground stakes on the seven paid events add +50% yen/+25% REP and 12–22 Heat on entry, with a pre-announced deterministic patrol alert at projected 50/75 Heat. Resolve it by paying the shown ¥1,500/¥3,000 fine or waiting through a free 60-second Lay low pause. Fine reduction is 30 Heat; completed Lay low removes 40; legal job claims remove up to 6. No passive decay, surprise car loss, new wear, forced debt or automatic fines. At 85+ Heat, recover before a new Underground run. See [PHASE9.md](PHASE9.md).
+
+## Next numbered system — Phase 10: Collection
+
+Build collection discovery and rarity independently of performance: Collection Book, meaningful achievements and the first Icon-car goals. Define how ownership history versus current ownership count, reward claims, duplicate models and sold cars are handled before adding persistent collection data. Existing dealer stock must not reroll and historical race/Heat contracts must stay valid. Preserve bought parts, active activities and saves; do not hand out unearned achievements or retrospective cash without explicit migration rules. The exact initial collection/achievement catalog still needs design.
 
 ## Market and workshop browsing — implemented
 
@@ -43,7 +48,7 @@ The Workshop component categories remain implemented: visible buttons and a sync
 | Phase | Scope |
 | --- | --- |
 | Graphics & Audio I | Targeted first car/garage/race art, animation and audio pass. Open presentation milestone. |
-| 9 — Heat | Police pressure and underground risk/reward without arbitrary save destruction. |
+
 | 10 — Collection | Rarity separate from performance, Collection Book, achievements and Icon cars. |
 | 11 — Advanced Cars | Auctions, imports, barn finds, restoration and more manufacturers; activate relevant Outer Kagehama content. |
 | 12 — Empire & Automation | Businesses, garage upgrades, staff/crew, delegated routines, capped passive/offline income; activate relevant Industrial District content. |
@@ -54,7 +59,7 @@ The Workshop component categories remain implemented: visible buttons and a sync
 
 Progression should move from earning the first yen personally to managing an automotive empire. Phase 12 is the principal milestone for passive businesses and staff/managers. Crew-dispatched repeatable work is a candidate; exact eligible jobs, unlocks, costs, collection rules and limits must be designed first. Offline earnings require eligibility, deterministic catch-up, a cap and duplicate-award protection. Automatic car/part purchases or destructive decisions are not implied.
 
-Current jobs/races remain manually accepted and settled. Tab changes are not offline time or automation. A smaller early automation step may be proposed if playtesting shows excessive repetition, but no earlier phase/date is committed.
+Current jobs/races remain manually accepted and settled. Lay low is also manually started/completed and is recovery, not production automation. Tab changes are not offline time or automation. A smaller early automation step may be proposed if playtesting shows excessive repetition, but no earlier phase/date is committed.
 
 ## Cross-phase quality
 

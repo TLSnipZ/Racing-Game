@@ -1,0 +1,60 @@
+/* Heat is readable without flashing sirens or relying on colour alone. */
+.shell.phase9 .compactBrand { min-width: 0; }
+.hudHeat { display: grid; gap: 5px; width: 170px; max-width: 100%; padding: 7px 0 0; border: 0; background: transparent; color: #d7cab6; text-align: left; cursor: pointer; }
+.hudHeat > span { font: 9px/1.5 Inter,Arial,sans-serif; letter-spacing: .03em; }
+.hudHeat b { font-variant-numeric: tabular-nums; }
+.hudHeat progress { width: 100%; height: 4px; }
+.hudHeat:disabled { cursor: default; }
+.phase9 progress { accent-color: #dbac77; }
+.heat-watched progress, .heat-crackdown progress { accent-color: #ed8967; }
+.heatPanel { border: 1px solid #5c594b; background: #141b1f; padding: 26px; margin: 8px 0 32px; scroll-margin-top: calc(var(--game-header-height,180px) + 18px); }
+.heatHeading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.heatHeading h2 { margin: 12px 0 20px; font: italic 800 clamp(30px,4vw,46px)/1.1 'Barlow Condensed',Impact,sans-serif; }
+.heatHeading svg { color: #dfbd91; flex-shrink: 0; }
+.heatOverview { display: grid; grid-template-columns: auto 1fr; gap: 24px; align-items: center; }
+.heatOverview > div { display: flex; gap: 15px; align-items: baseline; }
+.heatOverview strong { font: 800 32px 'Barlow Condensed',Impact,sans-serif; color: #f0d8b8; }
+.heatOverview strong small { font: 12px Inter,Arial,sans-serif; }
+.heatOverview span { font-size: 10px; letter-spacing: .13em; color: #dec096; }
+.heatOverview progress { width: 100%; height: 9px; }
+.heatIntro, .heatPanel p { color: #bcc8ca; font-size: 12px; line-height: 1.8; }
+.heatThresholds { display: flex; flex-wrap: wrap; gap: 8px 18px; padding: 12px 0 18px; border-bottom: 1px solid #3c4a4e; font-size: 10px; color: #cfc0a9; }
+.patrolAlert { background: #2e211d; border: 1px solid #946345; margin: 20px 0; padding: 20px; }
+.heatPanel h3 { font: 700 26px 'Barlow Condensed',Impact,sans-serif; color: #f1dfc3; margin: 8px 0; }
+.patrolAlert strong { color: #f2d4ab; }
+.heatRecovery { display: flex; flex-wrap: wrap; gap: 15px 25px; align-items: center; padding: 20px 0 6px; }
+.heatRecovery > div { flex: 1 1 320px; }
+.heatRecovery button { flex: 0 1 auto; }
+.heatPanel .heatHint { flex-basis: 100%; color: #d8b791; font-size: 11px; margin: 0; }
+.heatPause { margin-top: 20px; padding: 20px; background: #192728; border: 1px solid #50665d; }
+.heatPauseTitle { display: flex; align-items: center; gap: 10px; color: #d2dcb9; }
+.heatPause > progress { width: 100%; height: 8px; margin-top: 16px; }
+.heatActions { display: flex; gap: 12px; flex-wrap: wrap; }
+.heatPanel .heatReceipt { color: #c5ddbc; padding: 12px; border: 1px solid #48654b; background: #1c2a21; font-size: 11px; }
+.heatPanel .heatFootnote { margin-bottom: 0; font-size: 10px; color: #aebec0; }
+.heatNotice { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 18px; margin: 0 0 18px; border: 1px solid #81624d; background: #2d231d; }
+.heatNotice p { margin: 0; color: #e1c7a3; font-size: 12px; line-height: 1.7; }
+.heatNotice button { min-height: 40px; }
+.raceModeChoice { display: grid; gap: 10px; min-width: 0; margin: 16px 0; padding: 15px; border: 1px solid #6b5949; background: #1f2321; }
+.raceModeChoice legend { font-size: 11px; color: #f2d4ac; padding: 0 6px; }
+.raceModeChoice label { display: flex; align-items: start; gap: 10px; font-size: 12px; line-height: 1.7; color: #ecdfc9; cursor: pointer; }
+.raceModeChoice input { margin-top: 4px; accent-color: #dca76e; }
+.raceModeChoice small { display: block; font-size: 10px; color: #bdb9ad; }
+.raceRiskTerms { border-left: 3px solid #eb9b66; padding: 10px 14px; margin: 14px 0; background: #2b211b; color: #f0d5b5; font-size: 12px; line-height: 1.8; }
+.raceRiskTerms p { margin: 4px 0; }
+.raceRiskTerms small { display: block; color: #e1c2a1; font-size: 10px; }
+.phase9 .raceBriefTable { width: 100%; overflow-x: auto; }
+.phase9 .raceBriefTable table { min-width: 280px; font-variant-numeric: tabular-nums; }
+.phase9 .raceBriefTable th, .phase9 .raceBriefTable td { font-size: 11px; padding: 8px 5px; }
+.hudHeat:focus-visible, .heatPanel:focus-visible { outline: 2px solid #ecc797; outline-offset: 3px; }
+@media (max-width: 700px) {
+  .shell.phase9 .gameHud { padding-block: 12px; }
+  .hudHeat { width: 190px; padding-top: 4px; }
+  .heatPanel { padding: 18px 14px; }
+  .heatOverview { grid-template-columns: 1fr; gap: 8px; }
+  .heatHeading h2 { font-size: 31px; }
+  .heatActions { flex-direction: column; }
+  .heatNotice { align-items: stretch; flex-direction: column; }
+  .patrolAlert, .heatPause { padding: 14px; }
+  .raceModeChoice { padding: 12px; }
+}

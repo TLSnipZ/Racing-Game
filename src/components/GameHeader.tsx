@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, type KeyboardEvent } from 'react';
 import { BriefcaseBusiness, Database, Gauge, Map, Store, Warehouse, Wrench } from 'lucide-react';
+import { HeatBadge } from './HeatBadge';
 import { HudLevelProgress } from './HudLevelProgress';
 import type { GameState } from '../domain/types';
 
@@ -13,7 +14,8 @@ const ITEMS = [
   { id: 'market', label: 'Market', Icon: Store },
   { id: 'saves', label: 'Saves', Icon: Database },
 ] as const;
-export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }: {
+export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatReady, onHeat, onTab }: {
+  heatReady: boolean; onHeat: () => void;
   game: GameState; tab: SectionTab; hasStarted: boolean; jobReady: boolean; raceReady: boolean; onTab: (tab: SectionTab) => void;
 }) {
   const header = useRef<HTMLElement>(null);
@@ -40,7 +42,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }
   }
   return <header className="gameTopbar" ref={header}>
     <div className="gameHud"><div className="compactBrand"><div className="eyebrow">KAGEHAMA / UNDERGROUND</div>
-      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 08</span></div>
+      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 09</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
       <div className="playerMeta" aria-label="Player status"><div><span>CASH</span><strong data-testid="cash" title={`¥${game.cashYen.toLocaleString('en-US')}`}>¥{game.cashYen.toLocaleString('en-US')}</strong></div>
         <div className="hudLevel"><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong>
           <HudLevelProgress reputation={game.reputation} playerLevel={game.playerLevel} /></div>
@@ -51,10 +53,11 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }
         aria-selected={id === tab} aria-controls={`panel-${id}`} disabled={disabled(id)} tabIndex={id === tab ? 0 : -1}
         onKeyDown={keyDown} onClick={() => onTab(id as SectionTab)} title={disabled(id) ? 'Choose a starter first' : label}>
         <Icon size={19} aria-hidden="true" /><span>{label}</span>
+        {id === 'city' && (game.heat.pendingStop || game.heat.cooldown) && <b className="readyBadge" data-testid="heat-ready-badge" aria-hidden="true">{heatReady ? 'READY' : game.heat.cooldown ? 'PAUSE' : 'ALERT'}</b>}
         {id === 'jobs' && jobReady && <b className="readyBadge" data-testid="job-ready-badge" aria-hidden="true">READY</b>}
         {id === 'races' && raceReady && <b className="readyBadge" data-testid="race-ready-badge" aria-hidden="true">READY</b>}
       </button>)}
     </div></nav>
-    <span className="srOnly" role="status">{jobReady ? 'Your job reward is ready to claim in Jobs.' : raceReady ? 'Your race result is ready to settle in Races.' : ''}</span>
+    <span className="srOnly" role="status">{heatReady ? 'Lay low is ready to finish in City.' : game.heat.pendingStop && !game.heat.cooldown ? 'A patrol alert needs your decision in City.' : jobReady ? 'Your job reward is ready to claim in Jobs.' : raceReady ? 'Your race result is ready to settle in Races.' : ''}</span>
   </header>;
 }
