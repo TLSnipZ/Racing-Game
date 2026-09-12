@@ -1,3 +1,4 @@
+import { RarityBadge } from './RarityBadge';
 import { useState } from 'react';
 import { Check, KeyRound, Search, Warehouse } from 'lucide-react';
 import { VEHICLE_CATALOG, BODY_TYPES, MANUFACTURERS } from '../data/vehicles';
@@ -11,7 +12,7 @@ function ConditionMeter({ label, value }: { label: string; value: number }) {
   return <div className="conditionRow"><div><span>{label}</span><strong>{value}%</strong></div>
     <div role="meter" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value} className={`conditionTrack ${value < 60 ? 'conditionWorn' : ''}`}><span style={{ width: `${value}%` }} /></div></div>;
 }
-export function Garage({ game, blocked, onActivate, onMarket }: { game: GameState; blocked: boolean; onActivate: (id: string) => void; onMarket: () => void }) {
+export function Garage({ game, blocked, onActivate, onMarket, onCollection }: { game: GameState; blocked: boolean; onActivate: (id: string) => void; onCollection: () => void; onMarket: () => void }) {
   const [inspectedId, setInspectedId] = useState<string | null>(null);
   const [query, setQuery] = useState(''); const [sort, setSort] = useState<GarageSort>('name');
   const active = getActiveVehicle(game);
@@ -28,14 +29,15 @@ export function Garage({ game, blocked, onActivate, onMarket }: { game: GameStat
     return <button key={vehicle.instanceId} type="button" className={`ownedCard ${viewing ? 'inspected' : ''}`} aria-pressed={viewing}
       aria-label={`Inspect ${vehicle.name} (${vehicle.instanceId})`} onClick={() => setInspectedId(vehicle.instanceId)}>
       <div className="ownedCardTop"><span>{vehicle.year} / {vehicle.drive}</span>{vehicle.instanceId === game.activeVehicleId && <span className="activeTag"><Check size={12} /> ACTIVE</span>}</div>
-      <VehicleSilhouette catalogId={vehicle.catalogId} /><h4>{vehicle.name}</h4><p>{number(getVehicleBuildStats(vehicle).powerPs)} PS <span>·</span> {number(vehicle.odometerKm)} km</p>
+      <VehicleSilhouette catalogId={vehicle.catalogId} /><RarityBadge catalogId={vehicle.catalogId} /><h4>{vehicle.name}</h4><p>{number(getVehicleBuildStats(vehicle).powerPs)} PS <span>·</span> {number(vehicle.odometerKm)} km</p>
       <div className="ownedCardBottom"><span>{getOverallCondition(vehicle)}% condition</span><span>{viewing ? 'VIEWING' : 'INSPECT →'}</span></div></button>;
   }
   return <section id="garage" className="garageWorkspace" aria-label="Your garage">
     <div className="garageHeading"><div><span className="eyebrow">01 / MERCER GARAGE · EAST WARD</span><h2>Your garage.</h2></div>
       <div className="collectionCount"><strong>{game.ownedVehicles.length.toString().padStart(2, '0')}</strong><span>{game.ownedVehicles.length === 1 ? 'VEHICLE' : 'VEHICLES'} OWNED<br />{uniqueModels} UNIQUE {uniqueModels === 1 ? 'MODEL' : 'MODELS'}</span></div></div>
+    <button type="button" className="secondaryButton" onClick={onCollection}>OPEN COLLECTION BOOK</button>
     <div className="activeSummary" role="status"><KeyRound size={16} /><span>ACTIVE RIDE</span><strong>{active?.name ?? 'None'}</strong><small>Inspecting a card does not switch your active car.</small></div>
-    <div className="garageShowcase"><div className="showcaseCopy"><span className="tag">{isActive ? 'YOUR ACTIVE RIDE' : 'VEHICLE PREVIEW'}</span><h3>{inspected.name}</h3>
+    <div className="garageShowcase"><div className="showcaseCopy"><span className="tag">{isActive ? 'YOUR ACTIVE RIDE' : 'VEHICLE PREVIEW'}</span><h3>{inspected.name}</h3><RarityBadge catalogId={inspected.catalogId} />
       <p>{inspected.year} · {inspected.engine} · {inspected.drive}</p><p className="showcaseFlavor">{catalog?.description ?? 'Another chapter in your Kagehama story.'}</p>
       <div className="traits">{catalog?.traits.map((trait) => <span key={trait}>{trait}</span>)}</div>
       <button type="button" className="activateButton" disabled={isActive || blocked} onClick={() => onActivate(inspected.instanceId)}>{isActive ? <Check size={17} /> : <KeyRound size={17} />}{isActive ? 'ACTIVE VEHICLE' : 'SET AS ACTIVE VEHICLE'}</button></div>

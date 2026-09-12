@@ -120,13 +120,13 @@ test('reset restores default city and filter views without changing the save sch
   await page.getByRole('button', { name: 'Choose Hoshino Pico RS' }).click(); await page.getByRole('button', { name: 'BUY & ENTER KAGEHAMA' }).click();
   await tab(page, 'Races'); await expect(page.getByRole('combobox', { name: 'Race district', exact: true })).toHaveValue('all');
   await tab(page, 'City'); await expect(page.getByRole('button', { name: 'Inspect East Ward', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  expect(JSON.parse((await stored(page))!).version).toBe(7);
+  expect(JSON.parse((await stored(page))!).version).toBe(8);
 });
 for (const [name, width, height] of [['desktop', 1440, 1000], ['mobile', 390, 844], ['narrow', 320, 780]] as const) {
   test(`${name} city and XP stay readable with sticky HUD in all seven tabs`, async ({ page }) => {
     const errors: string[] = []; page.on('pageerror', (error) => errors.push(error.message));
     await page.setViewportSize({ width, height }); await seed(page, { ...level3(), reputation: 72 });
-    for (const section of ['Garage', 'Jobs', 'City', 'Races', 'Workshop', 'Market', 'Saves'] as const) {
+    for (const section of ['Garage', 'Jobs', 'City', 'Races', 'Workshop', 'Market', 'Collection', 'Saves'] as const) {
       await tab(page, section); await page.evaluate(() => window.scrollTo(0, 650));
       await expect(xp(page)).toBeInViewport(); await expect(page.getByTestId('cash')).toBeInViewport();
       expect((await page.locator('.gameTopbar').boundingBox())!.y).toBe(0);

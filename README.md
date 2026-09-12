@@ -6,17 +6,36 @@ A pre-alpha car-collection, street-racing and automotive-empire game set in a fi
 
 > Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
 
-**Current milestone: Phase 9 — Heat & Police** · **Save schema: v7** · **Next numbered system: Phase 10 — Collection**
+**Current milestone: Phase 10 — Collection** · **Save schema: v8** · **Next numbered system: Phase 11 — Advanced Cars**
 
 **Graphics & Audio I remains an open, separate presentation milestone.** The district map, car profiles and race replay are functional placeholders, not final artwork.
 
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Heat & save contract](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Collection & save contract](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
 ## Play now
 
 Choose one of three inexpensive starters with **¥50,000**, earn yen and reputation, fit performance parts and test your build against three rivals. The first complete loop is **starter → job → income → tuning → race → reward**.
 
-### New: Heat & Police
+### New: Collection Book, achievements and Icon Cars
+
+**Collection** is an eighth real tab, with **Collection Book**, **Achievements** and **Icon Showroom** sections. The book lists eight explicit models. Filter by manufacturer, rarity, ownership status and name/year search. It distinguishes **ever collected** from **currently owned**. A sold model keeps its book credit; multiple copies occupy separate garage spaces but count as one model. Merely seeing a dealer listing or rival does not collect that car.
+
+**Common → Rare → Legendary → Icon** are collector classifications, not performance modifiers, spawn odds or price multipliers. The 118 PS Tora 85 is Legendary, while the more powerful Pico R is Rare. Badges appear in Garage, Market and Collection. The original six-model used stock generator and its asking prices are unchanged.
+
+There are **18 achievements** with visible criteria and progress. Earn badges through collection, work, trading, tuning, racing and completed Lay low recovery. They stay earned after a sale or stock restoration. Each has a fixed, **manually claimed one-time yen reward**, from ¥1,000 to ¥12,500. The navigation badge counts claimable rewards. Viewing or reloading does not pay them; there is no extra XP, REP or passive stat bonus. Collection reward income is shown separately from job/race/dealer totals.
+
+| One-time Icon offer | Requirements | Exact car | Purchase price |
+| --- | --- | --- | ---: |
+| **Hoshino Tora 85 Heritage** | Level 6 + collect all three original starter models | 1987 · 135 PS · 940 kg · RWD | ¥180,000 |
+| **Akari Kestrel GT** | Level 8 + settle a race in all four disciplines | 1997 · 235 PS · 1,320 kg · RWD | ¥320,000 |
+
+Both offers provide a stock car with **10,000 km, 95% engine/body/transmission condition and 100% originality**. Meet the goal, inspect the fixed specification, then explicitly confirm the purchase. Earning an invitation does not grant a free car; claiming its achievement yen is optional. Icons use ordinary garage capacity, can be tuned with compatible non-turbo parts and entered in races. Buying does not switch your active car or change a pending activity. They are not ordinary dealer stock or random rewards.
+
+**Each Icon offer can be purchased only once per save, including after selling its car.** Dealer sale rules still apply; the sale preview includes all its paid parts. Book credit and achievement claims remain saved. Existing garages are not cleared to make room. These are the first playable Icon goals; final vehicle artwork remains part of Graphics & Audio I.
+
+**Old saves:** valid v1–v7 data migrate to v8 without changing previous balances, cars, parts, dealer stock, Heat or activities. Collection history is seeded only from current known cars, the original starter and the player's model in the last saved race result. Achievements supported by stored counters/parts can be recognised, but **no reward is paid automatically**. Unrecorded sold-model history cannot be guessed from names or sales totals. Full rules, all rewards and compatibility: [PHASE10.md](docs/PHASE10.md).
+
+### Heat & Police
 
 The fixed HUD now shows **driver Heat (0–100)** alongside your existing cash/level/REP/XP. Click it to open the Heat controls in **City**. Heat does not belong to one vehicle, so swapping or selling cars does not remove it.
 
@@ -37,7 +56,7 @@ The race briefing shows gross and net returns for both the free-wait and fine ch
 
 ### The used car market
 
-**Market** is a seventh separate tab, available after the starter choice, with shortcuts from Garage and East Ward. Browse six individual offers, inspect the exact vehicle and confirm **BUY VEHICLE**. A purchased car joins your garage without replacing or activating over the current car. Its listing is consumed once; the displayed year, mileage, conditions and ID are kept.
+**Market** is a separate tab, available after the starter choice, with shortcuts from Garage and East Ward. Browse six individual offers, inspect the exact vehicle and confirm **BUY VEHICLE**. A purchased car joins your garage without replacing or activating over the current car. Its listing is consumed once; the displayed year, mileage, conditions and ID are kept.
 
 | Model | Body / manufacturer | Model-year range | Factory power | Market level |
 | --- | --- | --- | ---: | ---: |
@@ -58,7 +77,7 @@ Prices depend on the specific example's condition, mileage, year and originality
 
 ### Level XP in the persistent HUD
 
-A small **XP progress bar sits directly below the level number** in the top HUD, in all seven sections and while scrolling. The label shows the REP remaining to the next level; the accessible description gives the target level. **Reputation is your level XP**, not a second currency. Job claims and race settlements update the same progression selector used by the Jobs panel. At the current Level 20 cap the bar is full and says **MAX**; money and reputation can still increase.
+A small **XP progress bar sits directly below the level number** in the top HUD, in all eight sections and while scrolling. The label shows the REP remaining to the next level; the accessible description gives the target level. **Reputation is your level XP**, not a second currency. Job claims and race settlements update the same progression selector used by the Jobs panel. At the current Level 20 cap the bar is full and says **MAX**; money and reputation can still increase.
 
 For example, Level 1 with 4 REP has a 20%-filled bar and needs 16 more REP for Level 2. Level 2 begins at 20 total REP and needs another 40 REP for Level 3. Thresholds remain `10 × level × (level − 1)`. This interface change does not rebalance rewards or rewrite existing levels.
 
@@ -124,17 +143,19 @@ You receive **one starter, not three free cars**. Additional examples of all thr
 
 ## Interface and saves
 
-Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop, Market and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races and Lay low pauses without applying them automatically. The City ALERT badge and global notice expose pending patrol decisions. Global save warnings link to recovery tools.
+Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop, Market, Collection and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races and Lay low pauses without applying them automatically. The City ALERT badge and global notice expose pending patrol decisions. Global save warnings link to recovery tools.
 
 District inspection, garage search/sort, market preferences and activity filters survive ordinary tab switches. City links intentionally choose the destination district and clear a conflicting race-discipline filter. Reload, successful import and reset return to Garage and default city/filter views. These view preferences are not gameplay save data.
 
+Collection filters and subviews persist during ordinary section switches; a reload or successful full import/reset restores the default view. Importing an older code deliberately restores its older claim/offer ledger, not a merge or cloud entitlement. Reset clears collection history, reward claims and used Icon offers along with the rest of the game.
+
 Progress autosaves in **this browser on this device**, under `kagehama:save`. Gameplay commands must write successfully **before** publishing visible changes. Tab/filter/XP rendering does not write gameplay data.
 
-- **Export:** generate a `KAGEHAMA1-...` code in Saves, including exact market stock/refresh cooldown/trades, tuning, race records, Heat, patrol alerts and any pending activity.
+- **Export:** generate a `KAGEHAMA1-...` code in Saves, including collected models, earned/claimed achievement IDs, used Icon offers, exact market stock/refresh cooldown/trades, tuning, race records, Heat, patrol alerts and any pending activity.
 - **Import:** review the confirmation before replacing the whole save, not merging it.
 - **Reset:** confirmation returns to ¥50,000, Level 1 and starter selection, clearing cars, parts, jobs, races, Heat, patrol alerts, Lay low and market history and restoring the initial unpurchased stock. Export a backup first.
 
-**Valid Save v1–v6 data migrate to v7 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. There are no retrospective penalties.
+**Valid Save v1–v7 data migrate to v8 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. There are no retrospective penalties.
 
 Leaving the page readies at most the one pending activity. Its original build, rivals, prizes and deadline remain saved. Returning never auto-repeats or pays it. Importing an older code deliberately restores an older snapshot. No cloud account or server-authoritative anti-cheat exists; device clocks/codes remain user-controlled.
 
@@ -153,7 +174,7 @@ Unreadable/newer saves are protected, not deleted. Failed writes cannot consume 
 - [ ] **Graphics & Audio I:** separate targeted presentation pass; not completed by the schematic city view.
 - [x] **8 — Car Market:** six models, individual saved stock, buy/sell, 12-space capacity, explicit refresh, valuation and combined brand/year/body-type filters; Save v6.
 - [x] **9 — Heat & Police:** optional Underground stakes, explicit Heat/bonus/fine terms, deterministic patrol choices, free/paid recovery and Save v7 compatibility.
-- [ ] **10 — Collection:** rarities, Collection Book, achievements and Icon cars.
+- [x] **10 — Collection:** eight-model book, independent rarity badges, 18 one-time manually claimed achievements, two gated Icon purchases and Save v8 migration.
 - [ ] **11 — Advanced Cars:** auctions, imports, barn finds and restoration.
 - [ ] **12 — Empire & Automation:** businesses, staff/crew, delegated routines and capped offline production.
 - [ ] **13+ — Endgame:** Legacy/Prestige, rivals, bosses, events and catalog expansion.

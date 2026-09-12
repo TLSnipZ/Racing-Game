@@ -1,5 +1,7 @@
 import { HeatPanel } from './components/HeatPanel';
 import { startLayLow, finishLayLow, cancelLayLow, payPoliceFine } from './domain/heat';
+import { Collection } from './components/Collection';
+import { claimAchievement, purchaseIcon } from './domain/collection';
 import { useLayoutEffect, useState } from 'react';
 import { ChevronRight, Database } from 'lucide-react';
 import { getDistrictAccess } from './domain/city';
@@ -32,6 +34,7 @@ import './styles/phase6.css';
 import './styles/phase7.css';
 import './styles/phase8.css';
 import './styles/phase9.css';
+import './styles/phase10.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
@@ -56,7 +59,7 @@ export function App() {
   }
   useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, [tab]);
   function selectTab(next: SectionTab) {
-    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city' || next === 'market') && !hasStarted) return;
+    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city' || next === 'market' || next === 'collection') && !hasStarted) return;
     setTab(next);
     document.getElementById(`tab-${next}`)?.focus({ preventScroll: true });
   }
@@ -76,7 +79,7 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9">
+  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9 phase10">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
     <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} heatReady={heatReady} onHeat={openHeat} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
@@ -94,7 +97,7 @@ export function App() {
     </aside>}
     {/* Views retain filters/forms but hidden panels have no layout, focus or accessibility presence. */}
     <div id="panel-garage" role="tabpanel" aria-labelledby="tab-garage" tabIndex={0} hidden={tab !== 'garage'} className="sectionPanel">
-      {hasStarted ? <Garage key={viewEpoch} game={game} blocked={blocked} onMarket={() => selectTab('market')} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
+      {hasStarted ? <Garage key={viewEpoch} onCollection={() => selectTab('collection')} game={game} blocked={blocked} onMarket={() => selectTab('market')} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
         : !blocked && <>
           <section className="hero"><div className="heroCopy"><span className="tag">MERCER GARAGE // EAST WARD</span>
             <h2>Everybody starts<br />with a bad decision.</h2><p>Three unwanted cars. Fifty thousand yen. One way into Kagehama's midnight scene.</p>
@@ -139,6 +142,12 @@ export function App() {
         onRefresh={(generation) => session.command((current) => refreshMarket(current, generation, Date.now()))}
         onGarage={() => selectTab('garage')} />}
     </div>
+    <div id="panel-collection" role="tabpanel" aria-labelledby="tab-collection" tabIndex={0} hidden={tab !== 'collection'} className="sectionPanel">
+      {hasStarted && <Collection key={viewEpoch} game={game} blocked={blocked}
+        onClaim={(id) => session.command((current) => claimAchievement(current, id))}
+        onIcon={(id, price) => session.command((current) => purchaseIcon(current, id, price))}
+        onMarket={() => selectTab('market')} onGarage={() => selectTab('garage')} />}
+    </div>
     <div id="panel-saves" role="tabpanel" aria-labelledby="tab-saves" tabIndex={0} hidden={tab !== 'saves'} className="sectionPanel">
       <SaveManagement game={game} blocked={blocked} onImport={(state) => { const ok = session.replaceGame(state); if (ok) returnToGarage(); return ok; }}
         onReset={() => { const ok = session.resetGame(); if (ok) returnToGarage(); return ok; }} />
@@ -153,6 +162,6 @@ export function App() {
         onRaces={(district) => openDistrict('races', district)} onJobs={(district) => openDistrict('jobs', district)}
         onService={selectTab} onResume={selectTab} />}
     </div>
-    <footer>PHASE 9 // HEAT & POLICE · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
+    <footer>PHASE 10 // COLLECTION · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }

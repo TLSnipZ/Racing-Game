@@ -1,4 +1,4 @@
-import { VEHICLE_CATALOG, type VehicleDefinition } from '../data/vehicles';
+import { USED_VEHICLE_CATALOG, type VehicleDefinition } from '../data/vehicles';
 import { createVehicleTuning } from './tuning';
 import { getVehicleValuation } from './marketValue';
 import type { MarketListing, MarketState } from './marketTypes';
@@ -30,7 +30,7 @@ function stockVehicle(model: VehicleDefinition, id: string, generation: number):
 export function createMarketListings(generation: number, reservedIds: readonly string[] = []): MarketListing[] {
   if (!Number.isSafeInteger(generation) || generation < 0 || generation > MAX_MARKET_GENERATION) throw new Error('Invalid market generation.');
   const reserved = new Set(reservedIds);
-  return VEHICLE_CATALOG.map((model, index) => {
+  return USED_VEHICLE_CATALOG.map((model, index) => {
     const stem = `market-v1:${generation}:${model.id}`;
     let id = stem;
     // Avoid colliding with valid legacy/user-export vehicle IDs without rewriting the existing car.

@@ -161,8 +161,8 @@ describe('Lay low timing, cancellation and legacy safety', () => {
     expect(()=>payPoliceFine(state,1,1500)).toThrow('cancel');
   });
   it('migrates a genuinely frozen released v6 save preserving EVERY prior field including dealer stock and paid race',()=>{
-    const before=JSON.stringify(v6); const result=deserializeSave(before); const {heat,...old}=result.state;
-    expect(result.version).toBe(7); expect(result.savedAt).toBe(v6.savedAt); expect(old).toEqual(v6.state); expect(heat).toEqual(createHeatState());
+    const before=JSON.stringify(v6); const result=deserializeSave(before); const {heat,collection,...old}=result.state;
+    expect(result.version).toBe(SAVE_VERSION); expect(collection.claimedAchievementIds).toEqual([]); expect(result.savedAt).toBe(v6.savedAt); expect(old).toEqual(v6.state); expect(heat).toEqual(createHeatState());
     expect(JSON.stringify(v6)).toBe(before); const paid=settleRace(result.state,result.state.racing.activeRace!.runId,result.state.racing.activeRace!.finishesAtMs);
     expect(paid.heat).toEqual(createHeatState()); expect(paid.market).toEqual(v6.state.market);
     expect(importSaveCode(SAVE_CODE_PREFIX+Buffer.from(before).toString('base64url')).state).toEqual(result.state);

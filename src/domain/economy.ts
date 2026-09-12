@@ -1,3 +1,4 @@
+import { withCollectionProgress } from './collectionProgress';
 import { afterLegalJob, assertHeatState, getHeatActivityRequirement } from './heat';
 import { findJob, type JobDefinition } from '../data/jobs';
 import { getActiveVehicle } from './garage';
@@ -59,7 +60,7 @@ function assertEconomy(state: GameState) {
   if (!isEconomyState(state.economy, state.ownedVehicles)) throw new Error('Economy state is invalid.');
   if (state.economy.activeJob && state.racing.activeRace) throw new Error('A job and a race cannot run together.');
 }
-export function startJob(state: GameState, jobId: string, nowMs: number): GameState {
+export const startJob = withCollectionProgress(function startJob(state: GameState, jobId: string, nowMs: number): GameState {
   assertClock(nowMs); assertEconomy(state);
   const job = findJob(jobId);
   if (!job) throw new Error('Unknown job.');
@@ -71,8 +72,8 @@ export function startJob(state: GameState, jobId: string, nowMs: number): GameSt
     runId: state.economy.nextRunId, jobId: job.id, vehicleId: job.requiresVehicle ? state.activeVehicleId : null,
     startedAtMs: nowMs, finishesAtMs, rewardYen: job.rewardYen, reputationReward: job.reputationReward, distanceKm: job.distanceKm,
   } } };
-}
-export function claimJob(state: GameState, runId: number, nowMs: number): GameState {
+});
+export const claimJob = withCollectionProgress(function claimJob(state: GameState, runId: number, nowMs: number): GameState {
   assertClock(nowMs); assertEconomy(state);
   const job = state.economy.activeJob;
   if (!job || job.runId !== runId) throw new Error('This job is no longer active.');
@@ -90,9 +91,9 @@ export function claimJob(state: GameState, runId: number, nowMs: number): GameSt
     lastReceipt: { runId: job.runId, jobId: job.jobId, rewardYen: job.rewardYen,
       reputationReward: job.reputationReward, levelBefore: state.playerLevel, levelAfter: playerLevel },
   } };
-}
-export function cancelJob(state: GameState, runId: number): GameState {
+});
+export const cancelJob = withCollectionProgress(function cancelJob(state: GameState, runId: number): GameState {
   assertEconomy(state);
   if (!state.economy.activeJob || state.economy.activeJob.runId !== runId) throw new Error('This job is no longer active.');
   return { ...state, economy: { ...state.economy, activeJob: null } };
-}
+});

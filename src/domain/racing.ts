@@ -1,3 +1,4 @@
+import { withCollectionProgress } from './collectionProgress';
 import { afterRaceHeat, assertHeatState, getHeatActivityRequirement, getUndergroundRequirement } from './heat';
 import { boostedPrize, createRaceHeatContract } from './heatRules';
 import type { RaceMode } from './heatTypes';
@@ -50,7 +51,7 @@ function assertState(state: GameState) {
 function assertClock(now: number) {
   if (!Number.isSafeInteger(now) || now < 0) throw new Error('Device clock is invalid. Restore it and retry.');
 }
-export function startRace(state: GameState, eventId: string, vehicleId: string, expectedBuildKey: string, nowMs: number, mode: RaceMode = 'standard', expectedHeat?: number): GameState {
+export const startRace = withCollectionProgress(function startRace(state: GameState, eventId: string, vehicleId: string, expectedBuildKey: string, nowMs: number, mode: RaceMode = 'standard', expectedHeat?: number): GameState {
   assertState(state); assertClock(nowMs);
   const event = findRaceEvent(eventId);
   if (!event) throw new Error('Unknown race event.');
@@ -77,8 +78,8 @@ export function startRace(state: GameState, eventId: string, vehicleId: string, 
     ...(risk ? { heatRisk: risk } : {}) };
   return { ...state, heat: risk ? { ...state.heat, value: risk.heatAfter } : state.heat, cashYen: state.cashYen - event.entryFeeYen, racing: { ...state.racing, nextRunId, activeRace,
     totalEntryFeesYen: add(state.racing.totalEntryFeesYen, event.entryFeeYen) } };
-}
-export function settleRace(state: GameState, runId: number, nowMs: number): GameState {
+});
+export const settleRace = withCollectionProgress(function settleRace(state: GameState, runId: number, nowMs: number): GameState {
   assertState(state); assertClock(nowMs);
   const race = state.racing.activeRace;
   if (!race || race.runId !== runId) throw new Error('This race is no longer active.');
@@ -100,10 +101,10 @@ export function settleRace(state: GameState, runId: number, nowMs: number): Game
       totalEarnedYen: add(state.racing.totalEarnedYen, prize.yen),
       records: old ? state.racing.records.map((r) => r.eventId === race.eventId ? record : r) : [...state.racing.records, record],
       lastResult: { race, position, rewardYen: prize.yen, reputationReward: prize.reputation, levelBefore: state.playerLevel, levelAfter: playerLevel } } };
-}
+});
 /** Withdrawal is usable even after a backwards clock jump. The paid entry fee is never refunded. */
-export function cancelRace(state: GameState, runId: number): GameState {
+export const cancelRace = withCollectionProgress(function cancelRace(state: GameState, runId: number): GameState {
   assertState(state);
   if (!state.racing.activeRace || state.racing.activeRace.runId !== runId) throw new Error('This race is no longer active.');
   return { ...state, heat: afterRaceHeat(state.heat, state.racing.activeRace), racing: { ...state.racing, activeRace: null, cancelledRaces: add(state.racing.cancelledRaces, 1) } };
-}
+});

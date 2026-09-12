@@ -1,0 +1,103 @@
+/* Collection is a playable archive, not the final vehicle-art pass. */
+.rarityBadge { display:inline-flex; align-items:center; border:1px solid currentColor; border-radius:3px; padding:4px 8px; font-size:9px; font-weight:700; letter-spacing:.1em; line-height:1.4; text-transform:uppercase; width:fit-content; }
+.rarity-common { color:#a9c8bf; background:#17302b; }
+.rarity-rare { color:#9ec9ef; background:#162c3b; }
+.rarity-legendary { color:#d4b7ed; background:#2d2239; }
+.rarity-icon { color:#f0cd86; background:#372c16; }
+.bookHeader { display:flex; align-items:center; justify-content:space-between; gap:24px; margin:20px 0 25px; }
+.bookHeader > div { min-width:0; max-width:100%; }
+.bookHeader h2 { overflow-wrap:anywhere; font:italic 800 clamp(38px,4.8vw,66px)/1 'Barlow Condensed',Impact,sans-serif; margin:15px 0; text-transform:uppercase; }
+.bookHeader p { font-size:13px; line-height:1.8; color:#b3c2c4; }
+.bookSeal { display:flex; align-items:center; gap:14px; border:1px solid #8a7650; padding:20px; color:#dec698; transform:rotate(-3deg); font-size:10px; line-height:1.6; letter-spacing:.15em; flex-shrink:0; }
+.collectorSummary { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; background:#40504f; border:1px solid #40504f; }
+.collectorSummary > div { background:#121c20; padding:22px; min-width:0; }
+.collectorSummary span { display:block; color:#a3b6b6; font-size:9px; letter-spacing:.12em; }
+.collectorSummary strong { display:block; color:#ecd7b1; font:800 38px/1.25 'Barlow Condensed',Impact,sans-serif; margin:8px 0; }
+.collectorSummary strong small { font-size:22px; color:#819693; }
+.collectorSummary > div > small { color:#acbcb8; font-size:10px; overflow-wrap:anywhere; }
+.collectorPanel progress { display:block; appearance:none; width:100%; height:5px; border:0; border-radius:4px; overflow:hidden; background:#354440; accent-color:#cfb374; }
+.collectorPanel progress::-webkit-progress-bar { background:#354440; }
+.collectorPanel progress::-webkit-progress-value { background:#cfb374; }
+.collectorPanel progress::-moz-progress-bar { background:#cfb374; }
+.collectorMode { display:flex; gap:8px; margin:24px 0; flex-wrap:wrap; }
+.collectorMode button { display:flex; align-items:center; justify-content:center; gap:9px; min-height:46px; padding:12px 20px; border:1px solid #4c5a59; background:#121c20; color:#aebfc1; font:600 12px Inter,Arial,sans-serif; cursor:pointer; }
+.collectorMode button[aria-pressed='true'] { background:#302a1e; border-color:#c5a16b; color:#f1d9b3; }
+.collectorMode b { background:#d5b579; color:#171c1b; padding:2px 5px; border-radius:3px; font-size:10px; }
+.collectorFeedback { padding:14px 18px; border-left:3px solid #94b89a; background:#152720; color:#c7e3c5; font-size:12px; line-height:1.7; }
+.bookFilters { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:14px; padding:20px; background:#121b20; border:1px solid #3a4c50; }
+.bookFilters label { display:flex; flex-direction:column; gap:8px; font-size:11px; color:#c1cfcb; min-width:0; }
+.bookFilters label span { display:flex; align-items:center; gap:6px; }
+.bookFilters input,.bookFilters select { min-width:0; width:100%; min-height:42px; background:#1b282e; color:#ecedde; border:1px solid #4d6266; padding:10px; font:inherit; }
+.rarityFilters { display:flex; gap:8px; flex-wrap:wrap; margin:15px 0; }
+.rarityFilters button { border:1px solid #465955; color:#c2d1cd; background:#162321; padding:9px 15px; font:600 10px Inter,Arial,sans-serif; cursor:pointer; min-height:38px; }
+.rarityFilters button[aria-pressed='true'] { background:#32443b; color:#f0e2c0; border-color:#ccb880; }
+.bookResults { display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin:20px 0; color:#a6bcb7; font-size:11px; }
+.bookGrid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.bookCard { display:flex; flex-direction:column; min-width:0; border:1px solid #3e524e; background:linear-gradient(145deg,#162321,#111a1c); }
+.bookCardTop { display:flex; gap:10px; align-items:center; justify-content:space-between; padding:16px 18px; flex-wrap:wrap; }
+.bookCardTop > span:not(.rarityBadge) { display:flex; align-items:center; gap:6px; font-size:8px; letter-spacing:.08em; color:#b8c9bc; }
+.bookMissing { border-style:dashed; background:#11191d; }
+.bookMissing > .vehicleSilhouette { opacity:.48; }
+.collectorPanel .vehicleSilhouette { display:block; width:100%; max-width:500px; height:auto; max-height:210px; margin:0 auto; color:#88978d; }
+.bookCollected .vehicleSilhouette { color:#beab84; }
+.bookCardCopy { display:flex; flex-direction:column; flex:1; padding:20px; border-top:1px solid #314640; }
+.bookCard h3,.achievementCard h3,.iconCard h3 { font:800 27px/1.1 'Barlow Condensed',Impact,sans-serif; color:#e9e1cf; margin:10px 0; }
+.bookCard p,.iconCard p { color:#aabdb7; font-size:12px; line-height:1.8; }
+.bookCard p { flex:1; }
+.bookSpecs { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; padding:12px 0; border-block:1px solid #354741; color:#d5c8ad; font-size:11px; }
+.bookOwnership { color:#b6cab9; font-size:10px; line-height:1.7; margin:15px 0; }
+.collectorPanel .secondaryButton { white-space:normal; min-height:40px; line-height:1.5; }
+.collectorNote { color:#a8b9b9; font-size:11px; line-height:1.85; margin:22px 0; }
+.collectorEmpty { padding:24px; border:1px dashed #65766d; color:#cad7c8; font-size:12px; line-height:1.8; }
+.achievementFilters { grid-template-columns:1fr 1fr; }
+.achievementGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+.achievementCard { display:grid; grid-template-columns:46px minmax(0,1fr); gap:18px; padding:24px; background:#141e20; border:1px solid #3b4e4d; }
+.achievementReady { border-color:#988456; background:linear-gradient(125deg,#302a1c,#16221e); }
+.achievementEmblem { width:46px; height:56px; border:1px solid #7c856f; background:#283229; color:#c4c8a1; clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%); display:grid; place-items:center; }
+.achievementReady .achievementEmblem { background:#51422a; color:#f5d898; }
+.achievementCopy { min-width:0; }
+.achievementCopy p { color:#aebfb7; font-size:11px; line-height:1.7; margin:7px 0; }
+.achievementCopy .achievementRequirement { color:#d5d8c5; margin:12px 0; }
+.achievementProgress { display:flex; align-items:center; gap:12px; margin:16px 0; }
+.achievementProgress span { flex-shrink:0; font-size:10px; color:#cfceb1; }
+.iconIntroduction { display:flex; align-items:center; gap:20px; background:#282316; border:1px solid #8b774a; padding:24px; margin-bottom:22px; color:#e4c893; }
+.iconIntroduction > svg { flex-shrink:0; }
+.iconIntroduction h3 { font:800 30px/1 'Barlow Condensed',Impact,sans-serif; margin:0 0 10px; }
+.iconIntroduction p { color:#c7c3aa; font-size:12px; line-height:1.8; margin:0; }
+.iconGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.iconCard { min-width:0; border:1px solid #8b7752; background:linear-gradient(130deg,#29251c,#101a1e); padding:24px; }
+.iconCard .bookCardTop { padding:0; }
+.iconCard .vehicleSilhouette,.iconDialog .vehicleSilhouette { color:#c8b684; }
+.iconRequirements { list-style:none; padding:0; margin:18px 0 12px; display:grid; gap:10px; color:#ded6ba; font-size:12px; }
+.iconRequirements li { display:flex; align-items:center; gap:8px; }
+.iconRequirements svg { flex-shrink:0; }
+.iconCard .iconGoalText { font-size:11px; color:#bcbba7; }
+.iconPrice { display:block; color:#f0d4a0; font:800 38px 'Barlow Condensed',Impact,sans-serif; margin-top:18px; }
+.iconCard .iconGate { color:#e0c79f; border-left:2px solid #a18c5c; padding-left:12px; font-size:11px; }
+.iconDialog { width:min(640px,calc(100vw - 24px)); max-height:calc(100dvh - 28px); overflow:auto; background:#151e20; border:1px solid #a18c5c; color:#e4e5d6; padding:24px; }
+.iconDialog::backdrop { background:#05080bd9; }
+.iconDialogHead { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.iconClose { border:1px solid #647165; color:#dddec8; background:#29322e; display:grid; place-items:center; min-width:40px; height:40px; cursor:pointer; }
+.iconDialog h3 { font:800 34px/1.1 'Barlow Condensed',Impact,sans-serif; margin:16px 0; }
+.iconDialog .vehicleSilhouette { max-height:140px; }
+.iconFacts { margin:15px 0; }
+.iconFacts > div { display:grid; grid-template-columns:1fr 1fr; gap:14px; padding:9px 0; border-bottom:1px solid #354540; font-size:11px; line-height:1.7; }
+.iconFacts dt { color:#aabbb1; }
+.iconFacts dd { margin:0; text-align:right; overflow-wrap:anywhere; color:#e0d7bb; }
+.iconDialogActions { display:flex; gap:12px; justify-content:flex-end; }
+.iconBuy { min-height:42px; padding:12px 18px; background:#a94b33; border:1px solid #d98d65; color:#fff1d7; font-weight:700; font-size:11px; cursor:pointer; }
+.iconBuy:disabled { opacity:.45; cursor:not-allowed; }
+@media (max-width:1100px) { .bookGrid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width:700px) {
+ .bookSeal { display:none; } .bookHeader { margin:15px 0; } .bookHeader h2 { font-size:clamp(32px,9vw,42px); }
+ .bookFilters { grid-template-columns:1fr; padding:16px; } .bookGrid,.achievementGrid,.iconGrid { grid-template-columns:1fr; }
+ .collectorSummary > div { padding:12px; } .collectorSummary span { font-size:8px; letter-spacing:.04em; line-height:1.6; }
+ .collectorSummary strong { font-size:30px; } .collectorSummary strong small { font-size:18px; }
+ .collectorMode { gap:6px; } .collectorMode button { padding:10px 12px; font-size:10px; flex:1 1 auto; }
+ .achievementCard { padding:17px; gap:12px; grid-template-columns:35px minmax(0,1fr); } .achievementEmblem { width:35px; height:46px; }
+ .iconIntroduction { align-items:start; padding:18px; gap:12px; } .iconCard { padding:19px; }
+ .iconDialog { padding:18px; } .iconDialogActions { flex-direction:column; }
+}
+
+/* Long fallback-font labels must wrap rather than enlarge a narrow archive card. */
+.collectorPanel h3,.collectorSummary span,.iconRequirements li { overflow-wrap:anywhere; }

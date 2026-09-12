@@ -1,3 +1,4 @@
+import { withCollectionProgress } from './collectionProgress';
 import { FINE_REDUCTION, LAY_LOW_MS, LAY_LOW_REDUCTION, LEGAL_JOB_REDUCTION, UNDERGROUND_ENTRY_LIMIT, UNDERGROUND_HEAT_V1, UNDERGROUND_MIN_LEVEL } from './heatRules';
 import { isHeatLinked, isHeatState } from './heatValidation';
 import type { HeatState, RaceMode } from './heatTypes';
@@ -44,7 +45,7 @@ export function getLayLowRequirement(state: GameState): string | null {
   if (state.heat.value === 0) return 'Heat is already clear.';
   return null;
 }
-export function startLayLow(state: GameState, expectedHeat: number, expectedNextId: number, now: number): GameState {
+export const startLayLow = withCollectionProgress(function startLayLow(state: GameState, expectedHeat: number, expectedNextId: number, now: number): GameState {
   assertHeatState(state); clock(now);
   const reason = getLayLowRequirement(state); if (reason) throw new Error(reason);
   if (expectedHeat !== state.heat.value || expectedNextId !== state.heat.nextCooldownId) throw new Error('Heat changed. Review the pause again.');
@@ -53,8 +54,8 @@ export function startLayLow(state: GameState, expectedHeat: number, expectedNext
     heatBefore: state.heat.value, heatAfter: Math.max(0, state.heat.value - LAY_LOW_REDUCTION),
     policeRunId: state.heat.pendingStop?.raceRunId ?? null,
   } } };
-}
-export function finishLayLow(state: GameState, runId: number, now: number): GameState {
+});
+export const finishLayLow = withCollectionProgress(function finishLayLow(state: GameState, runId: number, now: number): GameState {
   assertHeatState(state); clock(now);
   const pause = state.heat.cooldown;
   if (!pause || pause.runId !== runId) throw new Error('This Lay low pause is no longer active.');
@@ -62,13 +63,13 @@ export function finishLayLow(state: GameState, runId: number, now: number): Game
   if (now < pause.finishesAtMs) throw new Error('Lay low is not finished yet.');
   return { ...state, heat: { ...state.heat, value: pause.heatAfter, cooldown: null, pendingStop: null,
     lastResolution: { kind: 'lay-low', heatBefore: pause.heatBefore, heatAfter: pause.heatAfter, paidYen: 0, stop: state.heat.pendingStop } } };
-}
-export function cancelLayLow(state: GameState, runId: number): GameState {
+});
+export const cancelLayLow = withCollectionProgress(function cancelLayLow(state: GameState, runId: number): GameState {
   assertHeatState(state);
   if (!state.heat.cooldown || state.heat.cooldown.runId !== runId) throw new Error('This Lay low pause is no longer active.');
   return { ...state, heat: { ...state.heat, cooldown: null } };
-}
-export function payPoliceFine(state: GameState, expectedRaceId: number, expectedFine: number): GameState {
+});
+export const payPoliceFine = withCollectionProgress(function payPoliceFine(state: GameState, expectedRaceId: number, expectedFine: number): GameState {
   assertHeatState(state);
   const stop = state.heat.pendingStop;
   if (!stop || stop.raceRunId !== expectedRaceId || stop.fineYen !== expectedFine) throw new Error('This patrol alert changed or was already resolved.');
@@ -78,4 +79,4 @@ export function payPoliceFine(state: GameState, expectedRaceId: number, expected
   return { ...state, cashYen: state.cashYen - stop.fineYen, heat: { ...state.heat, value, pendingStop: null,
     totalFinesPaidYen: safeAdd(state.heat.totalFinesPaidYen, stop.fineYen),
     lastResolution: { kind: 'fine', heatBefore: state.heat.value, heatAfter: value, paidYen: stop.fineYen, stop } } };
-}
+});
