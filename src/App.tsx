@@ -112,7 +112,7 @@ export function App() {
       <p>{game.heat.cooldown ? heatReady ? 'Lay low is ready to finish. Your Heat reduction has not been claimed.' : 'You are laying low. Jobs and races resume after you finish or cancel.' : 'Patrol alert: choose the announced fine or a free Lay low pause in City.'}</p>
       <button type="button" className="secondaryButton" onClick={openHeat}>OPEN HEAT CONTROLS</button>
     </aside>}
-    {hasStarted && game.advanced.activeContract && tab !== 'market' && <aside className="specialistNotice" aria-label="Specialist activity notice">
+    {hasStarted && game.advanced.activeContract && (tab !== 'market' || marketSection === 'dealer') && <aside className="specialistNotice" aria-label="Specialist activity notice">
       <p>{specialistReady ? 'Your specialist contract is READY. Collect the car, survey result or auction refund in Market.' : 'Your specialist contract is running. Its original deadline and any reserved space are saved.'}</p>
       <button type="button" className="secondaryButton" onClick={openPendingSpecialist}>OPEN SPECIALIST CONTRACT</button>
     </aside>}

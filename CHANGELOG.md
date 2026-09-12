@@ -2,6 +2,7 @@
 
 ## Phase 11 — Advanced Cars (2026-09-12)
 
+- Kept the pending specialist shortcut visible within Used dealer as well as other tabs; clarified that all pending bids, not only winning bids, reserve space.
 - Added Market subviews for one fixed import, one deterministic single-player proxy auction and one paid barn lead, without adding another top-level tab. Added a separate Restoration view in Workshop.
 - Added Mizuno Sora S, Akari Crest RS and Hoshino Hachi GT with explicit metadata, factory ratings and existing non-turbo compatibility; expanded the Book to eleven models while keeping the six-model dealer generator and original Icon offers unchanged.
 - Added saved broker deadlines, refundable import/auction escrow, binding maximum bids and delta-only raises, exact clearing/refunds, optional surveyed-project purchase and once-per-save source consumption.

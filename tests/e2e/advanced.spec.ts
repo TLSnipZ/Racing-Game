@@ -153,3 +153,11 @@ test('blocked webfonts leave all new subviews readable at 320px without hiding h
  for(const s of ['Imports','Auctions','Barn Finds'] as const){await market(page,s);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);}
  await restoration(page);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/restoration-fallback-320.png',fullPage:true});
 });
+
+test('a pending contract stays directly reachable from the ordinary dealer view',async({page})=>{
+ await clock(page);await seed(page,start());await market(page,'Used dealer');
+ await expect(page.getByRole('complementary',{name:'Specialist activity notice',exact:true})).toBeVisible();
+ await page.getByRole('button',{name:'OPEN SPECIALIST CONTRACT',exact:true}).click();
+ await expect(page.getByRole('article',{name:'Current specialist contract',exact:true})).toBeVisible();
+ await expect(page.getByRole('group',{name:'Market sections',exact:true}).getByRole('button',{name:'Imports',exact:true})).toHaveAttribute('aria-pressed','true');
+});

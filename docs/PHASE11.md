@@ -6,7 +6,7 @@ Baseline: `c8c9bcf2850dd18a70094eac26dc36096c2436c2`, released Phase 10 / Save v
 
 Keep eight main tabs. Market now separates **Used dealer / Imports / Auctions / Barn Finds**; Workshop separates **Tuning parts / Restoration**. Normal tab switches retain these views. Successful full import/reset and reload restore the default dealer/parts views. Nothing is bought or started by browsing. Collection Book links point to the correct source rather than suggesting all models appear in dealer stock.
 
-A broker handles **one specialist contract at a time**, independently of the player's job/race/Lay low slot. This lets a delivery proceed while the player works or races, without introducing automatic job chains or passive income. The contract uses a saved deadline and a manual completion. Completion during absence only makes it ready; no automatic acquisition, refund or repetition. A global notice and Market READY badge keep pending contracts reachable from other tabs.
+A broker handles **one specialist contract at a time**, independently of the player's job/race/Lay low slot. This lets a delivery proceed while the player works or races, without introducing automatic job chains or passive income. The contract uses a saved deadline and a manual completion. Completion during absence only makes it ready; no automatic acquisition, refund or repetition. A global notice and Market READY badge keep pending contracts reachable from other tabs and from the ordinary Used dealer view.
 
 ## Three new models and fixed sources
 
