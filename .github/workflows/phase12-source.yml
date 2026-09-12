@@ -1,0 +1,21 @@
+name: Prepare pinned Phase 12 source
+on:
+  push:
+    branches: [prepare/12-empire-source]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: 60f8f28ea422e2faaab4769a32b238f7afc556c6
+          persist-credentials: false
+      - run: git archive --format=tar.gz HEAD > /tmp/phase12-source.tgz
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase12-source
+          path: /tmp/phase12-source.tgz
+          retention-days: 1
