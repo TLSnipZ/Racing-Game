@@ -1,5 +1,5 @@
 import { isRaceHeatContract } from './heatValidation';
-import { findRaceEvent, RACE_EVENTS } from '../data/races';
+import { findRaceEvent, ALL_RACE_EVENTS } from '../data/races';
 import { getPlayerPosition, simulateSectors } from './raceModel';
 import { RACE_DISCIPLINES, SECTOR_PROFILES, type ActiveRace, type RaceBuild, type RaceReceipt, type RacingState } from './racingTypes';
 
@@ -59,7 +59,7 @@ export function isRacingState(value: unknown, vehicles: readonly { instanceId: s
     || (active !== null && last.race.runId >= active.runId) || value.totalEarnedYen < last.rewardYen) return false;
   const minimumFees = (active?.entryFeeYen ?? 0) + (last?.race.entryFeeYen ?? 0);
   if (value.totalEntryFeesYen < minimumFees) return false;
-  if (!Array.isArray(value.records) || value.records.length > RACE_EVENTS.length) return false;
+  if (!Array.isArray(value.records) || value.records.length > ALL_RACE_EVENTS.length) return false;
   const ids = new Set<string>(); let finishes = 0; let wins = 0;
   for (const item of value.records) {
     if (!record(item) || !text(item.eventId) || !findRaceEvent(item.eventId) || ids.has(item.eventId)

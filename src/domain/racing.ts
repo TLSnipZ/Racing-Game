@@ -1,3 +1,4 @@
+import { getRivalEntryRequirement } from './rivalProgress';
 import { withCollectionProgress } from './collectionProgress';
 import { afterRaceHeat, assertHeatState, getHeatActivityRequirement, getUndergroundRequirement } from './heat';
 import { boostedPrize, createRaceHeatContract } from './heatRules';
@@ -34,6 +35,7 @@ export function getRaceRequirement(state: GameState, event: RaceEvent, vehicleId
   if (state.racing.activeRace) return 'Settle or withdraw from your current race first.';
   if (state.economy.activeJob) return 'Claim or cancel your job before entering a race. One driver, one activity.';
   const heatReason = getHeatActivityRequirement(state); if (heatReason) return heatReason;
+  const rivalReason = getRivalEntryRequirement(state, event.id); if (rivalReason) return rivalReason;
   if (state.playerLevel < event.minLevel) return `Requires Level ${event.minLevel}.`;
   const vehicle = state.ownedVehicles.find((v) => v.instanceId === vehicleId);
   if (!vehicle) return 'Choose a vehicle you own.';

@@ -1,3 +1,4 @@
+import { RIVAL_EVENTS } from './rivals';
 import type { RaceBuild, RaceDiscipline, RaceEvent, RacePrize, RaceSector, Rival } from '../domain/racingTypes';
 
 export const DISCIPLINE_LABELS: Record<RaceDiscipline, string> = {
@@ -72,4 +73,6 @@ export const RACE_EVENTS: readonly RaceEvent[] = [
   event('eastline-club', 'Eastline Midnight Club', 'expressway', 'Club', 6, 4000, 35, 18,
     [17500, 10000, 5500, 2000], [38, 24, 14, 7], 'The longest run on the first event board. Bring sustained power and enough balance to use it.'),
 ];
-export const findRaceEvent = (id: string): RaceEvent | undefined => RACE_EVENTS.find((race) => race.id === id);
+/** Validation and lookup include the separate Rival board; open-event browsing stays at eight. */
+export const ALL_RACE_EVENTS: readonly RaceEvent[] = [...RACE_EVENTS, ...RIVAL_EVENTS];
+export const findRaceEvent = (id: string): RaceEvent | undefined => ALL_RACE_EVENTS.find((race) => race.id === id);

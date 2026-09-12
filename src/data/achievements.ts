@@ -1,9 +1,11 @@
-export const ACHIEVEMENT_CATEGORIES = { collection: 'Collection', work: 'Work & trade', workshop: 'Workshop', racing: 'Racing', heat: 'Heat' } as const;
+import { RIVAL_CHALLENGES } from './rivals';
+
+export const ACHIEVEMENT_CATEGORIES = { rivals: 'Rival Crews', collection: 'Collection', work: 'Work & trade', workshop: 'Workshop', racing: 'Racing', heat: 'Heat' } as const;
 export type AchievementCategory = keyof typeof ACHIEVEMENT_CATEGORIES;
 export type AchievementMetric = 'starter' | 'starter-trio' | 'original-six' | 'garage-size' | 'body-types' | 'icons'
-  | 'jobs' | 'parts' | 'fitted-slots' | 'races' | 'podiums' | 'wins' | 'disciplines' | 'bought' | 'sold' | 'lay-low';
+  | 'jobs' | 'parts' | 'fitted-slots' | 'races' | 'podiums' | 'wins' | 'disciplines' | 'bought' | 'sold' | 'lay-low' | 'rival-win';
 export type AchievementDefinition = { readonly id: string; readonly name: string; readonly category: AchievementCategory;
-  readonly description: string; readonly requirement: string; readonly metric: AchievementMetric; readonly target: number; readonly rewardYen: number };
+  readonly description: string; readonly requirement: string; readonly metric: AchievementMetric; readonly target: number; readonly rewardYen: number; readonly raceEventId?: string };
 /** Stable IDs and one-time fixed yen rewards. No passive bonuses or duplicate XP currency. */
 export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
   { id: 'first-ride', name: 'Financially Questionable', category: 'collection', description: 'One key. Several future invoices.', requirement: 'Purchase your starter.', metric: 'starter', target: 1, rewardYen: 1000 },
@@ -24,5 +26,11 @@ export const ACHIEVEMENTS: readonly AchievementDefinition[] = [
   { id: 'four-corners', name: 'Four Corners of Midnight', category: 'racing', description: 'The strip, the streets, the pass and the expressway.', requirement: 'Settle a race in each of the four disciplines. Any finishing position counts.', metric: 'disciplines', target: 4, rewardYen: 7500 },
   { id: 'ten-wins', name: 'Local Problem', category: 'racing', description: 'The other drivers know that engine note.', requirement: 'Win and settle ten races.', metric: 'wins', target: 10, rewardYen: 12500 },
   { id: 'lay-low', name: 'Touch Grass, Not Guardrails', category: 'heat', description: 'Sixty seconds of being suspiciously sensible.', requirement: 'Finish a Lay low pause. Cancellation does not count.', metric: 'lay-low', target: 1, rewardYen: 2000 },
+  ...RIVAL_CHALLENGES.map((challenge): AchievementDefinition => ({
+    id: challenge.achievementId, name: challenge.title, category: 'rivals',
+    description: `The ${challenge.crew} grid finally has something else to talk about.`,
+    requirement: `Finish first and settle ${challenge.event.name}. No reward for withdrawal or an unclaimed finish.`,
+    metric: 'rival-win', raceEventId: challenge.event.id, target: 1, rewardYen: challenge.bonusYen,
+  })),
 ];
 export const findAchievement = (id: string) => ACHIEVEMENTS.find((item) => item.id === id);

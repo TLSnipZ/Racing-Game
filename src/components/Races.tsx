@@ -1,3 +1,6 @@
+import { RivalBoard } from './RivalBoard';
+import { findRivalChallenge } from '../data/rivals';
+import { getRivalGoals } from '../domain/rivalProgress';
 import { getUndergroundRequirement } from '../domain/heat';
 import { boostedPrize, createRaceHeatContract, LAY_LOW_MS } from '../domain/heatRules';
 import type { RaceMode } from '../domain/heatTypes';
@@ -40,7 +43,8 @@ function RacePlayback({ race, now }: { race: ActiveRace; now: number }) {
   </div>;
 }
 
-export function Races({ game, now, blocked, onStart, onSettle, onCancel, districtFilter, onDistrictFilter, discipline, onDiscipline }: {
+export function Races({ game, now, blocked, onStart, onSettle, onCancel, districtFilter, onDistrictFilter, discipline, onDiscipline, view, onView, onClaim }: {
+  view: 'open' | 'rivals'; onView: (view: 'open' | 'rivals') => void; onClaim: (id: string) => boolean;
   districtFilter: CityFilter; onDistrictFilter: (value: CityFilter) => void;
   discipline: RaceDiscipline | 'all'; onDiscipline: (value: RaceDiscipline | 'all') => void;
   game: GameState; now: number; blocked: boolean;
@@ -60,6 +64,7 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
   const receipt = game.racing.lastResult;
   const ready = isRaceReady(active, now);
   const reviewedEvent = review ? findRaceEvent(review.eventId) : undefined;
+  const reviewedChallenge = review ? findRivalChallenge(review.eventId) : undefined;
   const reviewedVehicle = game.ownedVehicles.find((v) => v.instanceId === review?.vehicleId);
   useEffect(() => {
     const element = dialog.current;
@@ -88,6 +93,11 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
         close(); window.scrollTo({ top: 0, behavior: 'auto' });
       } else setReviewError('Entry was not applied. Close this briefing and check the global save warning.');
     } finally { queueMicrotask(() => { submitting.current = false; }); }
+  }
+  function openBriefing(eventId: string) {
+    if (!target || blocked) return;
+    try { setReviewError(''); setMode('standard'); setReview({ eventId, vehicleId: target.instanceId, buildKey: getRaceBuildKey(target), heatAtReview: game.heat.value }); }
+    catch { setReviewError('This vehicle exceeds the supported race-build range. Choose another car.'); }
   }
   function withdraw() {
     if (active && window.confirm(`Withdraw from ${active.eventName}?\n\nThe ${yen(active.entryFeeYen)} entry fee is NOT refunded. No prize, reputation or mileage will be awarded.${active.heatRisk ? `\nHeat remains at ${active.heatRisk.heatAfter}. ${active.heatRisk.policeFineYen ? `The announced patrol alert (${yen(active.heatRisk.policeFineYen)} or a free 60s pause) still applies.` : ''}` : ''}`)) onCancel(active.runId);
@@ -127,10 +137,13 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
         <div key={i}><dt>{sector.name} <small>{sector.profile}</small></dt><dd>{seconds(receipt.race.entrants[3].sectorTimesMs[i])}</dd></div>)}</dl></details>
     </article>}
 
-    <div className="raceBoardHeading"><div><span className="eyebrow">ROOKIE / CLUB</span><h3>Choose your event</h3></div>
+    {receipt && findRivalChallenge(receipt.race.eventId) && <div className="rivalResultNotice" role="status"><p>{receipt.position === 1 ? 'Crew victory recorded. Check your one-time title bonus status in Rival Crews or Collection; replays never renew it.' : 'Challenge settled. Refine your build and try again; a title needs first place.'}</p><button type="button" className="secondaryButton" onClick={() => onView('rivals')}>OPEN RIVAL CREWS</button></div>}
+    <div className="specialistModes" role="group" aria-label="Race boards"><button type="button" aria-pressed={view === 'open'} onClick={() => onView('open')}>Open events</button><button type="button" aria-pressed={view === 'rivals'} onClick={() => onView('rivals')}>Rival Crews</button></div>
+    <div className="raceBoardHeading"><div><span className="eyebrow">{view === 'open' ? 'ROOKIE / CLUB' : 'CREWS / FINALE'}</span><h3>{view === 'open' ? 'Choose your event' : 'Choose your challenge car'}</h3></div>
       <label className="workshopVehicle"><span>RACE VEHICLE</span><select aria-label="Race vehicle" value={target.instanceId} disabled={!!active}
         onChange={(event) => setTargetId(event.target.value)}>{game.ownedVehicles.map((v) => <option key={v.instanceId} value={v.instanceId}>{v.name} · {v.instanceId.slice(-14)}</option>)}</select>
         <small>Selection does not change your active garage car.</small></label></div>
+    <div hidden={view !== 'open'}>
     <DistrictFilter kind="Race" value={districtFilter} onChange={onDistrictFilter} />
     <div className="categoryChips" role="group" aria-label="Filter races by discipline">
       <button type="button" aria-pressed={discipline === 'all'} onClick={() => setDiscipline('all')}>All events <b>{getDistrictRaces(districtFilter).length}</b></button>
@@ -147,14 +160,13 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
           <div><dt>WINNER PRIZE</dt><dd>{yen(event.prizes[0].yen)}</dd></div><div><dt>PLAYBACK + START</dt><dd>{event.playbackMs / 1000 + 3}s</dd></div></dl>
         <p className="raceRecord">{record ? `Best: P${record.bestPosition} · ${seconds(record.bestTimeMs)} · ${record.finishes} finishes` : `${event.distanceKm} km on settlement · No personal record yet`}</p>
         <p className="partRequirement">{requirement ?? 'Available · inspect entry, rivals and all payouts below'}</p>
-        <button type="button" className="secondaryButton" aria-label={`Briefing ${event.name}`} disabled={blocked} onClick={() => {
-          try { setReviewError(''); setMode('standard'); setReview({ eventId: event.id, vehicleId: target.instanceId, buildKey: getRaceBuildKey(target), heatAtReview: game.heat.value }); }
-          catch { setReviewError('This vehicle exceeds the supported race-build range. Choose another car.'); }
-        }}>RACE BRIEFING</button>
+        <button type="button" className="secondaryButton" aria-label={`Briefing ${event.name}`} disabled={blocked} onClick={() => openBriefing(event.id)}>RACE BRIEFING</button>
       </article>;
     })}</div>
     {getDistrictRaces(districtFilter, discipline).length === 0 && <p className="districtEmpty" role="status">No events match these district and discipline filters.
       <button type="button" className="secondaryButton" onClick={() => { onDistrictFilter('all'); onDiscipline('all'); }}>Clear race filters</button></p>}
+    </div>
+    <div hidden={view !== 'rivals'}><RivalBoard game={game} target={target} blocked={blocked} onBrief={openBriefing} onClaim={onClaim} /></div>
     {reviewError && !review && <p className="gameError" role="alert">{reviewError}</p>}
     <p className="tuningNote">These are abstract simulated times, not real driving physics. Underground stakes add announced Heat and patrol alerts. Standard entry is unchanged. No random failures, fuel bills, wear, damage or vehicle loss. Final race artwork and audio come later.</p>
 
@@ -165,11 +177,11 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
         <h3 id="race-briefing-title">{reviewedEvent.name}</h3><p>{reviewedEvent.focus}</p>
         <div className="raceBriefBuild"><strong>YOUR ENTRY · {reviewedVehicle.name}</strong><span>{build ? `${build.powerPs} PS · ${build.weightKg} kg · Grip ${build.grip} · Handling ${build.handling} · Braking ${build.braking}` : 'Unsupported build'}</span>
           <small>Current engine/transmission condition and reliability influence sector performance, but this race causes no new wear.</small></div>
-        <fieldset className="raceModeChoice"><legend>Choose your stakes · resets to Standard for every briefing</legend>
+        {reviewedChallenge ? <div className="rivalBriefTerms"><strong>{reviewedChallenge.crew} / STANDARD STAKES ONLY</strong><p>No new Heat, car loss or prestige reset. First place and settlement earn the title; the separate {yen(reviewedChallenge.bonusYen)} bonus is claimed once in Rival Crews or Collection, not included in the prize table.</p><ul>{getRivalGoals(game, reviewedChallenge).map((goal) => <li key={goal.label}>{goal.met ? 'MET' : 'NEEDED'} · {goal.label}</li>)}</ul></div> : <fieldset className="raceModeChoice"><legend>Choose your stakes · resets to Standard for every briefing</legend>
           <label><input type="radio" aria-label="Standard stakes" name="race-mode" value="standard" checked={mode === 'standard'} onChange={() => setMode('standard')} /><span>Standard stakes<small>Original prizes · no new Heat or patrol alert.</small></span></label>
           <label><input type="radio" aria-label="Underground stakes" name="race-mode" value="underground" checked={mode === 'underground'} disabled={!!undergroundReason} onChange={() => setMode('underground')} /><span>Underground stakes<small>+50% prize money · +25% REP (rounded down) · Heat on entry. Level 3+.</small></span></label>
           {undergroundReason && <small>{undergroundReason}</small>}
-        </fieldset>
+        </fieldset>}
         {risk && <div className="raceRiskTerms" data-testid="race-risk-preview"><strong>Heat {risk.heatBefore} → {risk.heatAfter} · +{risk.heatAfter - risk.heatBefore} on entry</strong>
           <p>{risk.policeFineYen ? `Announced patrol alert: ${yen(risk.policeFineYen)} fine OR a free ${LAY_LOW_MS / 1000}s Lay low pause after settlement or withdrawal.` : 'No patrol alert at this projected Heat.'}</p>
           <small>Heat and the announced alert remain if you withdraw. No random reroll or car loss. A fine is only paid after a separate confirmation; net below shows both choices.</small></div>}
