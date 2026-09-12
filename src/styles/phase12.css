@@ -33,6 +33,8 @@
 .businessCard .batchStatus { font-size:10px; min-height:28px; }
 .businessActions { display:flex; flex-wrap:wrap; gap:10px; }
 .businessActions button,.empireSummary button,.businessCard > button,.managerCard > button,.expansionCard > button { flex:1 1 125px; display:flex; align-items:center; justify-content:center; gap:7px; min-height:44px; max-width:100%; padding:12px; white-space:normal; font-size:10px; line-height:1.55; overflow-wrap:anywhere; }
+/* Direct card buttons sit in a column: do not let row-button flex basis stretch their height. */
+.businessCard > button,.managerCard > button,.expansionCard > button { flex:0 0 auto; }
 .empirePrimary { background:#b25338; border:1px solid #e58c64; color:#fff1da; cursor:pointer; font-weight:700; }
 .empirePrimary:disabled,.empirePanel button:disabled { opacity:.5; cursor:not-allowed; }
 .businessHint,.managerCard > small,.expansionCard > small { display:block; color:#aebeae; font-size:10px; line-height:1.75; }

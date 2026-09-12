@@ -2,6 +2,8 @@
 
 ## Phase 12 — Empire & Automation (2026-09-12)
 
+- Reviewed desktop/mobile/fallback-font screenshots and kept vertical card actions compact instead of stretching to fill their cards; added button-height regression checks. Updated historical tab/schema expectations while retaining exact old-field comparisons and checking the added empty Empire separately.
+
 - Added a ninth Empire section with Businesses, Staff & Managers and Garage Expansion subviews, plus Industrial District/garage shortcuts and a completed-earnings badge.
 - Added East Ward Detail, Bayline Parts Supply and Midnight Dyno Works with explicit Level 3/5/7 purchases, one-batch manual staff and Levels 1–5 upgrades.
 - Added permanently assigned Rei/Jun/Nao managers: one-time hires start automatic repeat bookings with no recurring wages, hidden bills or driver/broker slot use.
