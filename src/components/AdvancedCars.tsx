@@ -64,7 +64,7 @@ export function AdvancedCars({ game, now, blocked, mode, onStart, onFinish, onCa
   return <section className="specialistPanel" aria-labelledby="specialist-title">
     <div className="specialistHeading"><div><span className="eyebrow">KAGEHAMA SPECIALIST NETWORK / {mode.toUpperCase()}</span><h2 id="specialist-title">{HEADINGS[mode]}</h2></div>
       {mode === 'imports' ? <Ship size={36} /> : mode === 'auctions' ? <Gavel size={36} /> : <MapPin size={36} />}</div>
-    <p className="specialistNote">One broker contract at a time. Broker work runs alongside your own job, race or Lay low; it never earns money or repeats automatically. Delivery and winning bids reserve a garage space. Final car artwork is still planned.</p>
+    <p className="specialistNote">One broker contract at a time. Broker work runs alongside your own job, race or Lay low; it never earns money or repeats automatically. Imports and all pending auction bids reserve a garage space. Final car artwork is still planned.</p>
     {contract && pendingOffer && <article className="specialistPending" aria-label="Current specialist contract">
       <div className="specialistPendingTop"><div><span className="eyebrow">{contract.kind.toUpperCase()} / CONTRACT #{contract.runId}</span><h3>{pendingOffer.name}</h3></div><strong data-testid="specialist-timer">{clockError ? 'CLOCK ERROR' : ready ? 'READY' : `${seconds}s`}</strong></div>
       <progress max={100} value={clockError ? 0 : Math.min(100, Math.max(0, (now - contract.startedAtMs) / pendingOffer.durationMs * 100))} aria-label="Specialist contract progress" />
