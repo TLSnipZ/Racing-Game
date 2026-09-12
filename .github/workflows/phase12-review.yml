@@ -1,0 +1,39 @@
+name: Apply reviewed Phase 12 fixes
+on:
+  push:
+    branches: [prepare/12-empire-review]
+permissions:
+  contents: write
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Apply inspected review anchors
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          def patch(name, before, after):
+              path = Path(name)
+              source = path.read_text()
+              assert source.count(before) == 1, (name, before)
+              path.write_text(source.replace(before, after))
+          path = 'tests/e2e/advanced.spec.ts'
+          patch(path, "import { createAdvancedState } from '../../src/domain/advancedState';", "import { createAdvancedState } from '../../src/domain/advancedState';\nimport { createEmpireState } from '../../src/domain/empireState';\nimport { SAVE_VERSION } from '../../src/domain/persistence';")
+          patch(path, "await expect(page.getByRole('tab')).toHaveCount(8);", "await expect(page.getByRole('tab')).toHaveCount(9);")
+          patch(path, '{empire:_empire,advanced,...old}=s;', '{empire,advanced,...old}=s;')
+          patch(path, "expect(old).toEqual(v8.state);expect(advanced).toEqual(createAdvancedState());await expect(page.locator('.saveIndicator')).toContainText('SAVE V9');", "expect(old).toEqual(v8.state);expect(advanced).toEqual(createAdvancedState());expect(empire).toEqual(createEmpireState());await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);")
+          patch('src/styles/phase12.css', '.empirePrimary {', '/* Direct card buttons sit in a column: do not let row-button flex basis stretch their height. */\n.businessCard > button,.managerCard > button,.expansionCard > button { flex:0 0 auto; }\n.empirePrimary {')
+          patch('tests/e2e/empire.spec.ts', "await section(page,view);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n   await page.screenshot", "await section(page,view);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);\n   for(const button of await page.locator('.businessCard > button, .managerCard > button, .expansionCard > button').all()){const box=await button.boundingBox();expect(box!.height).toBeGreaterThanOrEqual(44);expect(box!.height).toBeLessThanOrEqual(80);}\n   await page.evaluate(()=>window.scrollTo(0,0));\n   await page.screenshot")
+          patch('CHANGELOG.md', '## Phase 12 — Empire & Automation (2026-09-12)\n', '## Phase 12 — Empire & Automation (2026-09-12)\n\n- Reviewed desktop/mobile/fallback-font screenshots and kept vertical card actions compact instead of stretching to fill their cards; added button-height regression checks. Updated historical tab/schema expectations while retaining exact old-field comparisons and checking the added empty Empire separately.\n')
+          PY
+      - name: Save the clean reviewed tree
+        run: |
+          git rm -- .github/workflows/phase12-review.yml
+          git add -A
+          test "$(git write-tree)" = 1e46ac40870f1df4387025e2e766c77237d533c3
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: materialize reviewed Empire card and legacy test corrections'
+          git push origin HEAD:refs/heads/staging/12-empire-reviewed
