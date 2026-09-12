@@ -1,0 +1,27 @@
+name: Prepare Phase 8 integration (staging only)
+on:
+  push:
+    branches: [prepare/8-market]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Apply inspected source anchors
+        run: node scripts/phase8-integrate.mjs
+      - name: Commit materialized code to staging only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src tests
+          git commit -m 'feat: integrate car market, catalog and save v6 migration'
+          git push origin HEAD:refs/heads/staging/8-market-materialized
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
