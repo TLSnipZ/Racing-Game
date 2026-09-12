@@ -2,8 +2,7 @@ import { findAdvancedOffer, getAuctionClearingPrice, type AdvancedOffer } from '
 import { withCollectionProgress } from './collectionProgress';
 import { createSpecialistVehicle, isSpecialistReady, isValidProxyBid } from './advancedRules';
 import { isAdvancedLinked, isAdvancedState } from './advancedValidation';
-import { getOccupiedGarageSpaces, getReservedVehicleIds } from './garageCapacity';
-import { GARAGE_CAPACITY } from './marketStock';
+import { getGarageCapacity, getOccupiedGarageSpaces, getReservedVehicleIds } from './garageCapacity';
 import type { SpecialistReceipt, SpecialistContract } from './advancedTypes';
 import type { GameState } from './types';
 
@@ -37,7 +36,7 @@ export function getSpecialistRequirement(state: GameState, offer: AdvancedOffer,
   if (state.advanced.acquiredOfferIds.includes(offer.id)) return 'This one-time source has already been acquired. Selling its car does not renew it.';
   if (state.advanced.activeContract) return 'Finish or cancel your existing specialist contract first. Auction bids cannot be cancelled.';
   if (offer.kind === 'survey' && state.advanced.surveyedBarnIds.includes(offer.id)) return 'The survey is complete. Review the recovered car instead.';
-  if (offer.kind !== 'survey' && getOccupiedGarageSpaces(state) >= GARAGE_CAPACITY) return 'Garage full: make space before reserving an incoming car.';
+  if (offer.kind !== 'survey' && getOccupiedGarageSpaces(state) >= getGarageCapacity(state)) return 'Garage full: make space before reserving an incoming car.';
   if (offer.kind === 'auction' && !isValidProxyBid(offer, bidYen)) return `Bid in ¥${offer.bidStepYen.toLocaleString('en-US')} steps, from ¥${offer.minimumBidYen.toLocaleString('en-US')} to ¥1,000,000.`;
   const cost = offer.kind === 'import' ? offer.priceYen + offer.transportYen : offer.kind === 'auction' ? bidYen : offer.surveyYen;
   if (!Number.isSafeInteger(state.cashYen) || state.cashYen < cost) return 'Not enough valid cash.';
@@ -106,7 +105,7 @@ export function getBarnBuyRequirement(state: GameState, offer: AdvancedOffer): s
   if (offer.kind !== 'survey' || !state.advanced.surveyedBarnIds.includes(offer.id)) return 'Complete the survey first.';
   if (state.advanced.acquiredOfferIds.includes(offer.id)) return 'This project has already been recovered. Sale does not renew it.';
   if (state.playerLevel < offer.minLevel) return `Requires Level ${offer.minLevel}.`;
-  if (getOccupiedGarageSpaces(state) >= GARAGE_CAPACITY) return 'Garage full, including reserved deliveries. Sell a spare first.';
+  if (getOccupiedGarageSpaces(state) >= getGarageCapacity(state)) return 'Garage full, including reserved deliveries. Sell a spare first.';
   if (!Number.isSafeInteger(state.cashYen) || state.cashYen < offer.priceYen) return 'Not enough valid cash.';
   return null;
 }

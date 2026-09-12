@@ -122,7 +122,7 @@ test('failed incoming delivery leaves the full paid contract for a successful la
  await page.reload();await market(page,'Imports');await page.getByRole('button',{name:'COMPLETE CONTRACT'}).click();expect((await read(page)).ownedVehicles).toHaveLength(2);
 });
 test('old v8 collection rewards, Heat, paid races and stock survive migration with only empty new fields',async({page})=>{
- await seedRaw(page,JSON.stringify(v8));const s=await read(page),{advanced,...old}=s;
+ await seedRaw(page,JSON.stringify(v8));const s=await read(page),{empire:_empire,advanced,...old}=s;
  expect(old).toEqual(v8.state);expect(advanced).toEqual(createAdvancedState());await expect(page.locator('.saveIndicator')).toContainText('SAVE V9');
 });
 test('export reset and import preserve exact escrow, reserved car, deadline and model/reward history',async({page})=>{

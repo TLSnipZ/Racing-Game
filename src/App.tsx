@@ -1,3 +1,6 @@
+import { Empire, type EmpireView } from './components/Empire';
+import { performEmpireAction } from './domain/empire';
+import { getEmpireProduction } from './domain/empireProduction';
 import { AdvancedCars } from './components/AdvancedCars';
 import { Restoration } from './components/Restoration';
 import { startSpecialistContract, finishSpecialistContract, cancelSpecialistContract, raiseProxyBid, buyBarnVehicle } from './domain/advanced';
@@ -42,6 +45,7 @@ import './styles/phase8.css';
 import './styles/phase9.css';
 import './styles/phase10.css';
 import './styles/phase11.css';
+import './styles/phase12.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
@@ -49,6 +53,7 @@ export function App() {
   const { game, blocked } = session;
   const [tab, setTab] = useState<SectionTab>('garage');
   const [viewEpoch, setViewEpoch] = useState(0);
+  const [empireSection, setEmpireSection] = useState<EmpireView>('businesses');
   const [marketSection, setMarketSection] = useState<'dealer' | SpecialistView>('dealer');
   const [workshopSection, setWorkshopSection] = useState<'parts' | 'restoration'>('parts');
   const [raceDistrict, setRaceDistrict] = useState<CityFilter>('all');
@@ -57,7 +62,8 @@ export function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = STARTER_CARS.find((car) => car.id === selectedId) ?? null;
   const hasStarted = game.selectedStarterId !== null || game.ownedVehicles.length > 0;
-  const now = useJobClock(game.economy.activeJob ?? game.racing.activeRace ?? game.heat.cooldown ?? game.advanced.activeContract);
+  const now = useJobClock(game.economy.activeJob ?? game.racing.activeRace ?? game.heat.cooldown ?? game.advanced.activeContract, game.empire.businesses.some((business) => business.startedAtMs !== null));
+  const empireOutput = getEmpireProduction(game.empire, now);
   const job = game.economy.activeJob;
   const jobReady = !!job && Number.isSafeInteger(now) && now >= job.startedAtMs && now >= job.finishesAtMs;
   const raceReady = isRaceReady(game.racing.activeRace, now);
@@ -75,7 +81,7 @@ export function App() {
   }
   useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, [tab]);
   function selectTab(next: SectionTab) {
-    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city' || next === 'market' || next === 'collection') && !hasStarted) return;
+    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city' || next === 'market' || next === 'collection' || next === 'empire') && !hasStarted) return;
     setTab(next);
     document.getElementById(`tab-${next}`)?.focus({ preventScroll: true });
   }
@@ -86,7 +92,7 @@ export function App() {
     selectTab(section);
   }
   function returnToGarage() {
-    setMarketSection('dealer'); setWorkshopSection('parts');
+    setEmpireSection('businesses'); setMarketSection('dealer'); setWorkshopSection('parts');
     setRaceDistrict('all'); setJobDistrict('all'); setRaceDiscipline('all');
     setSelectedId(null); setViewEpoch((value) => value + 1); setTab('garage');
     document.getElementById('tab-garage')?.focus({ preventScroll: true });
@@ -96,9 +102,9 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9 phase10 phase11">
+  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9 phase10 phase11 phase12">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
-    <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} heatReady={heatReady} specialistReady={specialistReady} onHeat={openHeat} onTab={selectTab} />
+    <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} heatReady={heatReady} specialistReady={specialistReady} empireReady={empireOutput.totalYen > 0 && !empireOutput.clockError} onHeat={openHeat} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
       <Database size={13} />{blocked ? 'SAVE PROTECTED · ACTION REQUIRED' : session.error ? 'SAVE FAILED · PLEASE CHECK BELOW'
         : session.savedAt ? `AUTOSAVED · ${new Date(session.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · SAVE V${SAVE_VERSION}` : 'AUTOSAVE READY'}
@@ -118,7 +124,7 @@ export function App() {
     </aside>}
     {/* Views retain filters/forms but hidden panels have no layout, focus or accessibility presence. */}
     <div id="panel-garage" role="tabpanel" aria-labelledby="tab-garage" tabIndex={0} hidden={tab !== 'garage'} className="sectionPanel">
-      {hasStarted ? <Garage key={viewEpoch} onCollection={() => selectTab('collection')} game={game} blocked={blocked} onMarket={() => selectTab('market')} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
+      {hasStarted ? <Garage key={viewEpoch} onEmpire={() => { setEmpireSection('garage'); selectTab('empire'); }} onCollection={() => selectTab('collection')} game={game} blocked={blocked} onMarket={() => selectTab('market')} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
         : !blocked && <>
           <section className="hero"><div className="heroCopy"><span className="tag">MERCER GARAGE // EAST WARD</span>
             <h2>Everybody starts<br />with a bad decision.</h2><p>Three unwanted cars. Fifty thousand yen. One way into Kagehama's midnight scene.</p>
@@ -185,6 +191,10 @@ export function App() {
         onIcon={(id, price) => session.command((current) => purchaseIcon(current, id, price))}
         onMarket={() => selectTab('market')} onGarage={() => selectTab('garage')} />}
     </div>
+    <div id="panel-empire" role="tabpanel" aria-labelledby="tab-empire" tabIndex={0} hidden={tab !== 'empire'} className="sectionPanel">
+      {hasStarted && <Empire key={viewEpoch} game={game} now={now} blocked={blocked} view={empireSection} onView={setEmpireSection}
+        onAction={(order) => session.command((current) => performEmpireAction(current, order, Date.now()))} />}
+    </div>
     <div id="panel-saves" role="tabpanel" aria-labelledby="tab-saves" tabIndex={0} hidden={tab !== 'saves'} className="sectionPanel">
       <SaveManagement game={game} blocked={blocked} onImport={(state) => { const ok = session.replaceGame(state); if (ok) returnToGarage(); return ok; }}
         onReset={() => { const ok = session.resetGame(); if (ok) returnToGarage(); return ok; }} />
@@ -197,8 +207,8 @@ export function App() {
         onPay={(id, fine) => session.command((current) => payPoliceFine(current, id, fine))} />}
       {hasStarted && <City key={viewEpoch} game={game} blocked={blocked} jobReady={jobReady} raceReady={raceReady}
         onRaces={(district) => openDistrict('races', district)} onJobs={(district) => openDistrict('jobs', district)}
-        onService={selectTab} onResume={selectTab} onSpecialist={openSpecialist} />}
+        onService={selectTab} onResume={selectTab} onEmpire={() => { setEmpireSection('businesses'); selectTab('empire'); }} onSpecialist={openSpecialist} />}
     </div>
-    <footer>PHASE 11 // ADVANCED CARS · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
+    <footer>PHASE 12 // EMPIRE & AUTOMATION · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }

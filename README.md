@@ -6,19 +6,47 @@ A pre-alpha car-collection, street-racing and automotive-empire game set in a fi
 
 > Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
 
-**Current milestone: Phase 11 — Advanced Cars** · **Save schema: v9** · **Next numbered system: Phase 12 — Empire & Automation**
+**Current milestone: Phase 12 — Empire & Automation** · **Save schema: v10** · **Next numbered system: Phase 13+ — Endgame**
 
 **Graphics & Audio I remains an open, separate presentation milestone.** The district map, car profiles and race replay are functional placeholders, not final artwork.
 
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Advanced cars & saves](docs/PHASE11.md) · [Collection](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Empire & saves](docs/PHASE12.md) · [Advanced cars](docs/PHASE11.md) · [Collection](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
 ## Play now
 
 Choose one of three inexpensive starters with **¥50,000**, earn yen and reputation, fit performance parts and test your build against three rivals. The first complete loop is **starter → job → income → tuning → race → reward**.
 
-### New: Imports, Auctions, Barn Finds and Restoration
+### New: businesses, managers and garage expansion
 
-Keep the same eight main tabs. **Market → Imports / Auctions / Barn Finds** opens the specialist network; **Workshop → Restoration** repairs condition separately from tuning. A broker handles one saved contract at a time while your own jobs/races/Heat recovery can continue. Finish each contract manually; closing the page never auto-buys, repeats or pays it. A pending delivery or auction reserves a garage space across dealer, Icon and project purchases.
+**Empire** is a ninth isolated tab with **Businesses**, **Staff & Managers** and **Garage Expansion**. Industrial District opens at **Level 3** and links to these operations. Your sticky cash/level/REP/XP/Heat HUD stays available; the Empire badge flags completed earnings ready to transfer.
+
+| Business | Player level | Purchase | L1 booking profit | One-time manager |
+| --- | ---: | ---: | --- | --- |
+| **East Ward Detail** | 3 | ¥60,000 | ¥300 / 30s | Rei, ¥35,000 |
+| **Bayline Parts Supply** | 5 | ¥180,000 | ¥900 / 45s | Jun, ¥90,000 |
+| **Midnight Dyno Works** | 7 | ¥450,000 | ¥2,100 / 60s | Nao, ¥225,000 |
+
+Purchase a property, then **START ONE BATCH → wait → COLLECT EARNINGS**. Unmanaged staff complete only one manually dispatched booking. The business is stopped after purchase and after collecting that batch; no income exists before dispatch. Staff do not occupy your driver or specialist-broker activity slot.
+
+**Hire the associated manager to start repeat production automatically.** Completed batches fill that business's till, while the game is open or closed. The till is **not your spendable cash**: transfer it with **COLLECT EARNINGS** or the atomic **COLLECT ALL EARNINGS** button. Managers do not collect your personal jobs, enter races, drive your cars, clear Heat or buy anything. Their quoted hire is a one-time cost; operating costs are included in the advertised net output. There are no recurring wages, rent, debt or surprise bills.
+
+Each managed till holds **at most eight hours of its current-level production**, online and offline combined. At Level 1 the limits are ¥288,000 / ¥576,000 / ¥1,008,000. An unmanaged till holds one booking. Full storage stops further accumulation; excess absence is discarded, not saved for a second payout. Reloading, exporting and other actions never renew the allowance. Collecting before full retains unfinished batch time; collecting a full till starts the next batch from that collection time. No background save loop or automatic wallet payout is required for production.
+
+Businesses upgrade through **Levels 1–5**. Output is base profit × business level; booking time is unchanged. The next upgrade from Level L costs purchase price × L and requires player Level (business unlock + L). **Pause before upgrading or hiring during a running manual batch.** Pausing keeps all completed earnings but discards the unfinished batch time. Upgrades preserve the exact old till balance and remain paused until you resume. Staff, manager and building ownership are permanent; no resale/dismissal is implemented.
+
+| Sequential garage expansion | Player level | One-time price | Total spaces |
+| --- | ---: | ---: | ---: |
+| Annex Lease | 4 | ¥75,000 | **18** |
+| Warehouse Bays | 6 | ¥180,000 | **24** |
+| Industrial Motor Hall | 8 | ¥400,000 | **36** |
+
+**Garage → EXPAND GARAGE** opens the same expansion view. Buy expansions in order from the original 12 spaces. Dealer, Icon, barn and broker purchases all use the new capacity; existing paid imports/auction reservations remain counted and protected. Larger valid historical garages are not truncated. Expanding grants no free cars and changes no current activity or escrow.
+
+**Save v10: no reset or retrospective income.** Valid v1–v9 worlds preserve every prior field and gain an empty business ledger with the original garage capacity. Production anchors, stopped/running state, managers, till balances, collected totals and expansion level travel in `KAGEHAMA1-...` exports. Invalid current ledgers are rejected rather than reset. Device-clock rollback blocks affected production commands without discarding progress. Full rules: [PHASE12.md](docs/PHASE12.md).
+
+### Imports, Auctions, Barn Finds and Restoration
+
+Specialist sources remain inside Market and Workshop; Empire is the only new main tab. **Market → Imports / Auctions / Barn Finds** opens the specialist network; **Workshop → Restoration** repairs condition separately from tuning. A broker handles one saved contract at a time while your own jobs/races/Heat recovery can continue. Finish each contract manually; closing the page never auto-buys, repeats or pays it. A pending delivery or auction reserves a garage space across dealer, Icon and project purchases.
 
 | Source | New car | Unlock | Explicit cost and duration |
 | --- | --- | --- | --- |
@@ -32,11 +60,11 @@ Auction bids are binding, can be raised before the original deadline and never t
 
 Outer Kagehama now has its first Level-5 barn lead. Dockside and East Ward link to the import and auction desks. The Collection Book now contains **11 models**, including the fourth manufacturer Mizuno and the Roadster body type. Existing six-car dealer batches, old Icon offers, 18 achievements and all previously accepted races/Heat terms are unchanged.
 
-**Save v9: no reset needed.** Valid v1–v8 data keep every prior field; migration only adds empty specialist state. Export codes include pending escrow, incoming cars, deadlines, surveyed leads and consumed sources. Read [PHASE11.md](docs/PHASE11.md) for exact terms, capacity protection and restoration pricing.
+**Specialist save compatibility:** the historical v8→v9 step adds only empty specialist state. Current v10 additionally retains it unchanged while introducing Empire. Export codes include pending escrow, incoming cars, deadlines, surveyed leads and consumed sources. Read [PHASE11.md](docs/PHASE11.md) for exact terms, capacity protection and restoration pricing.
 
 ### Collection Book, achievements and Icon Cars
 
-**Collection** is an eighth real tab, with **Collection Book**, **Achievements** and **Icon Showroom** sections. The book lists eleven explicit models. Filter by manufacturer, rarity, ownership status and name/year search. It distinguishes **ever collected** from **currently owned**. A sold model keeps its book credit; multiple copies occupy separate garage spaces but count as one model. Merely seeing a dealer listing or rival does not collect that car.
+**Collection** is a separate tab, with **Collection Book**, **Achievements** and **Icon Showroom** sections. The book lists eleven explicit models. Filter by manufacturer, rarity, ownership status and name/year search. It distinguishes **ever collected** from **currently owned**. A sold model keeps its book credit; multiple copies occupy separate garage spaces but count as one model. Merely seeing a dealer listing or rival does not collect that car.
 
 **Common → Rare → Legendary → Icon** are collector classifications, not performance modifiers, spawn odds or price multipliers. The 118 PS Tora 85 is Legendary, while the more powerful Pico R is Rare. Badges appear in Garage, Market and Collection. The original six-model used stock generator and its asking prices are unchanged.
 
@@ -87,7 +115,7 @@ The race briefing shows gross and net returns for both the free-wait and fine ch
 
 Combine **manufacturer, body type, exact year/year range and text search**. Sort by price, year, mileage or condition; visible counts and a reset recover empty results. Filters survive ordinary tab switches, never reroll stock and never purchase anything. New cars work with the Garage, existing non-turbo parts and all four race disciplines. RZ-T-only turbo upgrades remain RZ-T-only.
 
-Prices depend on the specific example's condition, mileage, year and originality. They are provisional game values, not real-world prices or a live supply/demand model. The initial garage has **12 spaces**; larger valid old garages are kept but cannot purchase more until below that limit.
+Prices depend on the specific example's condition, mileage, year and originality. They are provisional game values, not real-world prices or a live supply/demand model. The garage begins with **12 spaces** and can expand to **18, 24 and 36** through Empire. Reserved incoming cars count against every acquisition route. Larger valid old garages are kept but cannot purchase more until below their effective capacity.
 
 **SELL A CAR** opens your owned vehicles and dealer offers. A sale includes **all purchased parts for that car**, including removed upgrades; no parts transfer to another vehicle. The dealer pays 65% of the reference valuation plus a 20% parts allowance, rounded down to ¥100. You cannot sell the last car or a vehicle assigned to an unsettled job/race. Selling the active car requires choosing its replacement explicitly. Cancellation/Escape changes nothing. Historical race records remain after selling a car.
 
@@ -95,7 +123,7 @@ Prices depend on the specific example's condition, mileage, year and originality
 
 ### Level XP in the persistent HUD
 
-A small **XP progress bar sits directly below the level number** in the top HUD, in all eight sections and while scrolling. The label shows the REP remaining to the next level; the accessible description gives the target level. **Reputation is your level XP**, not a second currency. Job claims and race settlements update the same progression selector used by the Jobs panel. At the current Level 20 cap the bar is full and says **MAX**; money and reputation can still increase.
+A small **XP progress bar sits directly below the level number** in the top HUD, in all nine sections and while scrolling. The label shows the REP remaining to the next level; the accessible description gives the target level. **Reputation is your level XP**, not a second currency. Job claims and race settlements update the same progression selector used by the Jobs panel. At the current Level 20 cap the bar is full and says **MAX**; money and reputation can still increase.
 
 For example, Level 1 with 4 REP has a 20%-filled bar and needs 16 more REP for Level 2. Level 2 begins at 20 total REP and needs another 40 REP for Level 3. Thresholds remain `10 × level × (level − 1)`. This interface change does not rebalance rewards or rewrite existing levels.
 
@@ -109,10 +137,10 @@ For example, Level 1 with 4 REP has a 20%-filled bar and needs 16 more REP for L
 | Dockside | Level 2 | Drag invitations; Dockside Delivery still requires Level 3 |
 | Hakuro Pass | Level 2 | Touge invitations |
 | Eastline Expressway | Level 3 | Expressway invitations |
-| Industrial District | Future preview only | Business/crew locations planned for Phase 12 |
+| Industrial District | Level 3 | Businesses, staff/manager operations and garage expansion |
 | Outer Kagehama | Level 5 | Old Orchard barn survey/recovery; restoration is available in Workshop |
 
-Individual events keep their existing level requirements. Club invitations do not become available just because their district is open. Industrial District remains a future preview even at maximum level.
+Individual events keep their existing level requirements. Club invitations do not become available just because their district is open. Industrial District now opens at Level 3 for Empire operations; all six districts have implemented access.
 
 The city is a **directory, not travel**: no tolls, timers, rewards for clicking areas or changes to the active car. District shortcuts open the real Jobs/Races tabs with the matching filter, never start or pay for an activity. The race district filter combines with discipline; a clear-filter control recovers an empty result. Job districts filter only offers. **Pending activities always stay visible**, irrespective of filters, and can also be resumed from City.
 
@@ -161,7 +189,7 @@ You receive **one starter, not three free cars**. Additional examples of all thr
 
 ## Interface and saves
 
-Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop, Market, Collection and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races and Lay low pauses without applying them automatically. The City ALERT badge and global notice expose pending patrol decisions. Global save warnings link to recovery tools.
+Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop, Market, Collection, Empire and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races and Lay low pauses without applying them automatically. The City ALERT badge and global notice expose pending patrol decisions. Global save warnings link to recovery tools.
 
 District inspection, garage search/sort, market preferences and activity filters survive ordinary tab switches. City links intentionally choose the destination district and clear a conflicting race-discipline filter. Reload, successful import and reset return to Garage and default city/filter views. These view preferences are not gameplay save data.
 
@@ -173,9 +201,9 @@ Progress autosaves in **this browser on this device**, under `kagehama:save`. Ga
 - **Import:** review the confirmation before replacing the whole save, not merging it.
 - **Reset:** confirmation returns to ¥50,000, Level 1 and starter selection, clearing cars, parts, jobs, races, Heat, patrol alerts, Lay low and market history and restoring the initial unpurchased stock. Export a backup first.
 
-**Valid Save v1–v8 data migrate to v9 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. There are no retrospective penalties.
+**Valid Save v1–v9 data migrate to v10 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. The v9→v10 step adds an empty Empire only, preserving specialist escrow and collection claims. There are no retrospective penalties or business earnings.
 
-Leaving the page readies at most the one pending activity. Its original build, rivals, prizes and deadline remain saved. Returning never auto-repeats or pays it. Importing an older code deliberately restores an older snapshot. No cloud account or server-authoritative anti-cheat exists; device clocks/codes remain user-controlled.
+Leaving the page can ready the one pending driver activity and the independent specialist contract. Managed businesses separately repeat into their bounded tills; no wallet income is transferred automatically. Its original build, rivals, prizes and deadline remain saved. Returning never auto-repeats or pays it. Importing an older code deliberately restores an older snapshot. No cloud account or server-authoritative anti-cheat exists; device clocks/codes remain user-controlled.
 
 Unreadable/newer saves are protected, not deleted. Failed writes cannot consume money, parts or rewards. Clock rollback prevents premature completion but permits cancellation/withdrawal. Use one browser tab at a time: detected external changes block stale writes, not a distributed lock. Clearing site data/private browsing may remove progress; keep exported backups.
 
@@ -194,10 +222,10 @@ Unreadable/newer saves are protected, not deleted. Failed writes cannot consume 
 - [x] **9 — Heat & Police:** optional Underground stakes, explicit Heat/bonus/fine terms, deterministic patrol choices, free/paid recovery and Save v7 compatibility.
 - [x] **10 — Collection:** eight-model book, independent rarity badges, 18 one-time manually claimed achievements, two gated Icon purchases and Save v8 migration.
 - [x] **11 — Advanced Cars:** three curated specialist sources, escrow/refunds, reserved deliveries, optional barn recovery and condition restoration; Save v9.
-- [ ] **12 — Empire & Automation:** businesses, staff/crew, delegated routines and capped offline production.
+- [x] **12 — Empire & Automation:** three properties, manual batches, permanent managers, capped eight-hour production, manual till collection and garage expansion to 36; Save v10.
 - [ ] **13+ — Endgame:** Legacy/Prestige, rivals, bosses, events and catalog expansion.
 
-[Detailed roadmap](docs/ROADMAP.md). Automation remains later progression, with exact routines/costs/caps designed before implementation. README, roadmap, changelog and compatibility notes are reviewed with every phase.
+[Detailed roadmap](docs/ROADMAP.md). Business/manager automation is implemented as the first Empire slice. Personal-job delegation, crew squads, automatic racing/trading and broader business content remain extensions, not current features. README, roadmap, changelog and compatibility notes are reviewed with every phase.
 
 ## Development and verification
 

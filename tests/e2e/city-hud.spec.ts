@@ -42,8 +42,8 @@ test('locked and future districts can be inspected without charging or starting 
   await inspect(page, 'Hakuro Pass'); await expect(page.locator('.districtGate')).toContainText('Requires Level 2');
   await expect(page.getByRole('button', { name: 'BROWSE HAKURO PASS RACES' })).toBeDisabled();
   await expect(page.getByRole('progressbar', { name: 'Hakuro Pass unlock progress' })).toHaveJSProperty('value', 20);
-  await inspect(page, 'Industrial District'); await expect(page.locator('.districtGate')).toContainText('Phase 12');
-  await expect(page.locator('.cityPrimary')).toHaveCount(0);
+  await inspect(page, 'Industrial District'); await expect(page.locator('.districtGate')).toContainText('Requires Level 3');
+  await expect(page.getByRole('button', {name:'OPEN BUSINESS DISTRICT'})).toBeDisabled();
   await inspect(page, 'Outer Kagehama'); await expect(page.locator('.districtGate')).toContainText('Requires Level 5');
   expect(await stored(page)).toBe(before);
 });
@@ -120,7 +120,7 @@ test('reset restores default city and filter views without changing the save sch
   await page.getByRole('button', { name: 'Choose Hoshino Pico RS' }).click(); await page.getByRole('button', { name: 'BUY & ENTER KAGEHAMA' }).click();
   await tab(page, 'Races'); await expect(page.getByRole('combobox', { name: 'Race district', exact: true })).toHaveValue('all');
   await tab(page, 'City'); await expect(page.getByRole('button', { name: 'Inspect East Ward', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  expect(JSON.parse((await stored(page))!).version).toBe(9);
+  expect(JSON.parse((await stored(page))!).version).toBe(10);
 });
 for (const [name, width, height] of [['desktop', 1440, 1000], ['mobile', 390, 844], ['narrow', 320, 780]] as const) {
   test(`${name} city and XP stay readable with sticky HUD in all seven tabs`, async ({ page }) => {

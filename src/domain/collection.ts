@@ -1,9 +1,8 @@
-import { getOccupiedGarageSpaces, getReservedVehicleIds } from './garageCapacity';
+import { getGarageCapacity, getOccupiedGarageSpaces, getReservedVehicleIds } from './garageCapacity';
 import { findAchievement } from '../data/achievements';
 import { findIconOffer, type IconOffer } from '../data/collection';
 import { findVehicleDefinition } from '../data/vehicles';
 import { getAchievementProgress, recordCollectionProgress, withCollectionProgress } from './collectionProgress';
-import { GARAGE_CAPACITY } from './marketStock';
 import { createVehicleTuning } from './tuning';
 import type { GameState, PlayerVehicle } from './types';
 
@@ -24,7 +23,7 @@ export function getIconRequirement(state: GameState, offer: IconOffer): string |
   if (state.playerLevel < offer.minLevel) return `Requires Level ${offer.minLevel}.`;
   const achievement = findAchievement(offer.achievementId)!;
   if (!getAchievementProgress(state, achievement).unlocked) return `Earn “${achievement.name}” first. Claiming its yen is optional.`;
-  if (getOccupiedGarageSpaces(state) >= GARAGE_CAPACITY) return `Garage full: ${GARAGE_CAPACITY} spaces. Sell a spare car first.`;
+  if (getOccupiedGarageSpaces(state) >= getGarageCapacity(state)) return `Garage full: ${getGarageCapacity(state)} spaces. Sell a spare car first.`;
   if (!Number.isSafeInteger(state.cashYen) || state.cashYen < 0) return 'Cash value is invalid.';
   if (state.cashYen < offer.priceYen) return 'Not enough cash.';
   return null;

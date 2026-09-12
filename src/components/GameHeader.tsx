@@ -1,11 +1,11 @@
 import { useLayoutEffect, useRef, type KeyboardEvent } from 'react';
-import { BookOpen, BriefcaseBusiness, Database, Gauge, Map, Store, Warehouse, Wrench } from 'lucide-react';
+import { Factory, BookOpen, BriefcaseBusiness, Database, Gauge, Map, Store, Warehouse, Wrench } from 'lucide-react';
 import { getClaimableAchievements } from '../domain/collectionProgress';
 import { HeatBadge } from './HeatBadge';
 import { HudLevelProgress } from './HudLevelProgress';
 import type { GameState } from '../domain/types';
 
-export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'market' | 'collection' | 'saves';
+export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'market' | 'collection' | 'empire' | 'saves';
 const ITEMS = [
   { id: 'garage', label: 'Garage', Icon: Warehouse },
   { id: 'jobs', label: 'Jobs', Icon: BriefcaseBusiness },
@@ -14,10 +14,11 @@ const ITEMS = [
   { id: 'workshop', label: 'Workshop', Icon: Wrench },
   { id: 'market', label: 'Market', Icon: Store },
   { id: 'collection', label: 'Collection', Icon: BookOpen },
+  { id: 'empire', label: 'Empire', Icon: Factory },
   { id: 'saves', label: 'Saves', Icon: Database },
 ] as const;
-export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatReady, specialistReady, onHeat, onTab }: {
-  heatReady: boolean; specialistReady: boolean; onHeat: () => void;
+export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatReady, specialistReady, empireReady, onHeat, onTab }: {
+  heatReady: boolean; specialistReady: boolean; empireReady: boolean; onHeat: () => void;
   game: GameState; tab: SectionTab; hasStarted: boolean; jobReady: boolean; raceReady: boolean; onTab: (tab: SectionTab) => void;
 }) {
   const header = useRef<HTMLElement>(null);
@@ -55,7 +56,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
   }
   return <header className="gameTopbar" ref={header}>
     <div className="gameHud"><div className="compactBrand"><div className="eyebrow">KAGEHAMA / UNDERGROUND</div>
-      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 11</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
+      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 12</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
       <div className="playerMeta" aria-label="Player status"><div><span>CASH</span><strong data-testid="cash" title={`¥${game.cashYen.toLocaleString('en-US')}`}>¥{game.cashYen.toLocaleString('en-US')}</strong></div>
         <div className="hudLevel"><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong>
           <HudLevelProgress reputation={game.reputation} playerLevel={game.playerLevel} /></div>
@@ -66,6 +67,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
         aria-selected={id === tab} aria-controls={`panel-${id}`} disabled={disabled(id)} tabIndex={id === tab ? 0 : -1}
         onKeyDown={keyDown} onClick={() => onTab(id as SectionTab)} title={disabled(id) ? 'Choose a starter first' : label}>
         <Icon size={19} aria-hidden="true" /><span>{label}</span>
+        {id === 'empire' && empireReady && <b className="readyBadge" data-testid="empire-ready-badge" aria-hidden="true">CASH</b>}
         {id === 'collection' && rewardsReady > 0 && <b className="readyBadge" data-testid="collection-ready-badge" aria-hidden="true">{rewardsReady}</b>}
         {id === 'city' && (game.heat.pendingStop || game.heat.cooldown) && <b className="readyBadge" data-testid="heat-ready-badge" aria-hidden="true">{heatReady ? 'READY' : game.heat.cooldown ? 'PAUSE' : 'ALERT'}</b>}
         {id === 'market' && specialistReady && <b className="readyBadge" data-testid="specialist-ready-badge" aria-hidden="true">READY</b>}
