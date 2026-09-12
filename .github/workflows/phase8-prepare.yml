@@ -16,12 +16,12 @@ jobs:
           package-manager-cache: false
       - name: Apply inspected source anchors
         run: node scripts/phase8-integrate.mjs
-      - name: Commit materialized code to staging only
+      - name: Commit materialized code to unique staging branch
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add src tests
-          git commit -m 'feat: integrate car market, catalog and save v6 migration'
-          git push origin HEAD:refs/heads/staging/8-market-materialized
+          git commit -m 'feat: integrate chat car market and save v6 migration'
+          git push origin HEAD:refs/heads/staging/8-market-chat-20260912
           git rev-parse HEAD
           git rev-parse HEAD^{tree}
