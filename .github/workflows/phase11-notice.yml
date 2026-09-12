@@ -1,0 +1,28 @@
+name: Consolidate Phase 11 specialist notice
+on:
+  push:
+    branches: [prepare/11-notice-fix]
+permissions:
+  contents: write
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Remove the redundant dealer-local notice now covered by the global notice
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('src/App.tsx');s=p.read_text()
+          matches=[line for line in s.splitlines(True) if line.startswith("      {hasStarted && marketSection === 'dealer' && game.advanced.activeContract && <aside")]
+          assert len(matches)==1
+          p.write_text(s.replace(matches[0],''))
+          PY
+          git rm .github/workflows/phase11-notice.yml
+          git add src/App.tsx
+          test "$(git write-tree)" = 2006a7ba214d693738bc7726bdcf8e7629af8a61
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: consolidate specialist notice without duplicate action controls'
+          git push origin HEAD:refs/heads/staging/11-notice-fixed
