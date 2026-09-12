@@ -1,5 +1,9 @@
 import { useLayoutEffect, useState } from 'react';
 import { ChevronRight, Database } from 'lucide-react';
+import { getDistrictAccess } from './domain/city';
+import type { DistrictFilter as CityFilter, DistrictId } from './data/city';
+import type { RaceDiscipline } from './domain/racingTypes';
+import { City } from './components/City';
 import { STARTER_CARS } from './data/starters';
 import { purchaseStarter } from './domain/game';
 import { cancelJob, claimJob, startJob } from './domain/economy';
@@ -21,6 +25,7 @@ import './styles/phase3.css';
 import './styles/phase4.css';
 import './styles/phase5.css';
 import './styles/phase6.css';
+import './styles/phase7.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
@@ -28,6 +33,9 @@ export function App() {
   const { game, blocked } = session;
   const [tab, setTab] = useState<SectionTab>('garage');
   const [viewEpoch, setViewEpoch] = useState(0);
+  const [raceDistrict, setRaceDistrict] = useState<CityFilter>('all');
+  const [jobDistrict, setJobDistrict] = useState<CityFilter>('all');
+  const [raceDiscipline, setRaceDiscipline] = useState<RaceDiscipline | 'all'>('all');
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = STARTER_CARS.find((car) => car.id === selectedId) ?? null;
   const hasStarted = game.selectedStarterId !== null || game.ownedVehicles.length > 0;
@@ -37,10 +45,18 @@ export function App() {
   const raceReady = isRaceReady(game.racing.activeRace, now);
   useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, [tab]);
   function selectTab(next: SectionTab) {
-    if ((next === 'jobs' || next === 'workshop' || next === 'races') && !hasStarted) return;
+    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city') && !hasStarted) return;
     setTab(next);
+    document.getElementById(`tab-${next}`)?.focus({ preventScroll: true });
+  }
+  function openDistrict(section: 'jobs' | 'races', district: DistrictId) {
+    if (blocked || !getDistrictAccess(game, district).unlocked) return;
+    if (section === 'races') { setRaceDistrict(district); setRaceDiscipline('all'); }
+    else setJobDistrict(district);
+    selectTab(section);
   }
   function returnToGarage() {
+    setRaceDistrict('all'); setJobDistrict('all'); setRaceDiscipline('all');
     setSelectedId(null); setViewEpoch((value) => value + 1); setTab('garage');
     document.getElementById('tab-garage')?.focus({ preventScroll: true });
   }
@@ -49,7 +65,7 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5 phase6">
+  return <main className="shell phase3 phase4 phase5 phase6 phase7">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
     <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
@@ -84,13 +100,14 @@ export function App() {
         </>}
     </div>
     <div id="panel-jobs" role="tabpanel" aria-labelledby="tab-jobs" tabIndex={0} hidden={tab !== 'jobs'} className="sectionPanel">
-      {hasStarted && <Jobs key={viewEpoch} game={game} now={now} blocked={blocked}
+      {hasStarted && <Jobs key={viewEpoch} game={game} now={now} blocked={blocked} districtFilter={jobDistrict} onDistrictFilter={setJobDistrict}
         onStart={(id) => session.command((current) => startJob(current, id, Date.now()))}
         onClaim={(id) => session.command((current) => claimJob(current, id, Date.now()))}
         onCancel={(id) => session.command((current) => cancelJob(current, id))} />}
     </div>
     <div id="panel-races" role="tabpanel" aria-labelledby="tab-races" tabIndex={0} hidden={tab !== 'races'} className="sectionPanel">
       {hasStarted && <Races key={viewEpoch} game={game} now={now} blocked={blocked}
+        districtFilter={raceDistrict} onDistrictFilter={setRaceDistrict} discipline={raceDiscipline} onDiscipline={setRaceDiscipline}
         onStart={(eventId, vehicleId, key) => session.command((current) => startRace(current, eventId, vehicleId, key, Date.now()))}
         onSettle={(id) => session.command((current) => settleRace(current, id, Date.now()))}
         onCancel={(id) => session.command((current) => cancelRace(current, id))} />}
@@ -104,7 +121,11 @@ export function App() {
       <SaveManagement game={game} blocked={blocked} onImport={(state) => { const ok = session.replaceGame(state); if (ok) returnToGarage(); return ok; }}
         onReset={() => { const ok = session.resetGame(); if (ok) returnToGarage(); return ok; }} />
     </div>
-    <div id="panel-city" role="tabpanel" aria-labelledby="tab-city" hidden />
-    <footer>PHASE 6 // RACING · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
+    <div id="panel-city" role="tabpanel" aria-labelledby="tab-city" tabIndex={0} hidden={tab !== 'city'} className="sectionPanel">
+      {hasStarted && <City key={viewEpoch} game={game} blocked={blocked} jobReady={jobReady} raceReady={raceReady}
+        onRaces={(district) => openDistrict('races', district)} onJobs={(district) => openDistrict('jobs', district)}
+        onService={selectTab} onResume={selectTab} />}
+    </div>
+    <footer>PHASE 7 // KAGEHAMA CITY · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }
