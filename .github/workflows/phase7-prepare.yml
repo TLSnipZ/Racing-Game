@@ -1,0 +1,27 @@
+name: Prepare Phase 7 integration (temporary branch only)
+on:
+  push:
+    branches: [prepare/7-city]
+permissions:
+  contents: write
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Apply inspected source anchors
+        run: node scripts/phase7-apply.mjs
+      - name: Save materialized source on staging branch only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/App.tsx src/components/GameHeader.tsx src/components/Races.tsx src/components/Jobs.tsx tests/e2e/helpers.ts tests/e2e/interface-tuning.spec.ts
+          git commit -m 'feat: integrate city navigation, district filters and HUD XP'
+          git push origin HEAD:refs/heads/staging/7-city-materialized
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
