@@ -1,4 +1,7 @@
 import { BriefcaseBusiness, Check, Clock3, LockKeyhole, Route, TrendingUp } from 'lucide-react';
+import { DistrictFilter } from './DistrictFilter';
+import type { DistrictFilter as CityFilter } from '../data/city';
+import { getDistrictJobs } from '../domain/city';
 import { findJob, JOBS } from '../data/jobs';
 import { getJobRequirement } from '../domain/economy';
 import { getLevelProgress, LEVEL_CAP } from '../domain/progression';
@@ -6,7 +9,8 @@ import { getActiveVehicle } from '../domain/garage';
 import type { GameState } from '../domain/types';
 const yen = (value: number) => `¥${value.toLocaleString('en-US')}`;
 const time = (ms: number) => { const seconds = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(seconds / 60).toString().padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`; };
-export function Jobs({ game, now, blocked, onStart, onClaim, onCancel }: {
+export function Jobs({ game, now, blocked, onStart, onClaim, onCancel, districtFilter, onDistrictFilter }: {
+  districtFilter: CityFilter; onDistrictFilter: (value: CityFilter) => void;
   game: GameState; now: number; blocked: boolean; onStart: (id: string) => boolean;
   onClaim: (id: number) => boolean; onCancel: (id: number) => boolean;
 }) {
@@ -37,7 +41,8 @@ export function Jobs({ game, now, blocked, onStart, onClaim, onCancel }: {
     </article>}
     {receipt && !active && <div className="jobReceipt" role="status" data-testid="job-receipt"><Check size={18} /><div><strong>{findJob(receipt.jobId)?.name} complete · {yen(receipt.rewardYen)} + {receipt.reputationReward} REP</strong>
       <p>{receipt.levelAfter > receipt.levelBefore ? `LEVEL UP! Level ${receipt.levelAfter}. Check the new contacts below.` : 'Payment saved. Ready for another contract.'}</p></div></div>}
-    <div className="jobGrid">{JOBS.map((job) => {
+    <DistrictFilter kind="Job" value={districtFilter} onChange={onDistrictFilter} />
+    <div className="jobGrid">{getDistrictJobs(districtFilter).map((job) => {
       const requirement = getJobRequirement(game, job); const locked = game.playerLevel < job.minLevel;
       return <article key={job.id} className={`jobCard ${locked ? 'jobLocked' : ''}`} aria-label={`${job.name} offer`}>
         <div className="jobCardTop"><span>{job.contact}</span>{locked ? <LockKeyhole size={18} /> : <BriefcaseBusiness size={18} />}</div><h3>{job.name}</h3><p>{job.description}</p>
@@ -47,6 +52,7 @@ export function Jobs({ game, now, blocked, onStart, onClaim, onCancel }: {
         <button type="button" className="startJobButton" aria-label={`Start ${job.name}`} aria-describedby={`requirement-${job.id}`} disabled={blocked || !!requirement} onClick={() => onStart(job.id)}>{locked ? `UNLOCK AT LEVEL ${job.minLevel}` : 'ACCEPT JOB'}</button>
       </article>;
     })}</div>
+    {getDistrictJobs(districtFilter).length === 0 && <p className="districtEmpty" role="status">No job contacts in this district yet. Select All job districts to see current offers.</p>}
     <p className="jobNote">All three starters can do delivery work. Jobs add mileage, not damage, fuel bills or Heat. Spend your earnings on performance parts in Workshop.</p>
   </section>;
 }
