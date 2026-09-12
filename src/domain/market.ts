@@ -1,3 +1,4 @@
+import { withCollectionProgress } from './collectionProgress';
 import { findVehicleDefinition } from '../data/vehicles';
 import { createMarketListings, GARAGE_CAPACITY, MARKET_REFRESH_MS, MAX_MARKET_GENERATION, getRefreshRemainingMs } from './marketStock';
 import { getVehicleValuation } from './marketValue';
@@ -24,7 +25,7 @@ export function getBuyRequirement(state: GameState, listing: MarketListing): str
   if (state.cashYen < listing.askingPriceYen) return 'Not enough cash.';
   return null;
 }
-export function buyMarketVehicle(state: GameState, listingId: string, expectedGeneration: number, expectedPriceYen: number): GameState {
+export const buyMarketVehicle = withCollectionProgress(function buyMarketVehicle(state: GameState, listingId: string, expectedGeneration: number, expectedPriceYen: number): GameState {
   assertMarket(state);
   if (state.market.generation !== expectedGeneration) throw new Error('Stock changed. Review this listing again.');
   const listing = state.market.listings.find((entry) => entry.id === listingId);
@@ -41,7 +42,7 @@ export function buyMarketVehicle(state: GameState, listingId: string, expectedGe
       vehicleName: vehicle.name, amountYen: listing.askingPriceYen } };
   return { ...state, cashYen: state.cashYen - listing.askingPriceYen, market,
     ownedVehicles: [...state.ownedVehicles, vehicle], activeVehicleId: state.activeVehicleId ?? vehicle.instanceId };
-}
+});
 
 export function getSellRequirement(state: GameState, instanceId: string): string | null {
   const vehicle = state.ownedVehicles.find((car) => car.instanceId === instanceId);
@@ -54,7 +55,7 @@ export function getSellRequirement(state: GameState, instanceId: string): string
 }
 /** Captures the whole target, including stored parts/mileage, plus the active choice shown in the preview. */
 export const getVehicleSaleKey = (vehicle: PlayerVehicle, activeVehicleId: string | null) => JSON.stringify([vehicle, activeVehicleId]);
-export function sellMarketVehicle(state: GameState, instanceId: string, expectedKey: string, expectedOfferYen: number, replacementId: string | null): GameState {
+export const sellMarketVehicle = withCollectionProgress(function sellMarketVehicle(state: GameState, instanceId: string, expectedKey: string, expectedOfferYen: number, replacementId: string | null): GameState {
   assertMarket(state);
   const reason = getSellRequirement(state, instanceId);
   if (reason) throw new Error(reason);
@@ -73,7 +74,7 @@ export function sellMarketVehicle(state: GameState, instanceId: string, expected
       vehicleName: vehicle.name, amountYen: valuation.offerYen } };
   return { ...state, cashYen: add(state.cashYen, valuation.offerYen), market, ownedVehicles: remaining,
     activeVehicleId: activeSale ? replacementId : state.activeVehicleId };
-}
+});
 export function getRefreshRequirement(state: GameState, nowMs: number): string | null {
   if (state.selectedStarterId === null) return 'Choose your starter first.';
   if (!integer(nowMs) || nowMs > Number.MAX_SAFE_INTEGER - MARKET_REFRESH_MS) return 'Device clock is invalid.';
@@ -82,7 +83,7 @@ export function getRefreshRequirement(state: GameState, nowMs: number): string |
   if (getRefreshRemainingMs(state.market, nowMs) > 0) return 'Stock refresh is not ready yet.';
   return null;
 }
-export function refreshMarket(state: GameState, expectedGeneration: number, nowMs: number): GameState {
+export const refreshMarket = withCollectionProgress(function refreshMarket(state: GameState, expectedGeneration: number, nowMs: number): GameState {
   assertMarket(state);
   if (state.market.generation !== expectedGeneration) throw new Error('Stock changed. Review the current batch first.');
   const reason = getRefreshRequirement(state, nowMs);
@@ -90,4 +91,4 @@ export function refreshMarket(state: GameState, expectedGeneration: number, nowM
   const generation = state.market.generation + 1;
   return { ...state, market: { ...state.market, generation, refreshedAtMs: nowMs,
     listings: createMarketListings(generation, state.ownedVehicles.map((car) => car.instanceId)) } };
-}
+});

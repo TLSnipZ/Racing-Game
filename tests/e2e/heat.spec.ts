@@ -123,7 +123,7 @@ test('a stale browser tab cannot pay the same patrol fine twice',async({page,con
 });
 test('released v6 market and paid race migrate unchanged, without retrospective police',async({page})=>{
   await seedRaw(page,JSON.stringify(v6));await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);
-  const {heat,...old}=await read(page);expect(old).toEqual(v6.state);expect(heat).toEqual(createHeatState());
+  const {collection,heat,...old}=await read(page);expect(old).toEqual(v6.state);expect(heat).toEqual(createHeatState());
   await tab(page,'Races');await page.getByRole('button',{name:'SETTLE RESULT',exact:true}).click();expect((await read(page)).heat).toEqual(createHeatState());
 });
 test('malformed current Heat is protected, not replaced by a clean record',async({page})=>{
