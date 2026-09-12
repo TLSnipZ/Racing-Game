@@ -1,0 +1,34 @@
+name: Prepare isolated Phase 9 workspace
+on:
+  push:
+    branches: [prepare/9-heat-workspace]
+permissions:
+  contents: read
+jobs:
+  workspace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: 35f8b8f13b0c6ac3459bea215c81608684f57cb0
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm install
+      - name: Package pinned source and dependencies only
+        run: |
+          mkdir -p /tmp/phase9-workspace
+          git archive HEAD | tar -x -C /tmp/phase9-workspace
+          cp -a node_modules /tmp/phase9-workspace/
+          cp package-lock.json /tmp/phase9-workspace/local-dependency-lock.json
+          cp "$(command -v node)" /tmp/phase9-workspace/node-local
+          tar -czf /tmp/phase9-workspace.tgz -C /tmp/phase9-workspace .
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase9-workspace
+          path: /tmp/phase9-workspace.tgz
+          retention-days: 1
+          compression-level: 0
