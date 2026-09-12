@@ -1,0 +1,47 @@
+name: Materialize checked Phase 12 source
+on:
+  push:
+    branches: [prepare/12-empire-apply]
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+      - name: Apply source edits with before and after checksums
+        run: |
+          python3 - <<'PY'
+          import base64, hashlib, json, lzma
+          from pathlib import Path
+          encoded = ''.join(Path(f'.phase12/chunk-{i}.txt').read_text().strip() for i in range(5))
+          changes = json.loads(lzma.decompress(base64.b64decode(encoded, validate=True)))
+          assert len(changes) == 46
+          for name, item in changes.items():
+              path = Path(name)
+              assert not path.is_absolute() and '..' not in path.parts
+              assert path.parts[0] in ('src', 'tests', 'docs', 'README.md', 'CHANGELOG.md')
+              before = path.read_text(encoding='utf-8') if path.exists() else ''
+              assert hashlib.sha256(before.encode()).hexdigest() == item['sha256'], name
+              after = before
+              for start, end, replacement in reversed(item['edits']):
+                  assert 0 <= start <= end <= len(before)
+                  after = after[:start] + replacement + after[end:]
+              assert hashlib.sha256(after.encode()).hexdigest() == item['result'], name
+              path.parent.mkdir(parents=True, exist_ok=True)
+              path.write_text(after, encoding='utf-8')
+              print('Verified', name)
+          PY
+      - name: Store only the clean application tree
+        run: |
+          git rm -r -- .phase12 .github/workflows/phase12-materialize.yml
+          git add -A
+          tree=$(git write-tree)
+          test "$tree" = 80b4934fa91c9eae3e7fc1ebfbd5715f4fe57360
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'build: materialize verified Phase 12 source tree'
+          git push origin HEAD:refs/heads/staging/12-empire-materialized
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
