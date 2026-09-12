@@ -27,6 +27,9 @@ const BASE_RATINGS: Record<string, { grip: number; handling: number; braking: nu
   'pico-rs': { grip: 48, handling: 62, braking: 45, reliability: 88 },
   'tora-85': { grip: 50, handling: 66, braking: 47, reliability: 78 },
   'rz-t': { grip: 51, handling: 52, braking: 49, reliability: 68 },
+  'senda-s': { grip: 54, handling: 60, braking: 55, reliability: 84 },
+  'pico-r': { grip: 57, handling: 67, braking: 56, reliability: 82 },
+  'estate-gt': { grip: 55, handling: 53, braking: 57, reliability: 82 },
 };
 const clampRating = (value: number) => Math.max(0, Math.min(100, value));
 export function getInstalledUpgrades(vehicle: PlayerVehicle): PartDefinition[] {

@@ -10,7 +10,7 @@ test('blocked webfonts and high balances never overflow the 320px garage or shar
     cashYen: Number.MAX_SAFE_INTEGER, reputation: Number.MAX_SAFE_INTEGER };
   await seed(page, game);
   const before = await stored(page);
-  for (const section of ['Garage', 'Jobs', 'City', 'Races', 'Workshop', 'Saves'] as const) {
+  for (const section of ['Garage', 'Jobs', 'City', 'Races', 'Workshop', 'Market', 'Saves'] as const) {
     await tab(page, section);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await expect(page.getByTestId('cash')).toBeInViewport();

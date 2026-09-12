@@ -112,7 +112,10 @@ test('pending race survives export, confirmed reset and import with the same dea
 });
 test('v4 tuned saves migrate without losing parts, balances, receipts or the pending delivery', async ({ page }) => {
   await seedRaw(page, JSON.stringify(legacyV4)); await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);
-  const next = await read(page); const { racing, ...oldFields } = next; expect(oldFields).toEqual(legacyV4.state); expect(racing.nextRunId).toBe(1);
+  const next = await read(page); const { racing, market, ...oldFields } = next;
+  expect(oldFields).toEqual(legacyV4.state); expect(racing.nextRunId).toBe(1);
+  expect(market.generation).toBe(0); expect(market.purchasedCount).toBe(0);
+  expect(market.soldCount).toBe(0); expect(market.lastTrade).toBeNull(); expect(market.listings).toHaveLength(6);
   await expect(page.getByTestId('garage-power')).toContainText('110'); await tab(page, 'Races'); await briefing(page);
   await expect(page.getByRole('button', { name: 'ENTER RACE' })).toBeDisabled();
 });

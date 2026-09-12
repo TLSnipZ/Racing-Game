@@ -11,7 +11,7 @@ const yen = (value: number) => `¥${value.toLocaleString('en-US')}`;
 export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onService, onResume }: {
   game: GameState; blocked: boolean; jobReady: boolean; raceReady: boolean;
   onRaces: (district: DistrictId) => void; onJobs: (district: DistrictId) => void;
-  onService: (section: 'garage' | 'workshop') => void; onResume: (section: 'jobs' | 'races') => void;
+  onService: (section: 'garage' | 'workshop' | 'market') => void; onResume: (section: 'jobs' | 'races') => void;
 }) {
   const [selectedId, setSelectedId] = useState<DistrictId>('east-ward');
   const district = findDistrict(selectedId)!;
@@ -72,7 +72,7 @@ export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onSe
             {jobs.length > 0 && <button type="button" className="secondaryButton" disabled={cannotOpen}
               onClick={() => { if (!cannotOpen) onJobs(district.id); }}>BROWSE {district.name.toUpperCase()} JOBS <ArrowUpRight size={15} /></button>}
             {district.services.map((service) => <button key={service} type="button" className="secondaryButton" disabled={cannotOpen}
-              onClick={() => { if (!cannotOpen) onService(service); }}><Wrench size={15} /> {service === 'workshop' ? 'OPEN MERCER WORKSHOP' : 'OPEN YOUR GARAGE'}</button>)}
+              onClick={() => { if (!cannotOpen) onService(service); }}><Wrench size={15} /> {service === 'market' ? 'OPEN USED CAR MARKET' : service === 'workshop' ? 'OPEN MERCER WORKSHOP' : 'OPEN YOUR GARAGE'}</button>)}
           </div>
         </>}
       </article>
