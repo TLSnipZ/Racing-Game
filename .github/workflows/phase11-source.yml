@@ -1,0 +1,22 @@
+name: Prepare pinned Phase 11 source
+on:
+  push:
+    branches: [prepare/11-advanced-source]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: c8c9bcf2850dd18a70094eac26dc36096c2436c2
+          persist-credentials: false
+      - name: Archive released source only
+        run: git archive --format=tar.gz HEAD -o /tmp/phase11-source.tgz
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase11-source
+          path: /tmp/phase11-source.tgz
+          retention-days: 1
