@@ -1,0 +1,21 @@
+name: Prepare pinned Phase 13 source
+on:
+  push:
+    branches: [prepare/13-rivals-source]
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ad95122ba573256a2556aef1b03971df9be218a6
+          persist-credentials: false
+      - run: git archive --format=tar.gz HEAD > /tmp/phase13-source.tar.gz
+      - uses: actions/upload-artifact@v5
+        with:
+          name: phase13-source
+          path: /tmp/phase13-source.tar.gz
+          retention-days: 1
