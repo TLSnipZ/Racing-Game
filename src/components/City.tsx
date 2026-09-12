@@ -9,8 +9,8 @@ import { getRaceRequirement } from '../domain/racing';
 import type { GameState } from '../domain/types';
 
 const yen = (value: number) => `¥${value.toLocaleString('en-US')}`;
-export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onService, onResume, onEmpire, onSpecialist }: {
-  onEmpire: () => void;
+export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onService, onResume, onEmpire, onRivals, onSpecialist }: {
+  onEmpire: () => void; onRivals: () => void;
   game: GameState; blocked: boolean; jobReady: boolean; raceReady: boolean;
   onRaces: (district: DistrictId) => void; onJobs: (district: DistrictId) => void;
   onSpecialist: (view: SpecialistView) => void;
@@ -34,6 +34,7 @@ export function City({ game, blocked, jobReady, raceReady, onRaces, onJobs, onSe
     <div className="cityIntro"><MapPin size={19} aria-hidden="true" /><p>
       {next ? `Next access: Level ${next.minLevel}. Earn reputation in jobs or races to open more of the city.` : 'Every current district is open. Club invitations keep their own level requirements.'}
       <small>This is a directory, not travel. Exploring costs nothing and never starts an activity.</small></p></div>
+    <div className="rivalCityNotice"><p>The clubs were the introduction. Meet four rival crews and the Midnight Council in Races.</p><button type="button" className="secondaryButton" onClick={onRivals}>MEET RIVAL CREWS</button></div>
     {(job || race) && <aside className="cityPending" aria-label="Pending city activity">
       <div><span>{jobReady || raceReady ? 'READY TO COLLECT' : 'ACTIVITY IN PROGRESS'}</span>
         <strong>{race ? race.eventName : 'Your accepted job'}</strong><p>Your original vehicle and deadline are unchanged.</p></div>

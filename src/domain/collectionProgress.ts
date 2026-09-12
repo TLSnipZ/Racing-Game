@@ -22,6 +22,7 @@ export function getCollectedModelIds(state: LegacyGameStateV8): string[] {
 export function getAchievementValue(state: LegacyGameStateV8, achievement: AchievementDefinition): number {
   const models = getCollectedModelIds(state);
   switch (achievement.metric) {
+    case 'rival-win': return state.racing.records.some((record) => record.eventId === achievement.raceEventId && record.wins > 0) ? 1 : 0;
     case 'starter': return state.selectedStarterId === null ? 0 : 1;
     case 'starter-trio': return STARTER_CARS.filter((car) => models.includes(car.id)).length;
     case 'original-six': return USED_VEHICLE_CATALOG.filter((car) => models.includes(car.id)).length;

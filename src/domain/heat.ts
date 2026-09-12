@@ -18,6 +18,7 @@ export function getHeatActivityRequirement(state: GameState): string | null {
 export function getUndergroundRequirement(state: GameState, event: RaceEvent, mode: RaceMode): string | null {
   if (mode === 'standard') return null;
   if (mode !== 'underground') return 'Unknown race mode.';
+  if (event.tier === 'Boss') return 'Rival challenges use Standard stakes only. No extra Heat.';
   if (!Object.hasOwn(UNDERGROUND_HEAT_V1, event.id)) return 'This free practice event does not offer Underground stakes.';
   if (state.playerLevel < UNDERGROUND_MIN_LEVEL) return `Underground stakes require Level ${UNDERGROUND_MIN_LEVEL}.`;
   if (state.heat.value >= UNDERGROUND_ENTRY_LIMIT) return 'Heat is 85 or higher. Cool down before another Underground run.';

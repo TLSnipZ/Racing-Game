@@ -54,7 +54,7 @@ test('achievement filters show locked, claimed and ready states without claiming
   await seed(page,claimAchievement(initial(),'first-ride'));const before=await stored(page);await tab(page,'Collection');await section(page,'Achievements');
   await page.getByRole('combobox',{name:'Achievement status'}).selectOption('claimed');await expect(page.locator('.achievementCard')).toHaveCount(1);
   await page.getByRole('combobox',{name:'Achievement category'}).selectOption('racing');await expect(page.locator('.achievementCard')).toHaveCount(0);
-  await page.getByRole('button',{name:'RESET ACHIEVEMENT FILTERS'}).click();await expect(page.locator('.achievementCard')).toHaveCount(18);expect(await stored(page)).toBe(before);
+  await page.getByRole('button',{name:'RESET ACHIEVEMENT FILTERS'}).click();await expect(page.locator('.achievementCard')).toHaveCount(23);expect(await stored(page)).toBe(before);
 });
 test('a fifth job only earns its badge on claim; the reward is still manual and the timer can finish in Collection',async({page})=>{
   await clock(page);let state=initial();for(let i=0;i<4;i++){state=startJob(state,'garage-shift',T-100000);state=claimJob(state,state.economy.activeJob!.runId,T-85000);}

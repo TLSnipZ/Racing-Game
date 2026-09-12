@@ -93,8 +93,8 @@ describe('Model history and four non-mechanical rarity tiers', () => {
 });
 
 describe('Achievements and exact-once manual reward claims', () => {
-  it('defines 18 unique bounded fixed prizes with visible criteria', () => {
-    expect(ACHIEVEMENTS).toHaveLength(18); expect(new Set(ACHIEVEMENTS.map((a) => a.id)).size).toBe(18);
+  it('defines 23 unique bounded fixed prizes with visible criteria', () => {
+    expect(ACHIEVEMENTS).toHaveLength(23); expect(new Set(ACHIEVEMENTS.map((a) => a.id)).size).toBe(23);
     for (const item of ACHIEVEMENTS) { expect(item.requirement.length).toBeGreaterThan(10); expect(item.target).toBeGreaterThan(0); expect(Number.isSafeInteger(item.rewardYen)).toBe(true); }
   });
   it.each(ACHIEVEMENTS)('$id historical badge remains earned even after its live criterion goes away', (item) => {

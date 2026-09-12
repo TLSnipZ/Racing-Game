@@ -46,6 +46,7 @@ import './styles/phase9.css';
 import './styles/phase10.css';
 import './styles/phase11.css';
 import './styles/phase12.css';
+import './styles/phase13.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
@@ -56,6 +57,7 @@ export function App() {
   const [empireSection, setEmpireSection] = useState<EmpireView>('businesses');
   const [marketSection, setMarketSection] = useState<'dealer' | SpecialistView>('dealer');
   const [workshopSection, setWorkshopSection] = useState<'parts' | 'restoration'>('parts');
+  const [raceBoard, setRaceBoard] = useState<'open' | 'rivals'>('open');
   const [raceDistrict, setRaceDistrict] = useState<CityFilter>('all');
   const [jobDistrict, setJobDistrict] = useState<CityFilter>('all');
   const [raceDiscipline, setRaceDiscipline] = useState<RaceDiscipline | 'all'>('all');
@@ -87,13 +89,13 @@ export function App() {
   }
   function openDistrict(section: 'jobs' | 'races', district: DistrictId) {
     if (blocked || !getDistrictAccess(game, district).unlocked) return;
-    if (section === 'races') { setRaceDistrict(district); setRaceDiscipline('all'); }
+    if (section === 'races') { setRaceBoard('open'); setRaceDistrict(district); setRaceDiscipline('all'); }
     else setJobDistrict(district);
     selectTab(section);
   }
   function returnToGarage() {
     setEmpireSection('businesses'); setMarketSection('dealer'); setWorkshopSection('parts');
-    setRaceDistrict('all'); setJobDistrict('all'); setRaceDiscipline('all');
+    setRaceBoard('open'); setRaceDistrict('all'); setJobDistrict('all'); setRaceDiscipline('all');
     setSelectedId(null); setViewEpoch((value) => value + 1); setTab('garage');
     document.getElementById('tab-garage')?.focus({ preventScroll: true });
   }
@@ -102,7 +104,7 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9 phase10 phase11 phase12">
+  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9 phase10 phase11 phase12 phase13">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
     <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} heatReady={heatReady} specialistReady={specialistReady} empireReady={empireOutput.totalYen > 0 && !empireOutput.clockError} onHeat={openHeat} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
@@ -151,7 +153,8 @@ export function App() {
         onCancel={(id) => session.command((current) => cancelJob(current, id))} />}
     </div>
     <div id="panel-races" role="tabpanel" aria-labelledby="tab-races" tabIndex={0} hidden={tab !== 'races'} className="sectionPanel">
-      {hasStarted && <Races key={viewEpoch} game={game} now={now} blocked={blocked}
+      {hasStarted && <Races key={viewEpoch} game={game} now={now} blocked={blocked} view={raceBoard} onView={setRaceBoard}
+        onClaim={(id) => session.command((current) => claimAchievement(current, id))}
         districtFilter={raceDistrict} onDistrictFilter={setRaceDistrict} discipline={raceDiscipline} onDiscipline={setRaceDiscipline}
         onStart={(eventId, vehicleId, key, mode, expectedHeat) => session.command((current) => startRace(current, eventId, vehicleId, key, Date.now(), mode, expectedHeat))}
         onSettle={(id) => session.command((current) => settleRace(current, id, Date.now()))}
@@ -205,10 +208,10 @@ export function App() {
         onFinish={(id) => session.command((current) => finishLayLow(current, id, Date.now()))}
         onCancel={(id) => session.command((current) => cancelLayLow(current, id))}
         onPay={(id, fine) => session.command((current) => payPoliceFine(current, id, fine))} />}
-      {hasStarted && <City key={viewEpoch} game={game} blocked={blocked} jobReady={jobReady} raceReady={raceReady}
+      {hasStarted && <City key={viewEpoch} onRivals={() => { setRaceBoard('rivals'); selectTab('races'); }} game={game} blocked={blocked} jobReady={jobReady} raceReady={raceReady}
         onRaces={(district) => openDistrict('races', district)} onJobs={(district) => openDistrict('jobs', district)}
         onService={selectTab} onResume={selectTab} onEmpire={() => { setEmpireSection('businesses'); selectTab('empire'); }} onSpecialist={openSpecialist} />}
     </div>
-    <footer>PHASE 12 // EMPIRE & AUTOMATION · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
+    <footer>PHASE 13A // RIVAL CREWS & BOSSES · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }
