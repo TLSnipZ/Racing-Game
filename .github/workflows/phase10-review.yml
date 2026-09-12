@@ -1,0 +1,44 @@
+name: Materialize Phase 10 browser review fixes
+on:
+  push:
+    branches: [prepare/10-collection-review]
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v6
+      - name: Apply and validate reviewed source changes
+        run: |
+          python3 - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+          changes = json.loads(Path('.phase10-review.json').read_text())
+          assert len(changes) == 7
+          for name, item in changes.items():
+              path = Path(name)
+              assert not path.is_absolute() and '..' not in path.parts
+              assert path.parts[0] in ('src', 'tests', 'README.md', 'CHANGELOG.md')
+              before = path.read_text(encoding='utf-8')
+              assert hashlib.sha256(before.encode()).hexdigest() == item['sha256'], name
+              after = before
+              for start, end, replacement in reversed(item['edits']):
+                  assert 0 <= start <= end <= len(before)
+                  after = after[:start] + replacement + after[end:]
+              assert hashlib.sha256(after.encode()).hexdigest() == item['result'], name
+              path.write_text(after, encoding='utf-8')
+              print('Verified', name)
+          PY
+      - name: Record clean application tree only
+        run: |
+          git rm .phase10-review.json .github/workflows/phase10-review.yml
+          git add -A
+          test "$(git write-tree)" = e8408e2a18cddbc7c4e080e0428df6bc91e5b5f6
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix: apply reviewed collection layout and migration expectations'
+          git push origin HEAD:refs/heads/staging/10-collection-reviewed
+          git rev-parse HEAD
+          git rev-parse HEAD^{tree}
