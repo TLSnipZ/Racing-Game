@@ -1,3 +1,4 @@
+import type { AdvancedState } from './advancedTypes';
 import type { CollectionState } from './collectionTypes';
 import type { HeatState } from './heatTypes';
 import type { StarterCar } from '../data/starters';
@@ -34,4 +35,5 @@ export type LegacyGameStateV4 = Omit<LegacyGameStateV3, 'ownedVehicles'> & { own
 export type LegacyGameStateV5 = LegacyGameStateV4 & { racing: RacingState };
 export type LegacyGameStateV6 = LegacyGameStateV5 & { market: MarketState };
 export type LegacyGameStateV7 = LegacyGameStateV6 & { heat: HeatState };
-export type GameState = LegacyGameStateV7 & { collection: CollectionState };
+export type LegacyGameStateV8 = LegacyGameStateV7 & { collection: CollectionState };
+export type GameState = LegacyGameStateV8 & { advanced: AdvancedState };

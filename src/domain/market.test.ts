@@ -27,8 +27,8 @@ function sell(game: GameState, id: string, replacement: string | null = null) {
 describe('Vehicle catalog, stock v1 and valuation', () => {
   it('has six models, three explicit manufacturers and all four body types', () => {
     expect(USED_VEHICLE_CATALOG).toHaveLength(6); expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.id)).size).toBe(6);
-    expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.manufacturer)).size).toBe(Object.keys(MANUFACTURERS).length);
-    expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.bodyType)).size).toBe(Object.keys(BODY_TYPES).length);
+    expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.manufacturer)).size).toBe(3);
+    expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.bodyType)).size).toBe(4);
   });
   it('keeps the original starter choice, prices and stats untouched', () => {
     for (const [id, cash] of [['pico-rs', 18000], ['tora-85', 8000], ['rz-t', 2000]] as const) {

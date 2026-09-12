@@ -1,3 +1,4 @@
+import { getReservedVehicleIds } from '../domain/garageCapacity';
 import { RarityBadge } from './RarityBadge';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRightLeft, Check, KeyRound, LockKeyhole, RefreshCw, Search, Store, X } from 'lucide-react';
@@ -95,6 +96,7 @@ export function Market({ game, blocked, visible, onBuy, onSell, onRefresh, onGar
       <div className="marketRefresh"><button type="button" className="secondaryButton" disabled={blocked || !!refreshReason}
         onClick={() => open({ kind: 'refresh', generation: game.market.generation })}><RefreshCw size={14} /> REQUEST NEW STOCK</button>
         <small data-testid="market-refresh-status">{refreshReason?.includes('clock') ? refreshReason : seconds > 0 ? `Available in ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}` : 'Available now · free · manual refresh'}</small></div></div>
+    {getReservedVehicleIds(game).length > 0 && <p className="specialistNote">1 garage space reserved for an incoming specialist car. Purchases include that reservation in the 12-space limit.</p>}
     {game.market.lastTrade && <p className="marketReceipt" data-testid="market-last-trade"><Check size={15} /> LAST TRADE #{game.market.lastTrade.transactionId}: {game.market.lastTrade.kind === 'buy' ? 'BOUGHT' : 'SOLD'} {game.market.lastTrade.vehicleName} · {yen(game.market.lastTrade.amountYen)}</p>}
     {feedback && <div role="status" className="workshopFeedback">{feedback} <button className="secondaryButton" type="button" onClick={onGarage}>OPEN GARAGE</button></div>}
     <div className="marketModes" role="group" aria-label="Market mode"><button type="button" aria-pressed={mode === 'stock'} onClick={() => setMode('stock')}><Store size={16} /> USED STOCK <b>{game.market.listings.length}</b></button>
@@ -155,6 +157,7 @@ export function Market({ game, blocked, visible, onBuy, onSell, onRefresh, onGar
         <p>{findVehicleDefinition(listing.vehicle.catalogId)?.description}</p><p>Factory setup. This exact vehicle will be added to your garage. {game.activeVehicleId === null ? 'It becomes active because your garage was empty.' : 'It does not replace or automatically activate over your current car.'}</p>
         <div className="marketQuote"><span>Total purchase price</span><strong>{yen(review.price)}</strong><span>{game.cashYen >= review.price ? `${yen(game.cashYen - review.price)} remains` : `${yen(review.price - game.cashYen)} more needed`}</span></div></>}
       {review?.kind === 'sell' && saleCar && saleQuote && <><h4>{saleCar.name}</h4><VehicleFacts vehicle={saleCar} />
+        {['import', 'auction', 'barn'].includes(findVehicleDefinition(saleCar.catalogId)?.acquisition ?? '') && <p className="workshopWarning">This specialist source is one-time. Selling this car does not reopen its import, auction or barn offer. Collection history remains.</p>}
         <dl className="marketValueBreakdown"><div><dt>Vehicle trade-in (65% of reference valuation)</dt><dd>{yen(saleQuote.baseOfferYen)}</dd></div>
           <div><dt>Purchased parts allowance (20% of retail)</dt><dd>{yen(saleQuote.partsOfferYen)}</dd></div></dl>
         <div className="marketQuote"><span>You receive</span><strong>{yen(review.price)}</strong><span>All amounts rounded down to ¥100 for trade-in</span></div>

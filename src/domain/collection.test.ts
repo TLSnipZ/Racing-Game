@@ -34,8 +34,8 @@ function fourCorners() { return ['east-ward-shakedown', 'dockyard-402', 'hakuro-
 const raw = (state: unknown, version = SAVE_VERSION) => JSON.stringify({ version, savedAt: 1000, state });
 
 describe('Model history and four non-mechanical rarity tiers', () => {
-  it('has eight unique models, four rarity tiers, exactly six dealer models and two separate Icons', () => {
-    expect(VEHICLE_CATALOG).toHaveLength(8); expect(new Set(VEHICLE_CATALOG.map((m) => m.id)).size).toBe(8);
+  it('has eleven unique models, four rarity tiers, exactly six dealer models and two separate Icons', () => {
+    expect(VEHICLE_CATALOG).toHaveLength(11); expect(new Set(VEHICLE_CATALOG.map((m) => m.id)).size).toBe(11);
     expect(USED_VEHICLE_CATALOG).toHaveLength(6); expect(ICON_OFFERS).toHaveLength(2);
     expect(new Set(VEHICLE_CATALOG.map((m) => m.rarity)).size).toBe(4);
     expect(findVehicleDefinition('tora-85')!.hp).toBeLessThan(findVehicleDefinition('pico-r')!.hp);
@@ -79,7 +79,7 @@ describe('Model history and four non-mechanical rarity tiers', () => {
     const before = serializeSave(state, 1000);
     expect(listCollectionModels(state, { ...createBookFilters(), manufacturer: 'hoshino', rarity: 'legendary', status: 'collected' }).map((m) => m.id)).toEqual(['tora-85']);
     expect(listCollectionModels(state, { ...createBookFilters(), status: 'owned' })).toHaveLength(2);
-    expect(listCollectionModels(state, { ...createBookFilters(), status: 'missing' })).toHaveLength(5);
+    expect(listCollectionModels(state, { ...createBookFilters(), status: 'missing' })).toHaveLength(8);
     expect(listCollectionModels(state, { ...createBookFilters(), query: 'does not exist' })).toEqual([]);
     expect(serializeSave(state, 1000)).toBe(before);
   });
@@ -197,8 +197,8 @@ describe('Milestone Icon purchases', () => {
 
 describe('Save v8 and historical evidence', () => {
   it('preserves EVERY v7 field, including risk, market and deadlines, with no retrospective payout', () => {
-    const before=JSON.stringify(v7); const next=deserializeSave(before); const {collection,...old}=next.state;
-    expect(next.version).toBe(8); expect(next.savedAt).toBe(v7.savedAt); expect(old).toEqual(v7.state); expect(JSON.stringify(v7)).toBe(before);
+    const before=JSON.stringify(v7); const next=deserializeSave(before); const {collection,advanced:_advanced,...old}=next.state;
+    expect(next.version).toBe(9); expect(next.savedAt).toBe(v7.savedAt); expect(old).toEqual(v7.state); expect(JSON.stringify(v7)).toBe(before);
     expect(collection.collectedModelIds).toEqual(['tora-85','pico-rs']); expect(collection.unlockedAchievementIds).toEqual(expect.arrayContaining(['first-ride','five-jobs','night-shift','first-part','first-race','first-purchase']));
     expect(collection.claimedAchievementIds).toEqual([]); expect(collection.purchasedIconIds).toEqual([]);
     expect(importSaveCode('KAGEHAMA1-'+Buffer.from(before).toString('base64url')).state).toEqual(next.state);
@@ -215,7 +215,7 @@ describe('Save v8 and historical evidence', () => {
     const state=rich(); const car=buy(state,'senda-s').ownedVehicles.at(-1)!;
     const history=sell(buy(state,'senda-s'),car.instanceId); const {collection:_collection,...old}=history;
     const migrated=migrateCollection(old); expect(migrated.collection.collectedModelIds).not.toContain('senda-s');
-    expect(progress(migrated,'first-sale').unlocked).toBe(true);
+    expect(progress({ ...migrated, advanced: state.advanced },'first-sale').unlocked).toBe(true);
   });
   it('unknown historical models are kept without an invented rarity or dealer offer', () => {
     const old=structuredClone(v7); old.state.ownedVehicles[1].catalogId='unknown-historical';

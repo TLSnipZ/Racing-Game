@@ -24,13 +24,13 @@ test('Collection is an eighth real tab, unlocks after the starter, and participa
   await expect(page.getByTestId('collection-ready-badge')).toHaveText('1');
   await page.getByRole('button',{name:'OPEN COLLECTION BOOK'}).click();await expect(page.getByRole('tab',{name:'Collection',exact:true})).toBeFocused();
   await expect(page.getByRole('tabpanel')).toHaveAttribute('id','panel-collection');await expect(page.getByRole('tabpanel')).toHaveCount(1);
-  await expect(page.getByTestId('collected-count')).toHaveText('1 / 8');await page.keyboard.press('ArrowLeft');await expect(page.getByRole('tab',{name:'Market',exact:true})).toBeFocused();
+  await expect(page.getByTestId('collected-count')).toHaveText('1 / 11');await page.keyboard.press('ArrowLeft');await expect(page.getByRole('tab',{name:'Market',exact:true})).toBeFocused();
   await page.keyboard.press('ArrowRight');await expect(page.getByRole('tab',{name:'Collection',exact:true})).toBeFocused();
   await page.keyboard.press('End');await expect(page.getByRole('tab',{name:'Saves',exact:true})).toBeFocused();
 });
 test('viewing, subviews, categories and tabs do not write, reveal rewards automatically or collect dealer stock',async({page})=>{
   await seed(page,initial());const before=await stored(page);await tab(page,'Collection');
-  await expect(page.locator('.bookCard')).toHaveCount(8);await expect(page.locator('.bookCollected')).toHaveCount(1);
+  await expect(page.locator('.bookCard')).toHaveCount(11);await expect(page.locator('.bookCollected')).toHaveCount(1);
   await section(page,'Achievements');await section(page,'Icon Showroom');await tab(page,'Market');await tab(page,'Collection');
   expect(await stored(page)).toBe(before);await expect(page.getByTestId('cash')).toHaveText('¥18,000');
 });
@@ -41,7 +41,7 @@ test('combined book filters distinguish ever collected, currently owned and miss
   await page.getByRole('combobox',{name:'Collection ownership'}).selectOption('collected');await expect(page.locator('.bookCard')).toHaveCount(1);await expect(page.locator('.bookCard')).toContainText('no longer parked');
   await tab(page,'Jobs');await tab(page,'Collection');await expect(page.getByRole('combobox',{name:'Collection manufacturer'})).toHaveValue('hoshino');
   await page.getByRole('combobox',{name:'Collection ownership'}).selectOption('owned');await expect(page.locator('.bookCard')).toHaveCount(0);await expect(page.locator('.collectorEmpty')).toContainText('No models match');
-  await page.getByRole('button',{name:'RESET COLLECTION FILTERS'}).click();await expect(page.locator('.bookCard')).toHaveCount(8);expect(await stored(page)).toBe(before);
+  await page.getByRole('button',{name:'RESET COLLECTION FILTERS'}).click();await expect(page.locator('.bookCard')).toHaveCount(11);expect(await stored(page)).toBe(before);
 });
 test('one manual achievement claim updates cash once, not XP or activity income, and remains claimed on reload',async({page})=>{
   await seed(page,initial());await tab(page,'Collection');await section(page,'Achievements');
@@ -107,7 +107,7 @@ test('a stale second tab cannot claim the same achievement twice',async({page,co
   await expect(page.locator('.recoveryPanel')).toContainText('Another tab');await expect(page.getByRole('button',{name:'Claim Financially Questionable',exact:true})).toBeDisabled();expect((await read(other)).cashYen).toBe(19000);
 });
 test('v7 migration preserves every old field and recognises only provable achievements without money or free cars',async({page})=>{
-  await seedRaw(page,JSON.stringify(v7));const state=await read(page);const {collection,...old}=state;
+  await seedRaw(page,JSON.stringify(v7));const state=await read(page);const {advanced:_advanced,collection,...old}=state;
   expect(old).toEqual(v7.state);expect(collection.claimedAchievementIds).toEqual([]);expect(collection.purchasedIconIds).toEqual([]);expect(collection.collectedModelIds).toEqual(['tora-85','pico-rs']);
   await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);await tab(page,'Collection');await section(page,'Achievements');await expect(page.getByRole('button',{name:'Claim Overtime, Overtake'})).toBeEnabled();
 });

@@ -1,3 +1,4 @@
+import { createAdvancedState } from './advancedState';
 import { withCollectionProgress } from './collectionProgress';
 import { createEmptyCollectionState } from './collectionProgress';
 import { createMarketState } from './marketStock';
@@ -11,7 +12,7 @@ import type { GameState, PlayerVehicle } from './types';
 export const STARTING_CASH_YEN = 50000;
 export function createNewGameState(): GameState {
   return { cashYen: STARTING_CASH_YEN, playerLevel: 1, reputation: 0, selectedStarterId: null,
-    ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState(), market: createMarketState(), heat: createHeatState(), collection: createEmptyCollectionState() };
+    ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState(), market: createMarketState(), heat: createHeatState(), collection: createEmptyCollectionState(), advanced: createAdvancedState() };
 }
 export function createPlayerVehicle(starterId: string, instanceId: string): PlayerVehicle {
   const starter = STARTER_CARS.find((car) => car.id === starterId);
