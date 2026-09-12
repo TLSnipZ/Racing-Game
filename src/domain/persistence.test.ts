@@ -1,3 +1,4 @@
+import { createHeatState } from './heat';
 import { createMarketState } from './marketStock';
 import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
@@ -25,13 +26,13 @@ describe('Current save and historical compatibility', () => {
   it('keeps the portable transport prefix unchanged', () => expect(exportSaveCode(purchased())).toMatch(/^KAGEHAMA1-/));
   it('migrates the actual Phase 2 shape without losing any original field', () => {
     const before = JSON.stringify(legacy); const result = deserializeSave(before);
-    expect(result).toEqual({ ...legacy, version: SAVE_VERSION, state: { ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(), market: createMarketState(),
+    expect(result).toEqual({ ...legacy, version: SAVE_VERSION, state: { ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(), heat: createHeatState(), market: createMarketState(),
       ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) } });
     expect(JSON.stringify(legacy)).toBe(before);
   });
   it('migrates a fixed v2 fixture without a reward, reset or changed active car', () => {
     const before = JSON.stringify(legacyV2); const result = deserializeSave(before);
-    expect(result).toEqual({ ...legacyV2, version: SAVE_VERSION, state: { ...legacyV2.state, economy: createEconomyState(), racing: createRacingState(), market: createMarketState(),
+    expect(result).toEqual({ ...legacyV2, version: SAVE_VERSION, state: { ...legacyV2.state, economy: createEconomyState(), racing: createRacingState(), heat: createHeatState(), market: createMarketState(),
       ownedVehicles: legacyV2.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) } });
     expect(JSON.stringify(legacyV2)).toBe(before);
   });
@@ -103,7 +104,7 @@ describe('Tuning migration and invalid imports', () => {
   it('preserves a fixed v3 pending delivery, previous receipt, car and balance exactly', () => {
     const before = JSON.stringify(legacyV3); const result = deserializeSave(before);
     expect(result.version).toBe(SAVE_VERSION); expect(result.savedAt).toBe(legacyV3.savedAt);
-    expect(result.state).toEqual({ ...legacyV3.state, racing: createRacingState(), market: createMarketState(), ownedVehicles: legacyV3.state.ownedVehicles.map((v) => ({ ...v, tuning: createVehicleTuning() })) });
+    expect(result.state).toEqual({ ...legacyV3.state, racing: createRacingState(), heat: createHeatState(), market: createMarketState(), ownedVehicles: legacyV3.state.ownedVehicles.map((v) => ({ ...v, tuning: createVehicleTuning() })) });
     expect(JSON.stringify(legacyV3)).toBe(before);
   });
   it('keeps v3 portable codes and jobs without claiming rewards', () => {

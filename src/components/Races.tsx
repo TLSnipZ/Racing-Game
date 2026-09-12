@@ -1,3 +1,6 @@
+import { getUndergroundRequirement } from '../domain/heat';
+import { boostedPrize, createRaceHeatContract, LAY_LOW_MS } from '../domain/heatRules';
+import type { RaceMode } from '../domain/heatTypes';
 import { useEffect, useRef, useState } from 'react';
 import { CarFront, Flag, Trophy, X } from 'lucide-react';
 import { DistrictFilter } from './DistrictFilter';
@@ -41,13 +44,15 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
   districtFilter: CityFilter; onDistrictFilter: (value: CityFilter) => void;
   discipline: RaceDiscipline | 'all'; onDiscipline: (value: RaceDiscipline | 'all') => void;
   game: GameState; now: number; blocked: boolean;
-  onStart: (eventId: string, vehicleId: string, buildKey: string) => boolean;
+  onStart: (eventId: string, vehicleId: string, buildKey: string, mode: RaceMode, expectedHeat: number) => boolean;
   onSettle: (runId: number) => boolean; onCancel: (runId: number) => boolean;
 }) {
   const setDiscipline = onDiscipline;
   const [targetId, setTargetId] = useState<string | null>(null);
-  const [review, setReview] = useState<{ eventId: string; vehicleId: string; buildKey: string } | null>(null);
+  const [review, setReview] = useState<{ eventId: string; vehicleId: string; buildKey: string; heatAtReview: number } | null>(null);
   const [reviewError, setReviewError] = useState('');
+  const [mode, setMode] = useState<RaceMode>('standard');
+  const submitting = useRef(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const target = game.ownedVehicles.find((v) => v.instanceId === targetId)
     ?? game.ownedVehicles.find((v) => v.instanceId === game.activeVehicleId) ?? game.ownedVehicles[0];
@@ -64,21 +69,28 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
   let build: RaceBuild | null = null;
   let reason: string | null = null;
   if (reviewedEvent && reviewedVehicle && review) {
-    reason = blocked ? 'Resolve the save warning before entering.' : getRaceRequirement(game, reviewedEvent, reviewedVehicle.instanceId);
+    reason = blocked ? 'Resolve the save warning before entering.' : getRaceRequirement(game, reviewedEvent, reviewedVehicle.instanceId, mode);
+    if (mode === 'underground' && review.heatAtReview !== game.heat.value) reason = 'Heat changed. Reopen the race briefing.';
     try {
       build = getVehicleRaceBuild(reviewedVehicle);
       if (getRaceBuildKey(reviewedVehicle) !== review.buildKey) reason = 'This build changed. Reopen the race briefing.';
     } catch { reason = 'This vehicle exceeds the supported race-build range.'; }
   }
+  const undergroundReason = reviewedEvent ? getUndergroundRequirement(game, reviewedEvent, 'underground') : null;
+  const risk = reviewedEvent && mode === 'underground' && !undergroundReason ? createRaceHeatContract(reviewedEvent, game.heat.value) : null;
+  const shownPrizes = reviewedEvent?.prizes.map((prize) => risk ? boostedPrize(prize) : prize) ?? [];
   function close() { dialog.current?.close(); setReview(null); setReviewError(''); }
   function start() {
-    if (!review || reason || !build) return;
-    if (onStart(review.eventId, review.vehicleId, review.buildKey)) {
-      close(); window.scrollTo({ top: 0, behavior: 'auto' });
-    } else setReviewError('Entry was not applied. Close this briefing and check the global save warning.');
+    if (!review || reason || !build || submitting.current) return;
+    submitting.current = true;
+    try {
+      if (onStart(review.eventId, review.vehicleId, review.buildKey, mode, review.heatAtReview)) {
+        close(); window.scrollTo({ top: 0, behavior: 'auto' });
+      } else setReviewError('Entry was not applied. Close this briefing and check the global save warning.');
+    } finally { queueMicrotask(() => { submitting.current = false; }); }
   }
   function withdraw() {
-    if (active && window.confirm(`Withdraw from ${active.eventName}?\n\nThe ${yen(active.entryFeeYen)} entry fee is NOT refunded. No prize, reputation or mileage will be awarded.`)) onCancel(active.runId);
+    if (active && window.confirm(`Withdraw from ${active.eventName}?\n\nThe ${yen(active.entryFeeYen)} entry fee is NOT refunded. No prize, reputation or mileage will be awarded.${active.heatRisk ? `\nHeat remains at ${active.heatRisk.heatAfter}. ${active.heatRisk.policeFineYen ? `The announced patrol alert (${yen(active.heatRisk.policeFineYen)} or a free 60s pause) still applies.` : ''}` : ''}`)) onCancel(active.runId);
   }
   if (!target) return <section className="garageEmpty"><h2>No race vehicle.</h2><p>Choose a starter in Garage or import a collection in Saves.</p></section>;
   return <section className="racesPanel" aria-labelledby="races-title">
@@ -87,11 +99,13 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
     <div className="raceCareer" aria-label="Race career"><div><span>FINISHES</span><strong data-testid="races-completed">{game.racing.completedRaces}</strong></div>
       <div><span>WINS / PODIUMS</span><strong>{game.racing.wins} / {game.racing.podiums}</strong></div>
       <div><span>PRIZE MONEY</span><strong>{yen(game.racing.totalEarnedYen)}</strong></div>
-      <div><span>NET RACING INCOME</span><strong>{yen(game.racing.totalEarnedYen - game.racing.totalEntryFeesYen)}</strong></div></div>
+      <div><span>NET BEFORE POLICE</span><strong>{yen(game.racing.totalEarnedYen - game.racing.totalEntryFeesYen)}</strong></div></div>
 
     {active && <article className={`activeRace ${ready ? 'raceReady' : ''}`} aria-label="Current race">
       <div className="activeRaceTitle"><div><span className="eyebrow">{DISCIPLINE_LABELS[active.discipline]}</span><h3>{active.eventName}</h3>
         <p>{active.entrants[3].vehicleName} · {active.entrants[3].build.powerPs} PS · Entry {yen(active.entryFeeYen)} already paid</p></div><Trophy size={25} /></div>
+      {active.heatRisk && <p className="raceRiskTerms">UNDERGROUND · Heat {active.heatRisk.heatBefore} → {active.heatRisk.heatAfter} already applied. Bonus prizes are included.
+        <small>{active.heatRisk.policeFineYen ? `Patrol alert on settlement or withdrawal: ${yen(active.heatRisk.policeFineYen)} fine OR a free 60s Lay low pause. No automatic fine.` : 'No patrol alert for this entry.'}</small></p>}
       <RacePlayback race={active} now={now} />
       {ready && <><FinishTable race={active} /><p className="racePayout" data-testid="pending-race-payout">
         Position {getPlayerPosition(active)} · Prize {yen(active.prizes[getPlayerPosition(active) - 1].yen)} · +{active.prizes[getPlayerPosition(active) - 1].reputation} REP
@@ -106,6 +120,8 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
       <p className="racePayout" role="status" data-testid="race-receipt">{yen(receipt.rewardYen)} + {receipt.reputationReward} REP paid
         <small>Entry: {yen(receipt.race.entryFeeYen)} · Net: {yen(receipt.rewardYen - receipt.race.entryFeeYen)} · +{receipt.race.distanceKm} km on the assigned car</small>
         {receipt.levelAfter > receipt.levelBefore && <strong>LEVEL UP! Level {receipt.levelAfter}</strong>}</p>
+      {receipt.race.heatRisk && <p className="raceRiskTerms">UNDERGROUND RESULT · Bonus already included. Heat applied once at entry.
+        <small>{receipt.race.heatRisk.policeFineYen ? 'This run carried an announced patrol alert. Resolve pending alerts in City; paid fines are tracked there separately from gross race prizes.' : 'No patrol alert was issued for this entry.'}</small></p>}
       <FinishTable race={receipt.race} />
       <details className="raceSectorDetails"><summary>Your sector times · see where your build matters</summary><dl>{receipt.race.sectors.map((sector, i) =>
         <div key={i}><dt>{sector.name} <small>{sector.profile}</small></dt><dd>{seconds(receipt.race.entrants[3].sectorTimesMs[i])}</dd></div>)}</dl></details>
@@ -132,7 +148,7 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
         <p className="raceRecord">{record ? `Best: P${record.bestPosition} · ${seconds(record.bestTimeMs)} · ${record.finishes} finishes` : `${event.distanceKm} km on settlement · No personal record yet`}</p>
         <p className="partRequirement">{requirement ?? 'Available · inspect entry, rivals and all payouts below'}</p>
         <button type="button" className="secondaryButton" aria-label={`Briefing ${event.name}`} disabled={blocked} onClick={() => {
-          try { setReviewError(''); setReview({ eventId: event.id, vehicleId: target.instanceId, buildKey: getRaceBuildKey(target) }); }
+          try { setReviewError(''); setMode('standard'); setReview({ eventId: event.id, vehicleId: target.instanceId, buildKey: getRaceBuildKey(target), heatAtReview: game.heat.value }); }
           catch { setReviewError('This vehicle exceeds the supported race-build range. Choose another car.'); }
         }}>RACE BRIEFING</button>
       </article>;
@@ -140,7 +156,7 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
     {getDistrictRaces(districtFilter, discipline).length === 0 && <p className="districtEmpty" role="status">No events match these district and discipline filters.
       <button type="button" className="secondaryButton" onClick={() => { onDistrictFilter('all'); onDiscipline('all'); }}>Clear race filters</button></p>}
     {reviewError && !review && <p className="gameError" role="alert">{reviewError}</p>}
-    <p className="tuningNote">These are abstract simulated times, not real driving physics. There are no random failures, police, fuel bills, wear, damage or vehicle loss. Final race artwork and audio come later.</p>
+    <p className="tuningNote">These are abstract simulated times, not real driving physics. Underground stakes add announced Heat and patrol alerts. Standard entry is unchanged. No random failures, fuel bills, wear, damage or vehicle loss. Final race artwork and audio come later.</p>
 
     <dialog className="partDialog raceDialog" ref={dialog} aria-labelledby="race-briefing-title" onClose={() => setReview(null)} onCancel={() => setReview(null)}>
       {reviewedEvent && reviewedVehicle && <>
@@ -149,9 +165,19 @@ export function Races({ game, now, blocked, onStart, onSettle, onCancel, distric
         <h3 id="race-briefing-title">{reviewedEvent.name}</h3><p>{reviewedEvent.focus}</p>
         <div className="raceBriefBuild"><strong>YOUR ENTRY · {reviewedVehicle.name}</strong><span>{build ? `${build.powerPs} PS · ${build.weightKg} kg · Grip ${build.grip} · Handling ${build.handling} · Braking ${build.braking}` : 'Unsupported build'}</span>
           <small>Current engine/transmission condition and reliability influence sector performance, but this race causes no new wear.</small></div>
+        <fieldset className="raceModeChoice"><legend>Choose your stakes · resets to Standard for every briefing</legend>
+          <label><input type="radio" aria-label="Standard stakes" name="race-mode" value="standard" checked={mode === 'standard'} onChange={() => setMode('standard')} /><span>Standard stakes<small>Original prizes · no new Heat or patrol alert.</small></span></label>
+          <label><input type="radio" aria-label="Underground stakes" name="race-mode" value="underground" checked={mode === 'underground'} disabled={!!undergroundReason} onChange={() => setMode('underground')} /><span>Underground stakes<small>+50% prize money · +25% REP (rounded down) · Heat on entry. Level 3+.</small></span></label>
+          {undergroundReason && <small>{undergroundReason}</small>}
+        </fieldset>
+        {risk && <div className="raceRiskTerms" data-testid="race-risk-preview"><strong>Heat {risk.heatBefore} → {risk.heatAfter} · +{risk.heatAfter - risk.heatBefore} on entry</strong>
+          <p>{risk.policeFineYen ? `Announced patrol alert: ${yen(risk.policeFineYen)} fine OR a free ${LAY_LOW_MS / 1000}s Lay low pause after settlement or withdrawal.` : 'No patrol alert at this projected Heat.'}</p>
+          <small>Heat and the announced alert remain if you withdraw. No random reroll or car loss. A fine is only paid after a separate confirmation; net below shows both choices.</small></div>}
         <h4>The grid</h4><ul className="rivalList">{reviewedEvent.rivals.map((rival) => <li key={rival.name}><strong>{rival.name}</strong><span>{rival.vehicleName} · {rival.build.powerPs} PS / {rival.build.weightKg} kg</span></li>)}</ul>
-        <table className="comparisonTable"><caption>Entry {yen(reviewedEvent.entryFeeYen)} · charged once. Gross prizes and net earnings:</caption>
-          <thead><tr><th>Place</th><th>Prize</th><th>Net</th><th>REP</th></tr></thead><tbody>{reviewedEvent.prizes.map((prize, i) => <tr key={i}><th scope="row">{i + 1}</th><td>{yen(prize.yen)}</td><td>{yen(prize.yen - reviewedEvent.entryFeeYen)}</td><td>+{prize.reputation}</td></tr>)}</tbody></table>
+        <div className="raceBriefTable"><table className="comparisonTable"><caption>Entry {yen(reviewedEvent.entryFeeYen)} · charged once. {risk ? 'Bonus included in prizes.' : 'Original prizes.'}</caption>
+          <thead><tr><th>Place</th><th>Prize</th><th>{risk?.policeFineYen ? 'Net / wait' : 'Net'}</th>{!!risk?.policeFineYen && <th>Net / fine</th>}<th>REP</th></tr></thead>
+          <tbody>{shownPrizes.map((prize, i) => <tr key={i}><th scope="row">{i + 1}</th><td>{yen(prize.yen)}</td><td>{yen(prize.yen - reviewedEvent.entryFeeYen)}</td>
+            {!!risk?.policeFineYen && <td>{yen(prize.yen - reviewedEvent.entryFeeYen - risk.policeFineYen)}</td>}<td>+{prize.reputation}</td></tr>)}</tbody></table></div>
         <p className="tuningNote">3-second start + {reviewedEvent.playbackMs / 1000}-second replay. Same build and same rivals produce the same result; no random rerolls. Withdrawals do not refund the entry fee.</p>
         <p className="previewCost">{yen(reviewedEvent.entryFeeYen)} entry · {yen(Math.max(0, game.cashYen - reviewedEvent.entryFeeYen))} remaining</p>
         {reason && <p className="workshopWarning">{reason}</p>}{reviewError && <p className="gameError" role="alert">{reviewError}</p>}

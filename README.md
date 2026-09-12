@@ -6,17 +6,36 @@ A pre-alpha car-collection, street-racing and automotive-empire game set in a fi
 
 > Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
 
-**Current milestone: Phase 8 — Used Car Market** · **Save schema: v6** · **Next numbered system: Phase 9 — Heat**
+**Current milestone: Phase 9 — Heat & Police** · **Save schema: v7** · **Next numbered system: Phase 10 — Collection**
 
 **Graphics & Audio I remains an open, separate presentation milestone.** The district map, car profiles and race replay are functional placeholders, not final artwork.
 
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Market & save contract](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Heat & save contract](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
 ## Play now
 
 Choose one of three inexpensive starters with **¥50,000**, earn yen and reputation, fit performance parts and test your build against three rivals. The first complete loop is **starter → job → income → tuning → race → reward**.
 
-### New: the used car market
+### New: Heat & Police
+
+The fixed HUD now shows **driver Heat (0–100)** alongside your existing cash/level/REP/XP. Click it to open the Heat controls in **City**. Heat does not belong to one vehicle, so swapping or selling cars does not remove it.
+
+**Standard stakes remain unchanged.** Each race briefing defaults to Standard, preserving original prizes and adding no Heat. At Level 3, the seven paid events also offer **Underground stakes**: **+50% gross prize money and +25% REP**, rounded down, in exchange for a clearly shown Heat increase. The free East Ward Shakedown remains standard-only. Car performance, rivals, entry fee and race duration do not change.
+
+| Heat | Attention |
+| --- | --- |
+| 0–24 | Clear |
+| 25–49 | Noticed |
+| 50–74 | Watched |
+| 75–100 | Crackdown |
+
+Heat is added **once at entry**. Underground gains range from 12 to 22 by event. If projected Heat reaches 50, the briefing announces a **¥1,500 patrol alert**; at 75 it is **¥3,000**. The alert appears when the race is settled **or withdrawn**. There is no random roll and **no automatic fine**. Choose either a separately confirmed fine (−30 Heat) or a **free 60-second Lay low pause (−40 Heat)**. Both clear the alert. The free option always remains available with zero cash. New jobs/races wait until the alert is resolved; browsing, trading and parked-car tuning remain available.
+
+You can also lay low voluntarily between activities. Finish the saved pause manually when ready; closing the page retains its deadline but never auto-completes or repeats it. Cancelling removes no Heat and leaves any patrol alert intact. **Each claimed legal job removes up to 6 Heat**, without changing its money/REP rewards. There is no passive Heat decay or penalty on ordinary jobs. At **85+ Heat**, cool down before another Underground entry; Standard events remain accessible once any alert/pause is resolved.
+
+The race briefing shows gross and net returns for both the free-wait and fine choices. Race career net is before police payments; total paid fines are separately shown in City. No cars are confiscated, no damage/debt is introduced and pre-update races receive no retrospective penalties. Full rules and event gains: [PHASE9.md](docs/PHASE9.md).
+
+### The used car market
 
 **Market** is a seventh separate tab, available after the starter choice, with shortcuts from Garage and East Ward. Browse six individual offers, inspect the exact vehicle and confirm **BUY VEHICLE**. A purchased car joins your garage without replacing or activating over the current car. Its listing is consumed once; the displayed year, mileage, conditions and ID are kept.
 
@@ -73,9 +92,9 @@ Open **Races**, choose an owned vehicle and inspect **RACE BRIEFING** before con
 
 There are **8 events**. **East Ward Shakedown is fee-free at Level 1** after the starter choice. Other events require Levels 2–6 and charge a displayed fee. The briefing shows gross prizes and net earnings for all four positions. A poor finish can pay less than the entry fee; withdrawal does **not** refund it.
 
-The same build, condition, rivals and course give the same times: reloading does not reroll defeat. These are abstract game ratings, **not real driving physics or a freely driven 3D game**. There are no random breakdowns, fuel costs, new wear, damage, police or car loss. Race model v1, fees and rewards are unchanged in Phase 7. See [PHASE6.md](docs/PHASE6.md).
+The same build, condition, rivals and course give the same times: reloading does not reroll defeat. These are abstract game ratings, **not real driving physics or a freely driven 3D game**. There are no random breakdowns, fuel costs, new wear, damage or car loss. Standard entry keeps the original terms; optional Underground stakes add the announced Heat/bonus/patrol rules above. Race model v1 and entry fees stay unchanged. See [PHASE6.md](docs/PHASE6.md).
 
-Only **one job OR race** can be pending, including a finished but unclaimed activity. The assigned car stays locked for tuning until settlement/cancellation. Another parked car can be tuned. Changing the active garage vehicle never swaps the existing race participant.
+Only **one job, race OR Lay low pause** can be pending, including a finished but unclaimed activity. The assigned car stays locked for tuning until settlement/cancellation. Another parked car can be tuned. Changing the active garage vehicle never swaps the existing race participant.
 
 ### Categorised workshop
 
@@ -105,17 +124,17 @@ You receive **one starter, not three free cars**. Additional examples of all thr
 
 ## Interface and saves
 
-Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop, Market and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races without paying them automatically. Global save warnings link to recovery tools.
+Cash, level, REP, XP progress and top navigation remain visible while scrolling. **Garage, Jobs, City, Races, Workshop, Market and Saves** are isolated sections. Arrow keys, Home and End operate the tab row; narrow screens can scroll the row horizontally. READY badges announce finished jobs/races and Lay low pauses without applying them automatically. The City ALERT badge and global notice expose pending patrol decisions. Global save warnings link to recovery tools.
 
 District inspection, garage search/sort, market preferences and activity filters survive ordinary tab switches. City links intentionally choose the destination district and clear a conflicting race-discipline filter. Reload, successful import and reset return to Garage and default city/filter views. These view preferences are not gameplay save data.
 
 Progress autosaves in **this browser on this device**, under `kagehama:save`. Gameplay commands must write successfully **before** publishing visible changes. Tab/filter/XP rendering does not write gameplay data.
 
-- **Export:** generate a `KAGEHAMA1-...` code in Saves, including exact market stock/refresh cooldown/trades, tuning, race records and any pending activity.
+- **Export:** generate a `KAGEHAMA1-...` code in Saves, including exact market stock/refresh cooldown/trades, tuning, race records, Heat, patrol alerts and any pending activity.
 - **Import:** review the confirmation before replacing the whole save, not merging it.
-- **Reset:** confirmation returns to ¥50,000, Level 1 and starter selection, clearing cars, parts, jobs, races and market history and restoring the initial unpurchased stock. Export a backup first.
+- **Reset:** confirmation returns to ¥50,000, Level 1 and starter selection, clearing cars, parts, jobs, races, Heat, patrol alerts, Lay low and market history and restoring the initial unpurchased stock. Export a backup first.
 
-**Valid Save v1–v5 data migrate to v6 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Migration adds unpurchased market stock and empty trade history, not free owned cars or retrospective income. Missing or malformed market fields in a v6 save are rejected, not silently rerolled.
+**Valid Save v1–v6 data migrate to v7 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. There are no retrospective penalties.
 
 Leaving the page readies at most the one pending activity. Its original build, rivals, prizes and deadline remain saved. Returning never auto-repeats or pays it. Importing an older code deliberately restores an older snapshot. No cloud account or server-authoritative anti-cheat exists; device clocks/codes remain user-controlled.
 
@@ -133,7 +152,7 @@ Unreadable/newer saves are protected, not deleted. Failed writes cannot consume 
 - [x] **7 — Kagehama City:** district overview, access previews, filtered activity shortcuts and HUD XP.
 - [ ] **Graphics & Audio I:** separate targeted presentation pass; not completed by the schematic city view.
 - [x] **8 — Car Market:** six models, individual saved stock, buy/sell, 12-space capacity, explicit refresh, valuation and combined brand/year/body-type filters; Save v6.
-- [ ] **9 — Heat:** police pressure and underground risk/reward.
+- [x] **9 — Heat & Police:** optional Underground stakes, explicit Heat/bonus/fine terms, deterministic patrol choices, free/paid recovery and Save v7 compatibility.
 - [ ] **10 — Collection:** rarities, Collection Book, achievements and Icon cars.
 - [ ] **11 — Advanced Cars:** auctions, imports, barn finds and restoration.
 - [ ] **12 — Empire & Automation:** businesses, staff/crew, delegated routines and capped offline production.
@@ -158,7 +177,7 @@ PowerShell: use `npm.cmd` / `npx.cmd` when script policy blocks `.ps1` shims; no
 
 ## Architecture
 
-`src/data/` contains vehicle/job/part/race catalogs and explicit model/district metadata. `src/domain/` contains pure market/gameplay commands, valuation and stock generation, read-only city selectors, progression, derived stats, model-v1 racing, validation and migrations. `src/hooks/` owns durable session writes and the presentation clock. `src/components/` provides the shared HUD and views. Historical fixtures remain in `tests/fixtures/`; production-build regressions are in `tests/e2e/`.
+`src/data/` contains vehicle/job/part/race catalogs and explicit model/district metadata. `src/domain/` contains pure market/gameplay commands, valuation and stock generation, read-only city selectors, progression, derived stats, model-v1 racing, versioned Heat risk and recovery, validation and migrations. `src/hooks/` owns durable session writes and the presentation clock. `src/components/` provides the shared HUD and views. Historical fixtures remain in `tests/fixtures/`; production-build regressions are in `tests/e2e/`.
 
 ## Principles
 

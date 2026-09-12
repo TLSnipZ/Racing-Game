@@ -1,3 +1,4 @@
+import type { HeatState } from './heatTypes';
 import type { StarterCar } from '../data/starters';
 import type { JobId } from '../data/jobs';
 import type { VehicleTuning } from './tuningTypes';
@@ -30,4 +31,5 @@ export type EconomyState = {
 export type LegacyGameStateV3 = LegacyGameStateV2 & { economy: EconomyState };
 export type LegacyGameStateV4 = Omit<LegacyGameStateV3, 'ownedVehicles'> & { ownedVehicles: PlayerVehicle[] };
 export type LegacyGameStateV5 = LegacyGameStateV4 & { racing: RacingState };
-export type GameState = LegacyGameStateV5 & { market: MarketState };
+export type LegacyGameStateV6 = LegacyGameStateV5 & { market: MarketState };
+export type GameState = LegacyGameStateV6 & { heat: HeatState };

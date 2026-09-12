@@ -53,6 +53,7 @@ export function Jobs({ game, now, blocked, onStart, onClaim, onCancel, districtF
       </article>;
     })}</div>
     {getDistrictJobs(districtFilter).length === 0 && <p className="districtEmpty" role="status">No job contacts in this district yet. Select All job districts to see current offers.</p>}
+    <p className="heatFootnote">Each claimed legal job removes up to 6 Heat. No police fine is added to these jobs.</p>
     <p className="jobNote">All three starters can do delivery work. Jobs add mileage, not damage, fuel bills or Heat. Spend your earnings on performance parts in Workshop.</p>
   </section>;
 }
