@@ -20,7 +20,7 @@ export const SLOT_LABELS: Record<TuningSlot, string> = {
   intake: 'Intake', exhaust: 'Exhaust', ecu: 'ECU', tires: 'Tires', suspension: 'Suspension',
   brakes: 'Brakes', weight: 'Weight reduction', turbo: 'Turbo',
 };
-const ALL = ['pico-rs', 'tora-85', 'rz-t'] as const;
+const ALL = ['pico-rs', 'tora-85', 'rz-t', 'mira-s', 'nami-gt', 'riku-tourer'] as const;
 export const PARTS: readonly PartDefinition[] = [
   { id: 'aoba-panel-filter', name: 'Panel Filter', brand: 'aoba', slot: 'intake', priceYen: 6000, minLevel: 1,
     description: 'An affordable first breath of extra power. No simulated reliability penalty.', compatibleCatalogIds: ALL,

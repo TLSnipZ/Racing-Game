@@ -74,7 +74,7 @@ const initial = () => purchaseStarter(createNewGameState(), 'pico-rs', 'pico-1')
     const before = serializeSave(pending, 2000);
     for (const id of DISTRICT_IDS) { getDistrictAccess(pending, id); getDistrictRaces(id); getDistrictJobs(id); getDistrictRecords(pending, id); }
     getLevelProgress(pending.reputation, pending.playerLevel);
-    expect(serializeSave(pending, 2000)).toBe(before); expect(SAVE_VERSION).toBe(5);
+    expect(serializeSave(pending, 2000)).toBe(before); expect(SAVE_VERSION).toBe(6);
     expect(importSaveCode(exportSaveCode(pending)).state).toEqual(pending);
   });
   it('loads the frozen old tuned save with the same access without adding fake city rewards', () => {

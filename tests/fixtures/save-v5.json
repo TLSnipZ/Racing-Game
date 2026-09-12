@@ -1,0 +1,78 @@
+{
+  "version": 5,
+  "savedAt": 1789128005000,
+  "state": {
+    "cashYen": 9500,
+    "playerLevel": 2,
+    "reputation": 20,
+    "selectedStarterId": "pico-rs",
+    "activeVehicleId": "legacy-tuned-pico",
+    "ownedVehicles": [
+      {
+        "instanceId": "legacy-tuned-pico",
+        "catalogId": "pico-rs",
+        "name": "Hoshino Pico RS",
+        "year": 1994,
+        "engine": "1.5L NA I4",
+        "drive": "FWD",
+        "hp": 105,
+        "weightKg": 890,
+        "odometerKm": 168420,
+        "engineCondition": 88,
+        "bodyCondition": 82,
+        "transmissionCondition": 83,
+        "originality": 96,
+        "installedParts": [
+          "Factory intake",
+          "Factory exhaust",
+          "Factory ECU",
+          "Factory suspension",
+          "Road tires"
+        ],
+        "tuning": {
+          "purchasedPartIds": [
+            "aoba-panel-filter"
+          ],
+          "installedBySlot": {
+            "intake": "aoba-panel-filter"
+          }
+        }
+      }
+    ],
+    "economy": {
+      "nextRunId": 7,
+      "completedJobs": 5,
+      "totalEarnedYen": 7500,
+      "activeJob": {
+        "runId": 6,
+        "jobId": "parts-run",
+        "vehicleId": "legacy-tuned-pico",
+        "startedAtMs": 1789128000000,
+        "finishesAtMs": 1789128030000,
+        "rewardYen": 3000,
+        "reputationReward": 8,
+        "distanceKm": 6
+      },
+      "lastReceipt": {
+        "runId": 5,
+        "jobId": "garage-shift",
+        "rewardYen": 1500,
+        "reputationReward": 4,
+        "levelBefore": 1,
+        "levelAfter": 2
+      }
+    },
+    "racing": {
+      "nextRunId": 1,
+      "activeRace": null,
+      "completedRaces": 0,
+      "cancelledRaces": 0,
+      "wins": 0,
+      "podiums": 0,
+      "totalEntryFeesYen": 0,
+      "totalEarnedYen": 0,
+      "lastResult": null,
+      "records": []
+    }
+  }
+}
