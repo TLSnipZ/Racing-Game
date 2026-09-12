@@ -24,6 +24,9 @@ export function isVehicleTuning(value: unknown, catalogId: string): value is Veh
   });
 }
 const BASE_RATINGS: Record<string, { grip: number; handling: number; braking: number; reliability: number }> = {
+  'mira-s': { grip: 54, handling: 58, braking: 55, reliability: 86 },
+  'nami-gt': { grip: 61, handling: 67, braking: 59, reliability: 82 },
+  'riku-tourer': { grip: 54, handling: 47, braking: 57, reliability: 89 },
   'pico-rs': { grip: 48, handling: 62, braking: 45, reliability: 88 },
   'tora-85': { grip: 50, handling: 66, braking: 47, reliability: 78 },
   'rz-t': { grip: 51, handling: 52, braking: 49, reliability: 68 },

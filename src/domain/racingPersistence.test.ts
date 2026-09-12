@@ -1,3 +1,4 @@
+import { createMarketState } from './marketStock';
 import { Buffer } from 'node:buffer';
 import { describe, expect, it } from 'vitest';
 import legacyV4 from '../../tests/fixtures/save-v4.json';
@@ -14,8 +15,8 @@ const finished = () => { const state = pending(); return settleRace(state, 1, st
 describe('Save v5 race contract and frozen v4 fixture', () => {
   it('migrates a tuned v4 car and pending delivery without changing any prior field', () => {
     const before = JSON.stringify(legacyV4); const save = deserializeSave(before);
-    expect(save.version).toBe(5); expect(save.savedAt).toBe(legacyV4.savedAt);
-    expect(save.state).toEqual({ ...legacyV4.state, racing: createRacingState() }); expect(JSON.stringify(legacyV4)).toBe(before);
+    expect(save.version).toBe(SAVE_VERSION); expect(save.savedAt).toBe(legacyV4.savedAt);
+    expect(save.state).toEqual({ ...legacyV4.state, market: createMarketState(), racing: createRacingState() }); expect(JSON.stringify(legacyV4)).toBe(before);
   });
   it('accepts a v4 KAGEHAMA1 code without resetting tuning or paying a pending job', () => {
     const code = SAVE_CODE_PREFIX + Buffer.from(JSON.stringify(legacyV4)).toString('base64url');
