@@ -1,3 +1,5 @@
+import { createHeatState } from './heat';
+import { isHeatLinked, isHeatState } from './heatValidation';
 import { createEconomyState, isEconomyState } from './economy';
 import { createVehicleTuning } from './tuning';
 import { isRecord, isText, isInteger, isLegacyVehicle, isPlayerVehicle } from './vehicleValidation';
@@ -5,9 +7,9 @@ import { createMarketState } from './marketStock';
 import { isMarketState } from './marketValidation';
 import { createRacingState } from './racing';
 import { isRacingState } from './racingValidation';
-import type { GameState, LegacyGameStateV1, LegacyGameStateV2, LegacyGameStateV3, LegacyGameStateV4, LegacyGameStateV5 } from './types';
+import type { GameState, LegacyGameStateV1, LegacyGameStateV2, LegacyGameStateV3, LegacyGameStateV4, LegacyGameStateV5, LegacyGameStateV6 } from './types';
 
-export const SAVE_VERSION = 6;
+export const SAVE_VERSION = 7;
 export const SAVE_STORAGE_KEY = 'kagehama:save';
 // The transport stays v1; the envelope inside it has its own schema version.
 export const SAVE_CODE_PREFIX = 'KAGEHAMA1-';
@@ -65,9 +67,13 @@ function isGameStateV5(value: unknown): value is LegacyGameStateV5 {
   if (value.racing.activeRace && value.economy.activeJob) return false;
   return value.selectedStarterId !== null || value.racing.nextRunId === 1;
 }
-export function isGameState(value: unknown): value is GameState {
+function isGameStateV6(value: unknown): value is LegacyGameStateV6 {
   if (!isGameStateV5(value) || !('market' in value) || !isMarketState(value.market, value.ownedVehicles)) return false;
   return value.selectedStarterId !== null || (value.market.nextTransactionId === 1 && value.market.generation === 0);
+}
+export function isGameState(value: unknown): value is GameState {
+  return isGameStateV6(value) && 'heat' in value && isHeatState(value.heat)
+    && isHeatLinked(value.heat, value.racing, value.economy.activeJob, value.selectedStarterId !== null);
 }
 export function createSaveEnvelope(state: GameState, savedAt = Date.now()): SaveEnvelope {
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
@@ -84,7 +90,7 @@ export function deserializeSave(raw: string): SaveEnvelope {
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('Save data is not valid JSON.'); }
   if (!isRecord(parsed)) throw new Error('Save data is invalid.');
-  if (![1, 2, 3, 4, 5, SAVE_VERSION].includes(parsed.version as number)) {
+  if (![1, 2, 3, 4, 5, 6, SAVE_VERSION].includes(parsed.version as number)) {
     throw new Error(`Unsupported save version: ${String(parsed.version)}. Your stored data has not been deleted.`);
   }
   if (!isInteger(parsed.savedAt)) throw new Error('Save timestamp is invalid.');
@@ -106,9 +112,13 @@ export function deserializeSave(raw: string): SaveEnvelope {
     // Existing tuned builds, balances, pending jobs and receipts are untouched. No retrospective races or rewards.
     state = { ...state, racing: createRacingState() };
   }
-  if (parsed.version !== SAVE_VERSION) {
+  if ([1, 2, 3, 4, 5].includes(parsed.version as number)) {
     if (!isGameStateV5(state)) throw new Error('Legacy v5 save game state is invalid.');
     state = { ...state, market: createMarketState(state.ownedVehicles.map((vehicle) => vehicle.instanceId)) };
+  }
+  if (parsed.version !== SAVE_VERSION) {
+    if (!isGameStateV6(state) || state.racing.activeRace?.heatRisk || state.racing.lastResult?.race.heatRisk) throw new Error('Legacy v6 save game state is invalid.');
+    state = { ...state, heat: createHeatState() };
   }
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
   return { version: SAVE_VERSION, savedAt: parsed.savedAt, state };

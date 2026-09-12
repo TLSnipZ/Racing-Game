@@ -1,3 +1,5 @@
+import { HeatPanel } from './components/HeatPanel';
+import { startLayLow, finishLayLow, cancelLayLow, payPoliceFine } from './domain/heat';
 import { useLayoutEffect, useState } from 'react';
 import { ChevronRight, Database } from 'lucide-react';
 import { getDistrictAccess } from './domain/city';
@@ -29,6 +31,7 @@ import './styles/phase5.css';
 import './styles/phase6.css';
 import './styles/phase7.css';
 import './styles/phase8.css';
+import './styles/phase9.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
@@ -42,10 +45,15 @@ export function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = STARTER_CARS.find((car) => car.id === selectedId) ?? null;
   const hasStarted = game.selectedStarterId !== null || game.ownedVehicles.length > 0;
-  const now = useJobClock(game.economy.activeJob ?? game.racing.activeRace);
+  const now = useJobClock(game.economy.activeJob ?? game.racing.activeRace ?? game.heat.cooldown);
   const job = game.economy.activeJob;
   const jobReady = !!job && Number.isSafeInteger(now) && now >= job.startedAtMs && now >= job.finishesAtMs;
   const raceReady = isRaceReady(game.racing.activeRace, now);
+  const heatReady = !!game.heat.cooldown && Number.isSafeInteger(now) && now >= game.heat.cooldown.startedAtMs && now >= game.heat.cooldown.finishesAtMs;
+  function openHeat() {
+    setTab('city');
+    requestAnimationFrame(() => { const panel = document.getElementById('heat-controls'); panel?.focus({ preventScroll: true }); panel?.scrollIntoView({ block: 'start' }); });
+  }
   useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, [tab]);
   function selectTab(next: SectionTab) {
     if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city' || next === 'market') && !hasStarted) return;
@@ -68,9 +76,9 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8">
+  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8 phase9">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
-    <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} onTab={selectTab} />
+    <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} heatReady={heatReady} onHeat={openHeat} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
       <Database size={13} />{blocked ? 'SAVE PROTECTED · ACTION REQUIRED' : session.error ? 'SAVE FAILED · PLEASE CHECK BELOW'
         : session.savedAt ? `AUTOSAVED · ${new Date(session.savedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} · SAVE V${SAVE_VERSION}` : 'AUTOSAVE READY'}
@@ -80,6 +88,10 @@ export function App() {
       <button className="secondaryButton" type="button" onClick={() => { setTab('saves'); document.getElementById('tab-saves')?.focus({ preventScroll: true }); }}>OPEN SAVE TOOLS</button>
       {blocked && session.raw !== null && <details><summary>Show stored data for recovery</summary><textarea aria-label="Stored recovery data" readOnly value={session.raw} /></details>}
     </section>}
+    {hasStarted && tab !== 'city' && (game.heat.pendingStop || game.heat.cooldown) && <aside className="heatNotice" aria-label="Heat activity notice">
+      <p>{game.heat.cooldown ? heatReady ? 'Lay low is ready to finish. Your Heat reduction has not been claimed.' : 'You are laying low. Jobs and races resume after you finish or cancel.' : 'Patrol alert: choose the announced fine or a free Lay low pause in City.'}</p>
+      <button type="button" className="secondaryButton" onClick={openHeat}>OPEN HEAT CONTROLS</button>
+    </aside>}
     {/* Views retain filters/forms but hidden panels have no layout, focus or accessibility presence. */}
     <div id="panel-garage" role="tabpanel" aria-labelledby="tab-garage" tabIndex={0} hidden={tab !== 'garage'} className="sectionPanel">
       {hasStarted ? <Garage key={viewEpoch} game={game} blocked={blocked} onMarket={() => selectTab('market')} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
@@ -111,7 +123,7 @@ export function App() {
     <div id="panel-races" role="tabpanel" aria-labelledby="tab-races" tabIndex={0} hidden={tab !== 'races'} className="sectionPanel">
       {hasStarted && <Races key={viewEpoch} game={game} now={now} blocked={blocked}
         districtFilter={raceDistrict} onDistrictFilter={setRaceDistrict} discipline={raceDiscipline} onDiscipline={setRaceDiscipline}
-        onStart={(eventId, vehicleId, key) => session.command((current) => startRace(current, eventId, vehicleId, key, Date.now()))}
+        onStart={(eventId, vehicleId, key, mode, expectedHeat) => session.command((current) => startRace(current, eventId, vehicleId, key, Date.now(), mode, expectedHeat))}
         onSettle={(id) => session.command((current) => settleRace(current, id, Date.now()))}
         onCancel={(id) => session.command((current) => cancelRace(current, id))} />}
     </div>
@@ -132,10 +144,15 @@ export function App() {
         onReset={() => { const ok = session.resetGame(); if (ok) returnToGarage(); return ok; }} />
     </div>
     <div id="panel-city" role="tabpanel" aria-labelledby="tab-city" tabIndex={0} hidden={tab !== 'city'} className="sectionPanel">
+      {hasStarted && <HeatPanel key={`heat-${viewEpoch}`} game={game} now={now} blocked={blocked}
+        onStart={(heat, nextId) => session.command((current) => startLayLow(current, heat, nextId, Date.now()))}
+        onFinish={(id) => session.command((current) => finishLayLow(current, id, Date.now()))}
+        onCancel={(id) => session.command((current) => cancelLayLow(current, id))}
+        onPay={(id, fine) => session.command((current) => payPoliceFine(current, id, fine))} />}
       {hasStarted && <City key={viewEpoch} game={game} blocked={blocked} jobReady={jobReady} raceReady={raceReady}
         onRaces={(district) => openDistrict('races', district)} onJobs={(district) => openDistrict('jobs', district)}
         onService={selectTab} onResume={selectTab} />}
     </div>
-    <footer>PHASE 8 // USED CAR MARKET · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
+    <footer>PHASE 9 // HEAT & POLICE · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }

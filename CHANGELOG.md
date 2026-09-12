@@ -1,5 +1,17 @@
 # Changelog
 
+## Phase 9 — Heat & Police (2026-09-12)
+
+- Added a compact, labelled non-flashing driver Heat meter to the persistent HUD and recovery access through City; kept cash/level/REP/XP and seven isolated tabs.
+- Preserved Standard entry and the free practice event. Added explicit Level-3+ Underground stakes for seven paid races: 50% more gross yen, 25% more REP, with integer rounding and 12–22 Heat gained once at entry. Vehicle performance and model-v1 simulation are unchanged.
+- Stored versioned risk/base-prize terms at acceptance; showed projected Heat, both fine/wait options and net payouts before entry. Briefings always default to Standard.
+- Added deterministic patrol alerts at projected Heat 50/75, on settlement or withdrawal. No automatic payment: choose the shown ¥1,500/¥3,000 fine and −30 Heat or a free 60-second Lay low pause and −40 Heat.
+- Added saved manual Lay low, clock and double-claim guards, cancellation retaining an alert, global City alerts/readiness and zero-cash recovery. Existing legal job claims now remove up to 6 Heat while retaining their original rewards. No passive Heat decay.
+- Kept one driver activity at a time, including pauses and unresolved police decisions, without blocking prior race settlement or safe browsing/trading. Switching/selling cars does not remove Heat.
+- Added Save v7 migration, preserving all previous cars, parts, market stock, money, levels, paid race snapshots and job history. Existing codes/key remain unchanged. Added a frozen v6 snapshot produced by the released Phase 8 code; previous fixtures are unchanged.
+- Added threshold/mode/math/recovery/validation/legacy regressions and browser tests for stakes, confirmations, zero-cash recovery, failed writes, stale tabs, portable saves and responsive HUD/City/briefing views. Updated README, roadmap and Phase 9 contract.
+- No seizure, destruction, new wear, real chase physics, new vehicle catalog, automatic fines or debt. Graphics & Audio I remains open; next numbered system: Phase 10 — Collection.
+
 ## Phase 8 — Used Car Market (2026-09-12)
 
 - Added a seventh Market tab plus Garage and East Ward shortcuts; retained the sticky cash/level/REP/XP header and isolated views.

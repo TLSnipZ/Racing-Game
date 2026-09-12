@@ -1,3 +1,4 @@
+import { afterLegalJob, assertHeatState, getHeatActivityRequirement } from './heat';
 import { findJob, type JobDefinition } from '../data/jobs';
 import { getActiveVehicle } from './garage';
 import { levelForReputation } from './progression';
@@ -38,6 +39,7 @@ export function isEconomyState(value: unknown, vehicles: readonly Pick<PlayerVeh
 export function getJobRequirement(state: GameState, job: JobDefinition): string | null {
   if (state.selectedStarterId === null) return 'Choose your starter first.';
   if (state.racing.activeRace) return 'Settle or withdraw from your race before accepting a job. One driver, one activity.';
+  const heatReason = getHeatActivityRequirement(state); if (heatReason) return heatReason;
   if (state.playerLevel < job.minLevel) return `Requires Level ${job.minLevel}.`;
   if (state.economy.activeJob) return 'Finish or cancel your current job first.';
   if (job.requiresVehicle) {
@@ -53,6 +55,7 @@ function add(left: number, right: number): number {
 }
 function assertClock(nowMs: number) { if (!integer(nowMs)) throw new Error('Device clock is invalid. Restore your clock and retry.'); }
 function assertEconomy(state: GameState) {
+  assertHeatState(state);
   if (!isEconomyState(state.economy, state.ownedVehicles)) throw new Error('Economy state is invalid.');
   if (state.economy.activeJob && state.racing.activeRace) throw new Error('A job and a race cannot run together.');
 }
@@ -82,7 +85,7 @@ export function claimJob(state: GameState, runId: number, nowMs: number): GameSt
   const totalEarnedYen = add(state.economy.totalEarnedYen, job.rewardYen);
   const ownedVehicles = job.vehicleId === null ? state.ownedVehicles : state.ownedVehicles.map((vehicle) =>
     vehicle.instanceId === job.vehicleId ? { ...vehicle, odometerKm: add(vehicle.odometerKm, job.distanceKm) } : vehicle);
-  return { ...state, cashYen, reputation, playerLevel, ownedVehicles, economy: {
+  return { ...state, heat: afterLegalJob(state.heat), cashYen, reputation, playerLevel, ownedVehicles, economy: {
     ...state.economy, activeJob: null, completedJobs, totalEarnedYen,
     lastReceipt: { runId: job.runId, jobId: job.jobId, rewardYen: job.rewardYen,
       reputationReward: job.reputationReward, levelBefore: state.playerLevel, levelAfter: playerLevel },

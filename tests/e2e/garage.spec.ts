@@ -1,3 +1,4 @@
+import { createHeatState } from '../../src/domain/heat';
 import { createMarketState } from '../../src/domain/marketStock';
 import { Buffer } from 'node:buffer';
 import { test, expect } from '@playwright/test';
@@ -20,7 +21,7 @@ test('three starters, real purchase, active vehicle and reload', async ({ page }
 test('migrates a v1 browser save with its original instance and balance', async ({ page }) => {
   await seedRaw(page, JSON.stringify(legacy)); await expect(page.locator('.activeSummary strong')).toHaveText('Hoshino Pico RS');
   await expect(page.getByTestId('cash')).toHaveText('¥18,000'); await expect.poll(async () => JSON.parse((await stored(page))!).version).toBe(SAVE_VERSION);
-  expect(JSON.parse((await stored(page))!).state).toEqual({ ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(), market: createMarketState(), ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) });
+  expect(JSON.parse((await stored(page))!).state).toEqual({ ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(), heat: createHeatState(), market: createMarketState(), ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) });
 });
 test('inspection is free and does not change active ride; explicit activation persists', async ({ page }) => {
   await seedRaw(page, serializeSave(twoCars())); await page.getByRole('button', { name: 'Inspect Akari RZ-T (akari-1)' }).click();
