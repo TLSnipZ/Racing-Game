@@ -6,19 +6,37 @@ A pre-alpha car-collection, street-racing and automotive-empire game set in a fi
 
 > Modern Japan × JDM culture × touge × expressway × car collecting × tycoon.
 
-**Current milestone: Phase 10 — Collection** · **Save schema: v8** · **Next numbered system: Phase 11 — Advanced Cars**
+**Current milestone: Phase 11 — Advanced Cars** · **Save schema: v9** · **Next numbered system: Phase 12 — Empire & Automation**
 
 **Graphics & Audio I remains an open, separate presentation milestone.** The district map, car profiles and race replay are functional placeholders, not final artwork.
 
-[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Collection & save contract](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
+[Roadmap](docs/ROADMAP.md) · [Changelog](CHANGELOG.md) · [Advanced cars & saves](docs/PHASE11.md) · [Collection](docs/PHASE10.md) · [Heat](docs/PHASE9.md) · [Market](docs/PHASE8.md) · [City & XP](docs/PHASE7.md) · [Racing](docs/PHASE6.md) · [Tuning](docs/PHASE5.md) · [Economy](docs/PHASE4.md) · [Garage](docs/PHASE3.md) · [Build/deployment](https://github.com/TLSnipZ/Racing-Game/actions/workflows/deploy-pages.yml)
 
 ## Play now
 
 Choose one of three inexpensive starters with **¥50,000**, earn yen and reputation, fit performance parts and test your build against three rivals. The first complete loop is **starter → job → income → tuning → race → reward**.
 
-### New: Collection Book, achievements and Icon Cars
+### New: Imports, Auctions, Barn Finds and Restoration
 
-**Collection** is an eighth real tab, with **Collection Book**, **Achievements** and **Icon Showroom** sections. The book lists eight explicit models. Filter by manufacturer, rarity, ownership status and name/year search. It distinguishes **ever collected** from **currently owned**. A sold model keeps its book credit; multiple copies occupy separate garage spaces but count as one model. Merely seeing a dealer listing or rival does not collect that car.
+Keep the same eight main tabs. **Market → Imports / Auctions / Barn Finds** opens the specialist network; **Workshop → Restoration** repairs condition separately from tuning. A broker handles one saved contract at a time while your own jobs/races/Heat recovery can continue. Finish each contract manually; closing the page never auto-buys, repeats or pays it. A pending delivery or auction reserves a garage space across dealer, Icon and project purchases.
+
+| Source | New car | Unlock | Explicit cost and duration |
+| --- | --- | --- | --- |
+| Imports | **Mizuno Sora S** · 130 PS roadster | Level 5 | ¥165,000 + ¥15,000 transport, paid now; 90s; full refund on cancellation before collection. |
+| Auctions | **Akari Crest RS** · 210 PS sedan | Level 6 | Maximum-bid escrow from ¥190,000, ¥5,000 steps; 60s. Disclosed rival ceiling ¥220,000: a maximum ≥¥225,000 wins at ¥225,000 and refunds surplus; lower bids lose with a full refund. |
+| Barn Finds | **Hoshino Hachi GT** · 112 PS classic coupe | Level 5 | ¥5,000 non-refundable survey, 45s; then a separate optional ¥55,000 recovery purchase in its advertised worn condition. |
+
+Auction bids are binding, can be raised before the original deadline and never trigger hidden rival rolls. The barn lead is fixed, not a free refresh lottery; discovery alone is not vehicle ownership. Each of these initial sources supplies **one car per save**, including after selling it. These are three playable curated sources, not a multiplayer or unlimited auction/import system. New models use the twelve existing non-turbo parts and all existing race disciplines; no new free cars or parts are granted.
+
+**Restoration opens at Level 2:** review and pay to restore engine, body, transmission or all three to 100%, immediately. Costs depend on the model and actual deficit and are shown before confirmation. Purchased/fitted upgrades, mileage and originality remain unchanged. An assigned race/job car stays locked until settlement/cancellation; a parked spare can be repaired. No new wear, debts or forced repair costs have been added. Barn restoration is optional and its estimate is shown separately before acquisition.
+
+Outer Kagehama now has its first Level-5 barn lead. Dockside and East Ward link to the import and auction desks. The Collection Book now contains **11 models**, including the fourth manufacturer Mizuno and the Roadster body type. Existing six-car dealer batches, old Icon offers, 18 achievements and all previously accepted races/Heat terms are unchanged.
+
+**Save v9: no reset needed.** Valid v1–v8 data keep every prior field; migration only adds empty specialist state. Export codes include pending escrow, incoming cars, deadlines, surveyed leads and consumed sources. Read [PHASE11.md](docs/PHASE11.md) for exact terms, capacity protection and restoration pricing.
+
+### Collection Book, achievements and Icon Cars
+
+**Collection** is an eighth real tab, with **Collection Book**, **Achievements** and **Icon Showroom** sections. The book lists eleven explicit models. Filter by manufacturer, rarity, ownership status and name/year search. It distinguishes **ever collected** from **currently owned**. A sold model keeps its book credit; multiple copies occupy separate garage spaces but count as one model. Merely seeing a dealer listing or rival does not collect that car.
 
 **Common → Rare → Legendary → Icon** are collector classifications, not performance modifiers, spawn odds or price multipliers. The 118 PS Tora 85 is Legendary, while the more powerful Pico R is Rare. Badges appear in Garage, Market and Collection. The original six-model used stock generator and its asking prices are unchanged.
 
@@ -33,7 +51,7 @@ Both offers provide a stock car with **10,000 km, 95% engine/body/transmission c
 
 **Each Icon offer can be purchased only once per save, including after selling its car.** Dealer sale rules still apply; the sale preview includes all its paid parts. Book credit and achievement claims remain saved. Existing garages are not cleared to make room. These are the first playable Icon goals; final vehicle artwork remains part of Graphics & Audio I.
 
-**Old saves:** valid v1–v7 data migrate to v8 without changing previous balances, cars, parts, dealer stock, Heat or activities. Collection history is seeded only from current known cars, the original starter and the player's model in the last saved race result. Achievements supported by stored counters/parts can be recognised, but **no reward is paid automatically**. Unrecorded sold-model history cannot be guessed from names or sales totals. Full rules, all rewards and compatibility: [PHASE10.md](docs/PHASE10.md).
+**Collection migration:** valid pre-v8 data first migrate to v8 without changing previous balances, cars, parts, dealer stock, Heat or activities. Collection history is seeded only from current known cars, the original starter and the player's model in the last saved race result. Achievements supported by stored counters/parts can be recognised, but **no reward is paid automatically**. Unrecorded sold-model history cannot be guessed from names or sales totals. Full rules, all rewards and compatibility: [PHASE10.md](docs/PHASE10.md).
 
 ### Heat & Police
 
@@ -92,9 +110,9 @@ For example, Level 1 with 4 REP has a 20%-filled bar and needs 16 more REP for L
 | Hakuro Pass | Level 2 | Touge invitations |
 | Eastline Expressway | Level 3 | Expressway invitations |
 | Industrial District | Future preview only | Business/crew locations planned for Phase 12 |
-| Outer Kagehama | Future preview only | Barn finds/restoration planned for Phase 11 |
+| Outer Kagehama | Level 5 | Old Orchard barn survey/recovery; restoration is available in Workshop |
 
-Individual events keep their existing level requirements. Club invitations do not become available just because their district is open. The two future districts remain previews even at maximum level.
+Individual events keep their existing level requirements. Club invitations do not become available just because their district is open. Industrial District remains a future preview even at maximum level.
 
 The city is a **directory, not travel**: no tolls, timers, rewards for clicking areas or changes to the active car. District shortcuts open the real Jobs/Races tabs with the matching filter, never start or pay for an activity. The race district filter combines with discipline; a clear-filter control recovers an empty result. Job districts filter only offers. **Pending activities always stay visible**, irrespective of filters, and can also be resumed from City.
 
@@ -121,7 +139,7 @@ Only **one job, race OR Lay low pause** can be pending, including a finished but
 
 Choose the individual vehicle to tune and review current versus proposed power, weight, power-to-weight, grip, handling, braking, reliability and originality before **BUY & INSTALL**. Parts belong to that car, not every copy of a model. One upgrade fits a slot. Swapping retains the old part; refitting owned parts and **RESTORE STOCK** are free, without refunds. Turbo upgrades fit the Akari RZ-T only. Level, cash, compatibility and activity restrictions are explicit.
 
-Factory baselines stay separate from derived values so upgrades never compound on reload. Reliability is not current engine condition. Parts do not repair wear or increase job rewards. Resale/transfers, engine swaps, repairs and final art remain later work. [PHASE5.md](docs/PHASE5.md) lists unchanged prices/effects.
+Factory baselines stay separate from derived values so upgrades never compound on reload. Reliability is not current engine condition. Parts do not repair wear or increase job rewards. Separate part resale/transfers, engine swaps and final art remain later work. Condition repairs are now available in Workshop → Restoration. [PHASE5.md](docs/PHASE5.md) lists unchanged prices/effects.
 
 ### Jobs and starters
 
@@ -155,7 +173,7 @@ Progress autosaves in **this browser on this device**, under `kagehama:save`. Ga
 - **Import:** review the confirmation before replacing the whole save, not merging it.
 - **Reset:** confirmation returns to ¥50,000, Level 1 and starter selection, clearing cars, parts, jobs, races, Heat, patrol alerts, Lay low and market history and restoring the initial unpurchased stock. Export a backup first.
 
-**Valid Save v1–v7 data migrate to v8 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. There are no retrospective penalties.
+**Valid Save v1–v8 data migrate to v9 automatically. No reset is needed.** Earlier fields are preserved, including purchased/fitted parts, paid race snapshots, jobs and receipts, money, levels and REP. Pre-v6 saves first gain unpurchased market stock and empty trade history. V6→v7 adds only a clean Heat record: no changes to existing cars, dealer stock, pending races, money or history. Missing or malformed required market/Heat fields are rejected, not silently reset. There are no retrospective penalties.
 
 Leaving the page readies at most the one pending activity. Its original build, rivals, prizes and deadline remain saved. Returning never auto-repeats or pays it. Importing an older code deliberately restores an older snapshot. No cloud account or server-authoritative anti-cheat exists; device clocks/codes remain user-controlled.
 
@@ -175,7 +193,7 @@ Unreadable/newer saves are protected, not deleted. Failed writes cannot consume 
 - [x] **8 — Car Market:** six models, individual saved stock, buy/sell, 12-space capacity, explicit refresh, valuation and combined brand/year/body-type filters; Save v6.
 - [x] **9 — Heat & Police:** optional Underground stakes, explicit Heat/bonus/fine terms, deterministic patrol choices, free/paid recovery and Save v7 compatibility.
 - [x] **10 — Collection:** eight-model book, independent rarity badges, 18 one-time manually claimed achievements, two gated Icon purchases and Save v8 migration.
-- [ ] **11 — Advanced Cars:** auctions, imports, barn finds and restoration.
+- [x] **11 — Advanced Cars:** three curated specialist sources, escrow/refunds, reserved deliveries, optional barn recovery and condition restoration; Save v9.
 - [ ] **12 — Empire & Automation:** businesses, staff/crew, delegated routines and capped offline production.
 - [ ] **13+ — Endgame:** Legacy/Prestige, rivals, bosses, events and catalog expansion.
 

@@ -10,8 +10,9 @@ export function VehicleSilhouette({ catalogId, className = '' }: Props) {
   const hatch = type === 'hatchback';
   const wagon = type === 'wagon';
   const sedan = type === 'sedan';
+  const roadster = type === 'roadster';
   const turbo = catalogId === 'rz-t';
-  const body = wagon ? 'M48 150 L62 76 L277 66 L332 110 L436 130 L450 151 L447 179 L49 179 Z'
+  const body = roadster ? 'M49 151 L75 124 L176 112 L200 88 L214 91 L201 119 L301 119 L324 109 L428 134 L446 151 L446 179 L49 179 Z' : wagon ? 'M48 150 L62 76 L277 66 L332 110 L436 130 L450 151 L447 179 L49 179 Z'
     : sedan ? 'M48 152 L76 126 L135 115 L184 68 L293 68 L344 114 L436 131 L450 152 L447 179 L49 179 Z'
     : hatch
     ? 'M62 153 L73 116 L122 108 L154 60 L280 60 L328 113 L397 127 L426 148 L426 179 L62 179 Z'
@@ -25,7 +26,7 @@ export function VehicleSilhouette({ catalogId, className = '' }: Props) {
       <ellipse cx="253" cy="205" rx="218" ry="18" fill="#000" opacity=".48" />
       <path d="M22 215H478 M34 227H465" stroke="#65706f" opacity=".25" />
       <path d={body} fill={`url(#${id})`} stroke="currentColor" strokeWidth="2" />
-      <path d={wagon ? 'M75 84L165 76V111H70Z M177 75H222V111H177Z M234 75H282L314 111H234Z' : hatch ? 'M136 107L166 70H223V107Z M234 70H274L310 109H234Z'
+      <path d={roadster ? 'M182 112L203 93L207 94L194 114Z' : wagon ? 'M75 84L165 76V111H70Z M177 75H222V111H177Z M234 75H282L314 111H234Z' : hatch ? 'M136 107L166 70H223V107Z M234 70H274L310 109H234Z'
         : 'M143 111L195 76H236V111Z M247 77H289L330 114H247Z'} fill="#121d23" stroke="#b4cbd0" strokeOpacity=".32" />
       {(sedan || wagon) && <path d="M161 116V164 M285 117V167 M176 131H190 M298 131H312" stroke="#10181c" strokeWidth="2" />}
       <path d="M228 113V168 M77 154H425 M181 131H198 M336 133H350" stroke="#080e12" strokeWidth="2" opacity=".8" />

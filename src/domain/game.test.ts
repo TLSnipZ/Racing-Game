@@ -1,3 +1,4 @@
+import { createAdvancedState } from './advancedState';
 import { createEmptyCollectionState } from './collectionProgress';
 import { createHeatState } from './heat';
 import { createMarketState } from './marketStock';
@@ -9,7 +10,7 @@ import { createNewGameState, createPlayerVehicle, purchaseStarter, STARTING_CASH
 describe('KAGEHAMA core game', () => {
   it('creates the expected new game state', () => {
     expect(createNewGameState()).toEqual({ cashYen: STARTING_CASH_YEN, playerLevel: 1, reputation: 0,
-      selectedStarterId: null, ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState(), heat: createHeatState(), market: createMarketState(), collection: createEmptyCollectionState() });
+      selectedStarterId: null, ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState(), heat: createHeatState(), market: createMarketState(), collection: createEmptyCollectionState(), advanced: createAdvancedState() });
   });
   it.each([['pico-rs', 18000], ['tora-85', 8000], ['rz-t', 2000]] as const)('buys and activates %s for the real price', (id, cash) => {
     const initial = createNewGameState(); const state = purchaseStarter(initial, id, 'vehicle-001');

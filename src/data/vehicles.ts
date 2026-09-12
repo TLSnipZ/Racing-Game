@@ -1,9 +1,9 @@
 import type { Rarity } from '../domain/collectionTypes';
 import { STARTER_CARS, type Drive } from './starters';
 
-export const MANUFACTURERS = { hoshino: 'Hoshino', akari: 'Akari', kazuma: 'Kazuma' } as const;
+export const MANUFACTURERS = { hoshino: 'Hoshino', akari: 'Akari', kazuma: 'Kazuma', mizuno: 'Mizuno' } as const;
 export type ManufacturerId = keyof typeof MANUFACTURERS;
-export const BODY_TYPES = { hatchback: 'Hatchback', coupe: 'Coupe', sedan: 'Sedan', wagon: 'Wagon' } as const;
+export const BODY_TYPES = { hatchback: 'Hatchback', coupe: 'Coupe', sedan: 'Sedan', wagon: 'Wagon', roadster: 'Roadster' } as const;
 export type BodyType = keyof typeof BODY_TYPES;
 export type VehicleDefinition = {
   readonly id: string;
@@ -18,7 +18,7 @@ export type VehicleDefinition = {
   readonly referenceYen: number;
   readonly marketLevel: number;
   readonly rarity: Rarity;
-  readonly acquisition: 'used-market' | 'icon';
+  readonly acquisition: 'used-market' | 'icon' | 'import' | 'auction' | 'barn';
   readonly description: string;
   readonly traits: readonly string[];
   readonly stockParts: readonly string[];
@@ -57,6 +57,18 @@ export const VEHICLE_CATALOG: readonly VehicleDefinition[] = [
     engine: '3.0L NA I6', drive: 'RWD', hp: 235, weightKg: 1320, referenceYen: 400000, marketLevel: 8,
     rarity: 'icon', acquisition: 'icon', description: 'A long-bonnet grand tourer from the bay\'s midnight folklore. A reward for knowing every racing scene, not just the quickest straight.',
     traits: ['Straight-six GT', 'Midnight icon', 'Collector milestone'], stockParts: FACTORY_PARTS },
+  { id: 'sora-s', name: 'Mizuno Sora S', manufacturer: 'mizuno', bodyType: 'roadster', years: [1991, 1996],
+    engine: '1.8L NA I4', drive: 'RWD', hp: 130, weightKg: 970, referenceYen: 210000, marketLevel: 5,
+    rarity: 'rare', acquisition: 'import', description: 'Open roof, small engine, excellent excuses to take the long way home.',
+    traits: ['Light roadster', 'Balanced RWD', 'Specialist import'], stockParts: FACTORY_PARTS },
+  { id: 'crest-rs', name: 'Akari Crest RS', manufacturer: 'akari', bodyType: 'sedan', years: [1997, 2000],
+    engine: '3.0L NA I6', drive: 'RWD', hp: 210, weightKg: 1380, referenceYen: 300000, marketLevel: 6,
+    rarity: 'rare', acquisition: 'auction', description: 'An understated straight-six sedan. The auction sheet calls it sensible. The rear tires disagree.',
+    traits: ['Straight-six sedan', 'RWD', 'Auction acquisition'], stockParts: FACTORY_PARTS },
+  { id: 'hachi-gt', name: 'Hoshino Hachi GT', manufacturer: 'hoshino', bodyType: 'coupe', years: [1972, 1976],
+    engine: '1.6L NA I4', drive: 'RWD', hp: 112, weightKg: 1010, referenceYen: 180000, marketLevel: 5,
+    rarity: 'legendary', acquisition: 'barn', description: 'A forgotten seventies coupe. More patina than paint; a project worth saving, not a free performance upgrade.',
+    traits: ['Barn-find classic', 'Restoration project', 'Light RWD'], stockParts: FACTORY_PARTS },
 ];
 /** Keep the released six-model dealer generator separate from milestone-only cars. */
 export const USED_VEHICLE_CATALOG = VEHICLE_CATALOG.filter((car) => car.acquisition === 'used-market');

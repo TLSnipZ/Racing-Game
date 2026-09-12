@@ -21,7 +21,7 @@ test('three starters, real purchase, active vehicle and reload', async ({ page }
 test('migrates a v1 browser save with its original instance and balance', async ({ page }) => {
   await seedRaw(page, JSON.stringify(legacy)); await expect(page.locator('.activeSummary strong')).toHaveText('Hoshino Pico RS');
   await expect(page.getByTestId('cash')).toHaveText('¥18,000'); await expect.poll(async () => JSON.parse((await stored(page))!).version).toBe(SAVE_VERSION);
-  const { collection, ...oldFields } = JSON.parse((await stored(page))!).state;
+  const { advanced: _advanced, collection, ...oldFields } = JSON.parse((await stored(page))!).state;
   expect(collection).toEqual({ collectedModelIds: ['pico-rs'], unlockedAchievementIds: ['first-ride'], claimedAchievementIds: [], purchasedIconIds: [] });
   expect(oldFields).toEqual({ ...legacy.state, activeVehicleId: 'legacy-pico-001', economy: createEconomyState(), racing: createRacingState(), heat: createHeatState(), market: createMarketState(), ownedVehicles: legacy.state.ownedVehicles.map((car) => ({ ...car, tuning: createVehicleTuning() })) });
 });

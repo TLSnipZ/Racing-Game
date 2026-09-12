@@ -1,0 +1,67 @@
+/* Functional Phase 11 presentation. Final car/world artworks remain a separate milestone. */
+.specialistModes { display:flex; flex-wrap:wrap; gap:8px; margin:20px 0 26px; padding:12px; border:1px solid #405055; background:#111c21; }
+.specialistModes button { min-height:44px; padding:10px 16px; background:#17272e; border:1px solid #465962; color:#d8e3df; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; }
+.specialistModes button[aria-pressed='true'] { border-color:#e1ba83; color:#f1d6b1; background:#352c20; }
+.specialistHeading { display:flex; justify-content:space-between; align-items:center; gap:20px; margin:20px 0; }
+.specialistHeading > div { min-width:0; }
+.specialistHeading h2 { font:italic 800 clamp(38px,5vw,64px)/1.05 'Barlow Condensed',Impact,sans-serif; margin:12px 0; text-transform:uppercase; overflow-wrap:anywhere; }
+.specialistHeading svg { color:#d3b485; flex-shrink:0; }
+.specialistPanel { min-width:0; }
+.specialistNote { color:#b4c3c6; font-size:12px; line-height:1.8; }
+.specialistOffers { display:grid; gap:20px; margin:25px 0; }
+.specialistOffer { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); background:#131e24; border:1px solid #425960; }
+.specialistOfferCopy { padding:30px; min-width:0; }
+.specialistOffer h3, .restorationCard h3 { font:800 33px/1.1 'Barlow Condensed',Impact,sans-serif; color:#f0dfc4; margin:14px 0; overflow-wrap:anywhere; }
+.specialistOffer p,.specialistPending p,.restorationCard p { font-size:12px; color:#c0ced0; line-height:1.8; }
+.specialistOfferCar { padding:20px; min-width:0; background:radial-gradient(ellipse at 60% 5%,#25454b,transparent 60%); }
+.specialistOfferCar svg { max-height:230px; width:100%; }
+.specialistFacts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; padding:16px 0; border-block:1px solid #3a5058; }
+.specialistFacts > div { min-width:0; }
+.specialistFacts dt { font-size:10px; color:#a2b4bb; margin-bottom:7px; }
+.specialistFacts dd { margin:0; font-size:12px; line-height:1.6; color:#f2e6d4; overflow-wrap:anywhere; }
+.specialistFacts code { font-size:10px; }
+.specialistGate { border-top:1px solid #3b4c52; padding-top:14px; color:#dfc398 !important; }
+.specialistPending { padding:24px; margin:22px 0; border:1px solid #977846; background:#25241b; }
+.specialistPendingTop { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.specialistPendingTop > div { min-width:0; }
+.specialistPending h3 { font:800 28px/1.2 'Barlow Condensed',Impact,sans-serif; margin:12px 0; }
+.specialistPending strong[data-testid] { font:800 27px 'Barlow Condensed',Impact,sans-serif; color:#e8ce96; white-space:nowrap; }
+.specialistPending progress { width:100%; height:7px; accent-color:#d5b377; }
+.specialistActions { display:flex; flex-wrap:wrap; gap:12px; margin:20px 0 5px; }
+.specialistActions button,.specialistOffer button,.restorationCard button { min-height:44px; white-space:normal; overflow-wrap:anywhere; }
+.specialistReceipt { padding:15px; background:#1c2d29; border:1px solid #496959; color:#c6debe; font-size:12px; line-height:1.8; overflow-wrap:anywhere; }
+.specialistDialog { width:min(640px,calc(100vw - 32px)); box-sizing:border-box; max-height:calc(100dvh - 28px); overflow-y:auto; padding:25px; color:#e3e9e5; background:#17232a; border:1px solid #96805c; }
+.specialistDialog::backdrop { background:#02090dcf; }
+.specialistDialogHead { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+.specialistDialogHead > span { min-width:0; }
+.specialistDialogHead button { flex-shrink:0; }
+.specialistDialog h3 { font:800 36px/1.1 'Barlow Condensed',Impact,sans-serif; margin:18px 0; overflow-wrap:anywhere; }
+.specialistDialog p { color:#c0ced0; font-size:12px; line-height:1.8; overflow-wrap:anywhere; }
+.specialistBid,.restorationSelect { display:flex; flex-direction:column; gap:9px; font-size:12px; color:#d7c19d; margin:18px 0; }
+.specialistBid input,.restorationSelect select { width:100%; min-width:0; box-sizing:border-box; min-height:44px; border:1px solid #5d737a; background:#0e1920; color:#edf0e4; padding:12px; font:inherit; }
+.restorationGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.restorationCard { min-width:0; padding:24px; border:1px solid #435b63; background:#131e24; }
+.restorationCard > strong { font-size:23px; color:#e6bd7e; }
+.restorationConditions { display:flex; flex-wrap:wrap; gap:20px; padding:22px; margin:20px 0; border:1px solid #4d646c; font-size:11px; color:#b1c8ce; }
+.restorationConditions b { display:block; margin-top:8px; font:800 28px 'Barlow Condensed',Impact,sans-serif; color:#ede6d9; }
+.restorationTable { width:100%; border-collapse:collapse; font-size:12px; table-layout:fixed; }
+.restorationTable caption { text-align:left; font-size:11px; color:#aec1c6; padding:12px 0; }
+.restorationTable th,.restorationTable td { padding:12px 5px; border-bottom:1px solid #435b63; text-align:right; overflow-wrap:anywhere; }
+.restorationTable th:first-child { text-align:left; width:34%; }
+.specialistNotice { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; background:#1b2c31; border:1px solid #587c82; padding:14px 18px; margin:15px 0; }
+.specialistNotice p { margin:0; color:#d0e0dd; font-size:12px; line-height:1.7; }
+@media(max-width:700px) {
+ .specialistOffer,.restorationGrid { grid-template-columns:minmax(0,1fr); }
+ .specialistOfferCopy,.specialistOfferCar,.restorationCard,.specialistPending { padding:18px; }
+ .specialistHeading { align-items:flex-start; gap:10px; }
+ .specialistHeading svg { width:24px; height:24px; }
+ .specialistModes { gap:7px; padding:9px; }
+ .specialistModes button { flex:1 1 40%; padding:10px 8px; font-size:11px; }
+ .specialistDialog { padding:18px; }
+ .specialistDialog h3 { font-size:31px; }
+ .specialistActions { align-items:stretch; }
+ .specialistActions button { flex:1 1 100%; }
+ .specialistFacts { gap:14px 10px; }
+ .specialistFacts dd { font-size:11px; }
+ .restorationTable { font-size:10px; }
+}

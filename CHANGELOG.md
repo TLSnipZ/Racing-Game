@@ -1,5 +1,18 @@
 # Changelog
 
+## Phase 11 — Advanced Cars (2026-09-12)
+
+- Kept the pending specialist shortcut visible within Used dealer as well as other tabs; clarified that all pending bids, not only winning bids, reserve space.
+- Added Market subviews for one fixed import, one deterministic single-player proxy auction and one paid barn lead, without adding another top-level tab. Added a separate Restoration view in Workshop.
+- Added Mizuno Sora S, Akari Crest RS and Hoshino Hachi GT with explicit metadata, factory ratings and existing non-turbo compatibility; expanded the Book to eleven models while keeping the six-model dealer generator and original Icon offers unchanged.
+- Added saved broker deadlines, refundable import/auction escrow, binding maximum bids and delta-only raises, exact clearing/refunds, optional surveyed-project purchase and once-per-save source consumption.
+- Reserved incoming-car capacity across dealer, Icon and project purchases; protected identity, active cars and driver activities. Added global contract notices and a Market READY badge.
+- Added explicit Level-2 engine/body/transmission/full restoration quotes, immediate condition repair and assigned-car locks, preserving all tuning parts, factory stats, originality and mileage.
+- Opened Outer Kagehama at Level 5, added source shortcuts in City and Collection, and warned about non-renewable specialist sources in sale previews.
+- Added Save v9 with an empty specialist ledger on migration, preserving every prior field and all previous fixtures; froze a released-v8 regression world with claimed rewards and a paid Underground race. KAGEHAMA1 and the browser key are unchanged.
+- Added contract, auction, discovery, refund, restoration, reservation, legacy, malformed-save and production-browser coverage, preserving prior suites with only schema/catalog/access expectation updates.
+- Updated README, roadmap and the Phase 11 contract. Graphics & Audio I remains open; Phase 12 Empire & Automation is the next numbered system.
+
 ## Phase 10 — Collection, achievements and Icon Cars (2026-09-12)
 
 - Browser review: preserve exact old-save assertions alongside the new collection ledger; wrap narrow fallback-font headings and check every Collection subview without webfonts. Add an explicit non-renewable Icon offer warning to dealer-sale confirmation.

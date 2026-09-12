@@ -1,3 +1,4 @@
+import { getOccupiedGarageSpaces, getReservedVehicleIds } from './garageCapacity';
 import { withCollectionProgress } from './collectionProgress';
 import { findVehicleDefinition } from '../data/vehicles';
 import { createMarketListings, GARAGE_CAPACITY, MARKET_REFRESH_MS, MAX_MARKET_GENERATION, getRefreshRemainingMs } from './marketStock';
@@ -19,7 +20,7 @@ export function getBuyRequirement(state: GameState, listing: MarketListing): str
   if (state.selectedStarterId === null) return 'Choose your starter first.';
   if (!state.market.listings.some((entry) => entry.id === listing.id)) return 'This listing is no longer available.';
   if (state.playerLevel < listing.minLevel) return `Requires Level ${listing.minLevel}.`;
-  if (state.ownedVehicles.length >= GARAGE_CAPACITY) return `Garage full: ${GARAGE_CAPACITY} spaces. Sell a spare car first.`;
+  if (getOccupiedGarageSpaces(state) >= GARAGE_CAPACITY) return `Garage full: ${GARAGE_CAPACITY} spaces. Sell a spare car first.`;
   if (state.ownedVehicles.some((car) => car.instanceId === listing.vehicle.instanceId)) return 'This vehicle is already owned.';
   if (!integer(state.cashYen)) return 'Cash value is invalid.';
   if (state.cashYen < listing.askingPriceYen) return 'Not enough cash.';
@@ -90,5 +91,5 @@ export const refreshMarket = withCollectionProgress(function refreshMarket(state
   if (reason) throw new Error(reason);
   const generation = state.market.generation + 1;
   return { ...state, market: { ...state.market, generation, refreshedAtMs: nowMs,
-    listings: createMarketListings(generation, state.ownedVehicles.map((car) => car.instanceId)) } };
+    listings: createMarketListings(generation, [...state.ownedVehicles.map((car) => car.instanceId), ...getReservedVehicleIds(state)]) } };
 });

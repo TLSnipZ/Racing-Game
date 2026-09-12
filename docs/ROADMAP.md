@@ -2,7 +2,7 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current milestone: **Phase 10 — Collection**. **Save v8.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
+Current milestone: **Phase 11 — Advanced Cars**. **Save v9.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
 
 ## Implemented
 
@@ -18,8 +18,8 @@ Current milestone: **Phase 10 — Collection**. **Save v8.** The complete starte
 | 7 — Kagehama City | Four districts with existing-level access, two future previews, explicit activity membership, filtered shortcuts, retained pending activities and a small REP-based level XP bar in the sticky HUD. |
 | 8 — Used Car Market | Six models/three manufacturers/four body types; individual saved listings, combined brand/year/body/search filters, price/year/mileage/condition sorting, confirmed buy/sell, active replacement, assigned/last-car locks, 12-space purchase capacity, manual 5-minute stock refresh and Save v6 migration. |
 | 9 — Heat & Police | Driver-global Heat HUD; optional Underground stakes on seven paid events, frozen bonus/Heat/fine terms, deterministic patrol decisions, legal-job recovery and free timed Lay low; Save v7 preserves every prior field. |
-
 | 10 — Collection | Eight-model Collection Book, Common/Rare/Legendary/Icon metadata independent of performance, 18 persistent achievements with manual one-time yen rewards, two gated fixed-price Icon offers and Save v8 evidence-based migration. |
+| 11 — Advanced Cars | Three curated import/auction/barn sources, paid escrow/refunds and reserved delivery slots, exact timed contracts, Level-2 condition restoration, three new models, active Outer Kagehama and Save v9 preserving all previous fields. |
 
 Phase 8 preserves race model v1, level thresholds, original starter prices, original build ratings and all job/part/race rewards. The shared catalog adds three new models with their own ratings. See [PHASE8.md](PHASE8.md) for exact market, ownership and migration rules. Previous milestones remain documented historical contracts.
 
@@ -27,7 +27,7 @@ Phase 7 did not change race model v1, old saves, level thresholds, starter price
 
 ## Open presentation milestone — Graphics & Audio I
 
-The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9 or Phase 10.** City, Market, Heat and Collection were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
+The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9, Phase 10 or Phase 11.** City, Market, Heat, Collection and Advanced Cars were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
 
 Scope remains three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Define an asset/layer strategy before promising independently changeable paint, wheels and bodykits. Preserve gameplay and saves. This is a targeted pass, not conversion into freely driven 3D racing. Sequencing remains flexible; do not let further feature work silently remove it from the roadmap.
 
@@ -41,15 +41,21 @@ Collection credit means ever owned, not just seen. Duplicates count once per mod
 
 The eight-model book includes two new milestone-only Icons: Tora 85 Heritage (Level 6 + starter trio, ¥180,000) and Kestrel GT (Level 8 + four completed race disciplines, ¥320,000). These are fixed, once-per-save purchases, not gifts or dealer refresh results. The six existing used-market offers, pending races/Heat, original balance and factory values stay unchanged. Rarity never multiplies performance or the valuation formula.
 
-## Next numbered system — Phase 11: Advanced Cars
+## Phase 11 — implemented first specialist slice
 
-Design the first auctions/imports, barn finds and restoration services before expanding the catalog or activating Outer Kagehama. Define their costs, time limits, offer identity, exact restoration effects, owned-vehicle/capacity rules and preservation of tuned parts. Auction bidding must reserve or charge money explicitly; no duplicate wins, hidden bids or loss of an already paid car. Discovery cannot be a free reload reroll. Begin with a small playable slice rather than pretending every advanced acquisition source is already available.
+Market now separates dealer, imports, auctions and barn leads. Import a fixed Sora S for ¥180,000 over 90 seconds; participate in a disclosed-ceiling 60-second proxy auction for Crest RS with reserved maximum-bid funds, exact clearing/refund and no hidden bids; commission the ¥5,000 / 45-second Old Orchard survey and optionally recover the worn Hachi GT for ¥55,000. Each source supplies one car per save, including after sale. Full terms: [PHASE11.md](PHASE11.md).
 
-Collection history and achievement/Icon claims must remain monotonic under normal play. Further Icon offers, vehicle models and achievements require stable IDs and explicit compatibility rules. Keep old used stock, accepted race and Heat snapshots valid; test any migration. Repairs/restoration must not retroactively recalculate an active race build. Automation remains Phase 12, not a hidden addition to advanced cars.
+Pending imports/auctions reserve a space across all acquisition routes. Broker work is independent of driver jobs/races, never an automatic earning chain. Level-2 Workshop restoration repairs selected condition to 100% with an explicit before/after quote, preserving tuning, mileage and originality and blocking assigned cars. Collection history, old dealer stock, accepted race/Heat contracts and all claimed rewards remain intact. The initial specialist system has three curated sources; additional lots/imports/leads and richer opponent bidding are later extensions, not already implemented.
+
+## Next numbered system — Phase 12: Empire & Automation
+
+Design the first businesses, expandable garage and delegated routines. Define purchase costs, unlocks, upgrade returns, manager prerequisites, manual versus automatic collection, offline cap and exact-once accrual before adding passive earnings. Specialist escrow and reserved delivery spaces must survive a garage-capacity expansion. Ongoing driver and broker activities must not be replaced, repriced or completed by unrelated business commands.
+
+Start with a small playable business/manager loop, not a claim that all crew/endgame systems already exist. Save migration must preserve current cars, condition repairs, specialist contracts, sources, achievement claims, market stock and Heat snapshots. Balance active racing/work against passive returns. Readability, mobile navigation and the open Graphics & Audio I milestone remain part of the plan.
 
 ## Market and workshop browsing — implemented
 
-The requested **manufacturer, model-year/range and body-type filters** now combine with text search and sorting in the Market. They use explicit catalog metadata, show counts and reset states, and never buy/sell/refresh by browsing. Source stock and price snapshots persist through reload and exports. The original other two starters are normally purchasable, not gifts. The shared catalog includes three new models. Garage expansion, auctions, negotiation, parts transfers and a live supply/demand simulation are not yet included.
+The requested **manufacturer, model-year/range and body-type filters** now combine with text search and sorting in the Market. They use explicit catalog metadata, show counts and reset states, and never buy/sell/refresh by browsing. Source stock and price snapshots persist through reload and exports. The original other two starters are normally purchasable, not gifts. The shared catalog includes three new models. Garage expansion, negotiation, separate parts transfers and a live supply/demand simulation are not yet included. The first fixed specialist auction/import/barn sources and restoration are now implemented separately.
 
 The Workshop component categories remain implemented: visible buttons and a synchronized dropdown cover intake, exhaust, ECU, tires, suspension, brakes, weight reduction and turbo. New car models use compatible existing parts; the two turbo upgrades remain RZ-T-only. More categories require real slot/catalog support.
 
@@ -58,7 +64,6 @@ The Workshop component categories remain implemented: visible buttons and a sync
 | Phase | Scope |
 | --- | --- |
 | Graphics & Audio I | Targeted first car/garage/race art, animation and audio pass. Open presentation milestone. |
-| 11 — Advanced Cars | Auctions, imports, barn finds, restoration and more manufacturers; activate relevant Outer Kagehama content. |
 | 12 — Empire & Automation | Businesses, garage upgrades, staff/crew, delegated routines, capped passive/offline income; activate relevant Industrial District content. |
 | 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and catalog expansion. |
 | Further graphics expansion | Apply the chosen style to later content; plan visible paint/wheel/bodykit changes through a consistent asset system. |

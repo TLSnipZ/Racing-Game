@@ -1,3 +1,4 @@
+import { getOccupiedGarageSpaces, getReservedVehicleIds } from './garageCapacity';
 import { findAchievement } from '../data/achievements';
 import { findIconOffer, type IconOffer } from '../data/collection';
 import { findVehicleDefinition } from '../data/vehicles';
@@ -23,7 +24,7 @@ export function getIconRequirement(state: GameState, offer: IconOffer): string |
   if (state.playerLevel < offer.minLevel) return `Requires Level ${offer.minLevel}.`;
   const achievement = findAchievement(offer.achievementId)!;
   if (!getAchievementProgress(state, achievement).unlocked) return `Earn “${achievement.name}” first. Claiming its yen is optional.`;
-  if (state.ownedVehicles.length >= GARAGE_CAPACITY) return `Garage full: ${GARAGE_CAPACITY} spaces. Sell a spare car first.`;
+  if (getOccupiedGarageSpaces(state) >= GARAGE_CAPACITY) return `Garage full: ${GARAGE_CAPACITY} spaces. Sell a spare car first.`;
   if (!Number.isSafeInteger(state.cashYen) || state.cashYen < 0) return 'Cash value is invalid.';
   if (state.cashYen < offer.priceYen) return 'Not enough cash.';
   return null;
@@ -31,7 +32,7 @@ export function getIconRequirement(state: GameState, offer: IconOffer): string |
 /** A fixed fully specified car, never a rerolled dealer listing. */
 export function createIconVehicle(state: GameState, offer: IconOffer): PlayerVehicle {
   const model = findVehicleDefinition(offer.catalogId)!;
-  const taken = new Set([...state.ownedVehicles.map((car) => car.instanceId), ...state.market.listings.map((listing) => listing.id)]);
+  const taken = new Set([...state.ownedVehicles.map((car) => car.instanceId), ...state.market.listings.map((listing) => listing.id), ...getReservedVehicleIds(state)]);
   const stem = `icon-v1:${offer.id}`;
   let instanceId = stem;
   for (let index = 1; taken.has(instanceId); index++) instanceId = `${stem}:${index}`;
