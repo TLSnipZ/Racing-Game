@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BODY_TYPES, MANUFACTURERS, VEHICLE_CATALOG } from '../data/vehicles';
+import { BODY_TYPES, MANUFACTURERS, USED_VEHICLE_CATALOG } from '../data/vehicles';
 import { PARTS } from '../data/parts';
 import { createNewGameState, createPlayerVehicle, purchaseStarter } from './game';
 import { createMarketListings, createMarketState, GARAGE_CAPACITY, MARKET_REFRESH_MS } from './marketStock';
@@ -26,9 +26,9 @@ function sell(game: GameState, id: string, replacement: string | null = null) {
 
 describe('Vehicle catalog, stock v1 and valuation', () => {
   it('has six models, three explicit manufacturers and all four body types', () => {
-    expect(VEHICLE_CATALOG).toHaveLength(6); expect(new Set(VEHICLE_CATALOG.map((car) => car.id)).size).toBe(6);
-    expect(new Set(VEHICLE_CATALOG.map((car) => car.manufacturer)).size).toBe(Object.keys(MANUFACTURERS).length);
-    expect(new Set(VEHICLE_CATALOG.map((car) => car.bodyType)).size).toBe(Object.keys(BODY_TYPES).length);
+    expect(USED_VEHICLE_CATALOG).toHaveLength(6); expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.id)).size).toBe(6);
+    expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.manufacturer)).size).toBe(Object.keys(MANUFACTURERS).length);
+    expect(new Set(USED_VEHICLE_CATALOG.map((car) => car.bodyType)).size).toBe(Object.keys(BODY_TYPES).length);
   });
   it('keeps the original starter choice, prices and stats untouched', () => {
     for (const [id, cash] of [['pico-rs', 18000], ['tora-85', 8000], ['rz-t', 2000]] as const) {
@@ -79,7 +79,7 @@ describe('Vehicle catalog, stock v1 and valuation', () => {
     expect(() => installPart(buy(rich(), 'estate-gt'), 'market-v1:0:estate-gt', 'kurogane-big-turbo', null)).toThrow('compatible');
   });
 });
-function VEHICLE_IDS() { return VEHICLE_CATALOG.map((car) => car.id); }
+function VEHICLE_IDS() { return USED_VEHICLE_CATALOG.map((car) => car.id); }
 
 describe('Atomic purchases, capacity and listing identity', () => {
   it('charges once, keeps exact advertised data and parks the new car without activating it', () => {

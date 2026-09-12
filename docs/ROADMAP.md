@@ -2,7 +2,7 @@
 
 Play: https://tlsnipz.github.io/Racing-Game/
 
-Current milestone: **Phase 9 — Heat & Police**. **Save v7.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
+Current milestone: **Phase 10 — Collection**. **Save v8.** The complete starter → job → tuning → race → reward loop now includes multiple cars, individual saved dealer stock and explicit buy/sell transactions.
 
 ## Implemented
 
@@ -19,13 +19,15 @@ Current milestone: **Phase 9 — Heat & Police**. **Save v7.** The complete star
 | 8 — Used Car Market | Six models/three manufacturers/four body types; individual saved listings, combined brand/year/body/search filters, price/year/mileage/condition sorting, confirmed buy/sell, active replacement, assigned/last-car locks, 12-space purchase capacity, manual 5-minute stock refresh and Save v6 migration. |
 | 9 — Heat & Police | Driver-global Heat HUD; optional Underground stakes on seven paid events, frozen bonus/Heat/fine terms, deterministic patrol decisions, legal-job recovery and free timed Lay low; Save v7 preserves every prior field. |
 
+| 10 — Collection | Eight-model Collection Book, Common/Rare/Legendary/Icon metadata independent of performance, 18 persistent achievements with manual one-time yen rewards, two gated fixed-price Icon offers and Save v8 evidence-based migration. |
+
 Phase 8 preserves race model v1, level thresholds, original starter prices, original build ratings and all job/part/race rewards. The shared catalog adds three new models with their own ratings. See [PHASE8.md](PHASE8.md) for exact market, ownership and migration rules. Previous milestones remain documented historical contracts.
 
 Phase 7 did not change race model v1, old saves, level thresholds, starter prices or job/part/race rewards. District browsing is not travel and does not grant money or start activities. The active job/race remains recoverable even through an unrelated or locked-district preview. See [PHASE7.md](PHASE7.md); previous contracts remain historical records of their milestones.
 
 ## Open presentation milestone — Graphics & Audio I
 
-The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8 or Phase 9.** City, Market and Heat were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
+The first complete loop makes a focused art/audio pass possible. **This remains open, not completed by Phase 7, Phase 8, Phase 9 or Phase 10.** City, Market, Heat and Collection were implemented as numbered systems before this separate presentation milestone; the map and car profiles remain functional placeholders. No final car/garage images or audio have been silently substituted or marked done.
 
 Scope remains three consistent starter artworks, the first Japanese garage, one race environment, improved animation and audio feedback. Define an asset/layer strategy before promising independently changeable paint, wheels and bodykits. Preserve gameplay and saves. This is a targeted pass, not conversion into freely driven 3D racing. Sequencing remains flexible; do not let further feature work silently remove it from the roadmap.
 
@@ -33,9 +35,17 @@ Scope remains three consistent starter artworks, the first Japanese garage, one 
 
 Standard races and ordinary jobs retain their original terms. Optional Level-3+ Underground stakes on the seven paid events add +50% yen/+25% REP and 12–22 Heat on entry, with a pre-announced deterministic patrol alert at projected 50/75 Heat. Resolve it by paying the shown ¥1,500/¥3,000 fine or waiting through a free 60-second Lay low pause. Fine reduction is 30 Heat; completed Lay low removes 40; legal job claims remove up to 6. No passive decay, surprise car loss, new wear, forced debt or automatic fines. At 85+ Heat, recover before a new Underground run. See [PHASE9.md](PHASE9.md).
 
-## Next numbered system — Phase 10: Collection
+## Phase 10 — implemented collection contract
 
-Build collection discovery and rarity independently of performance: Collection Book, meaningful achievements and the first Icon-car goals. Define how ownership history versus current ownership count, reward claims, duplicate models and sold cars are handled before adding persistent collection data. Existing dealer stock must not reroll and historical race/Heat contracts must stay valid. Preserve bought parts, active activities and saves; do not hand out unearned achievements or retrospective cash without explicit migration rules. The exact initial collection/achievement catalog still needs design.
+Collection credit means ever owned, not just seen. Duplicates count once per model; sale does not remove a recorded entry or an earned badge. Eighteen achievement rewards are claimed once manually, never silently paid on load. Old saves recognise only provable criteria from retained models/counters/parts. The new shared pure transition observer records relevant before/after command state, including before destructive sales/refits. See [PHASE10.md](PHASE10.md).
+
+The eight-model book includes two new milestone-only Icons: Tora 85 Heritage (Level 6 + starter trio, ¥180,000) and Kestrel GT (Level 8 + four completed race disciplines, ¥320,000). These are fixed, once-per-save purchases, not gifts or dealer refresh results. The six existing used-market offers, pending races/Heat, original balance and factory values stay unchanged. Rarity never multiplies performance or the valuation formula.
+
+## Next numbered system — Phase 11: Advanced Cars
+
+Design the first auctions/imports, barn finds and restoration services before expanding the catalog or activating Outer Kagehama. Define their costs, time limits, offer identity, exact restoration effects, owned-vehicle/capacity rules and preservation of tuned parts. Auction bidding must reserve or charge money explicitly; no duplicate wins, hidden bids or loss of an already paid car. Discovery cannot be a free reload reroll. Begin with a small playable slice rather than pretending every advanced acquisition source is already available.
+
+Collection history and achievement/Icon claims must remain monotonic under normal play. Further Icon offers, vehicle models and achievements require stable IDs and explicit compatibility rules. Keep old used stock, accepted race and Heat snapshots valid; test any migration. Repairs/restoration must not retroactively recalculate an active race build. Automation remains Phase 12, not a hidden addition to advanced cars.
 
 ## Market and workshop browsing — implemented
 
@@ -48,8 +58,6 @@ The Workshop component categories remain implemented: visible buttons and a sync
 | Phase | Scope |
 | --- | --- |
 | Graphics & Audio I | Targeted first car/garage/race art, animation and audio pass. Open presentation milestone. |
-
-| 10 — Collection | Rarity separate from performance, Collection Book, achievements and Icon cars. |
 | 11 — Advanced Cars | Auctions, imports, barn finds, restoration and more manufacturers; activate relevant Outer Kagehama content. |
 | 12 — Empire & Automation | Businesses, garage upgrades, staff/crew, delegated routines, capped passive/offline income; activate relevant Industrial District content. |
 | 13+ — Endgame | Legacy/Prestige, rivals, bosses, events and catalog expansion. |

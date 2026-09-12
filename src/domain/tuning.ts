@@ -1,3 +1,4 @@
+import { withCollectionProgress } from './collectionProgress';
 import { findPart, isPartCompatible, PARTS, type PartDefinition } from '../data/parts';
 import { TUNING_SLOTS, type TuningSlot, type VehicleBuildStats, type VehicleTuning } from './tuningTypes';
 import type { GameState, PlayerVehicle } from './types';
@@ -30,6 +31,8 @@ const BASE_RATINGS: Record<string, { grip: number; handling: number; braking: nu
   'senda-s': { grip: 54, handling: 60, braking: 55, reliability: 84 },
   'pico-r': { grip: 57, handling: 67, braking: 56, reliability: 82 },
   'estate-gt': { grip: 55, handling: 53, braking: 57, reliability: 82 },
+  'tora-heritage': { grip: 57, handling: 72, braking: 57, reliability: 86 },
+  'kestrel-gt': { grip: 62, handling: 61, braking: 62, reliability: 84 },
 };
 const clampRating = (value: number) => Math.max(0, Math.min(100, value));
 export function getInstalledUpgrades(vehicle: PlayerVehicle): PartDefinition[] {
@@ -91,7 +94,7 @@ function requireVehicle(state: GameState, id: string): PlayerVehicle {
   if (!isVehicleTuning(vehicle.tuning, vehicle.catalogId)) throw new Error('Vehicle tuning data is invalid.');
   return vehicle;
 }
-export function installPart(state: GameState, instanceId: string, partId: string, expectedInstalledId: string | null): GameState {
+export const installPart = withCollectionProgress(function installPart(state: GameState, instanceId: string, partId: string, expectedInstalledId: string | null): GameState {
   const vehicle = requireVehicle(state, instanceId); const part = findPart(partId);
   if (!part) throw new Error('Unknown performance part.');
   if ((vehicle.tuning.installedBySlot[part.slot] ?? null) !== expectedInstalledId) throw new Error('This build changed. Review the current slot and try again.');
@@ -105,8 +108,8 @@ export function installPart(state: GameState, instanceId: string, partId: string
   getVehicleBuildStats(updated);
   return { ...state, cashYen: state.cashYen - (alreadyOwned ? 0 : part.priceYen),
     ownedVehicles: state.ownedVehicles.map((v) => v.instanceId === instanceId ? updated : v) };
-}
-export function removePart(state: GameState, instanceId: string, slot: TuningSlot, expectedPartId: string): GameState {
+});
+export const removePart = withCollectionProgress(function removePart(state: GameState, instanceId: string, slot: TuningSlot, expectedPartId: string): GameState {
   const vehicle = requireVehicle(state, instanceId);
   if (!TUNING_SLOTS.includes(slot) || vehicle.tuning.installedBySlot[slot] !== expectedPartId) throw new Error('This part is no longer installed.');
   const busy = getVehicleBusyReason(state, instanceId);
@@ -115,4 +118,4 @@ export function removePart(state: GameState, instanceId: string, slot: TuningSlo
   const updated = { ...vehicle, tuning: { purchasedPartIds: [...vehicle.tuning.purchasedPartIds], installedBySlot } };
   getVehicleBuildStats(updated);
   return { ...state, ownedVehicles: state.ownedVehicles.map((v) => v.instanceId === instanceId ? updated : v) };
-}
+});

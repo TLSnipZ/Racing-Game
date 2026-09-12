@@ -1,4 +1,4 @@
-import { findVehicleDefinition, VEHICLE_CATALOG } from '../data/vehicles';
+import { findVehicleDefinition, USED_VEHICLE_CATALOG } from '../data/vehicles';
 import { MARKET_REFRESH_MS, MAX_MARKET_GENERATION } from './marketStock';
 import { isInteger, isPlayerVehicle, isRecord, isText } from './vehicleValidation';
 import type { MarketState } from './marketTypes';
@@ -22,7 +22,7 @@ export function isMarketState(value: unknown, ownedVehicles: readonly { instance
     if (last.kind === 'buy' ? value.purchasedCount === 0 || value.totalSpentYen < last.amountYen
       : value.soldCount === 0 || value.totalReceivedYen < last.amountYen) return false;
   }
-  if (!Array.isArray(value.listings) || value.listings.length > VEHICLE_CATALOG.length) return false;
+  if (!Array.isArray(value.listings) || value.listings.length > USED_VEHICLE_CATALOG.length) return false;
   const ids = new Set(ownedVehicles.map((vehicle) => vehicle.instanceId));
   const catalogs = new Set<string>();
   for (const listing of value.listings) {
@@ -31,7 +31,7 @@ export function isMarketState(value: unknown, ownedVehicles: readonly { instance
       || !isInteger(listing.minLevel, 1) || listing.minLevel > 20 || !isPlayerVehicle(listing.vehicle)) return false;
     const vehicle = listing.vehicle;
     const definition = findVehicleDefinition(vehicle.catalogId);
-    if (!definition || vehicle.instanceId !== listing.id || ids.has(listing.id) || catalogs.has(vehicle.catalogId)
+    if (!definition || definition.acquisition !== 'used-market' || vehicle.instanceId !== listing.id || ids.has(listing.id) || catalogs.has(vehicle.catalogId)
       || vehicle.name !== definition.name || vehicle.engine !== definition.engine || vehicle.drive !== definition.drive
       || vehicle.hp !== definition.hp || vehicle.weightKg !== definition.weightKg
       || vehicle.year < definition.years[0] || vehicle.year > definition.years[1]

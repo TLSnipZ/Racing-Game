@@ -1,10 +1,11 @@
 import { useLayoutEffect, useRef, type KeyboardEvent } from 'react';
-import { BriefcaseBusiness, Database, Gauge, Map, Store, Warehouse, Wrench } from 'lucide-react';
+import { BookOpen, BriefcaseBusiness, Database, Gauge, Map, Store, Warehouse, Wrench } from 'lucide-react';
+import { getClaimableAchievements } from '../domain/collectionProgress';
 import { HeatBadge } from './HeatBadge';
 import { HudLevelProgress } from './HudLevelProgress';
 import type { GameState } from '../domain/types';
 
-export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'market' | 'saves';
+export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'market' | 'collection' | 'saves';
 const ITEMS = [
   { id: 'garage', label: 'Garage', Icon: Warehouse },
   { id: 'jobs', label: 'Jobs', Icon: BriefcaseBusiness },
@@ -12,6 +13,7 @@ const ITEMS = [
   { id: 'races', label: 'Races', Icon: Gauge },
   { id: 'workshop', label: 'Workshop', Icon: Wrench },
   { id: 'market', label: 'Market', Icon: Store },
+  { id: 'collection', label: 'Collection', Icon: BookOpen },
   { id: 'saves', label: 'Saves', Icon: Database },
 ] as const;
 export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatReady, onHeat, onTab }: {
@@ -19,6 +21,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
   game: GameState; tab: SectionTab; hasStarted: boolean; jobReady: boolean; raceReady: boolean; onTab: (tab: SectionTab) => void;
 }) {
   const header = useRef<HTMLElement>(null);
+  const rewardsReady = getClaimableAchievements(game).length;
   const disabled = (id: string) => !hasStarted && id !== 'garage' && id !== 'saves';
   useLayoutEffect(() => {
     const element = header.current;
@@ -52,7 +55,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
   }
   return <header className="gameTopbar" ref={header}>
     <div className="gameHud"><div className="compactBrand"><div className="eyebrow">KAGEHAMA / UNDERGROUND</div>
-      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 09</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
+      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 10</span><HeatBadge value={game.heat.value} disabled={!hasStarted} onOpen={onHeat} /></div>
       <div className="playerMeta" aria-label="Player status"><div><span>CASH</span><strong data-testid="cash" title={`¥${game.cashYen.toLocaleString('en-US')}`}>¥{game.cashYen.toLocaleString('en-US')}</strong></div>
         <div className="hudLevel"><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong>
           <HudLevelProgress reputation={game.reputation} playerLevel={game.playerLevel} /></div>
@@ -63,11 +66,12 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, heatRea
         aria-selected={id === tab} aria-controls={`panel-${id}`} disabled={disabled(id)} tabIndex={id === tab ? 0 : -1}
         onKeyDown={keyDown} onClick={() => onTab(id as SectionTab)} title={disabled(id) ? 'Choose a starter first' : label}>
         <Icon size={19} aria-hidden="true" /><span>{label}</span>
+        {id === 'collection' && rewardsReady > 0 && <b className="readyBadge" data-testid="collection-ready-badge" aria-hidden="true">{rewardsReady}</b>}
         {id === 'city' && (game.heat.pendingStop || game.heat.cooldown) && <b className="readyBadge" data-testid="heat-ready-badge" aria-hidden="true">{heatReady ? 'READY' : game.heat.cooldown ? 'PAUSE' : 'ALERT'}</b>}
         {id === 'jobs' && jobReady && <b className="readyBadge" data-testid="job-ready-badge" aria-hidden="true">READY</b>}
         {id === 'races' && raceReady && <b className="readyBadge" data-testid="race-ready-badge" aria-hidden="true">READY</b>}
       </button>)}
     </div></nav>
-    <span className="srOnly" role="status">{heatReady ? 'Lay low is ready to finish in City.' : game.heat.pendingStop && !game.heat.cooldown ? 'A patrol alert needs your decision in City.' : jobReady ? 'Your job reward is ready to claim in Jobs.' : raceReady ? 'Your race result is ready to settle in Races.' : ''}</span>
+    <span className="srOnly" role="status">{heatReady ? 'Lay low is ready to finish in City.' : game.heat.pendingStop && !game.heat.cooldown ? 'A patrol alert needs your decision in City.' : jobReady ? 'Your job reward is ready to claim in Jobs.' : raceReady ? 'Your race result is ready to settle in Races.' : rewardsReady ? `${rewardsReady} achievement rewards are ready in Collection.` : ''}</span>
   </header>;
 }

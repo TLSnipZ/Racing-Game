@@ -18,7 +18,7 @@ async function buy(page: Page, name: string, owned = false) {
 
 test('real tabs expose exactly one panel and never mutate the session', async ({ page }) => {
   await seed(page, initial()); const before = await stored(page);
-  for (const name of ['Jobs', 'City', 'Races', 'Workshop', 'Market', 'Saves', 'Garage'] as const) {
+  for (const name of ['Jobs', 'City', 'Races', 'Workshop', 'Market', 'Collection', 'Saves', 'Garage'] as const) {
     await tab(page, name); await expect(page.getByRole('tabpanel')).toHaveCount(1);
     await expect(page.getByRole('tabpanel')).toHaveAttribute('id', `panel-${name.toLowerCase()}`);
     await expect(page.getByTestId('cash')).toHaveText('¥18,000'); expect(await stored(page)).toBe(before);

@@ -1,3 +1,4 @@
+import { RarityBadge } from './RarityBadge';
 import { useEffect, useRef, useState } from 'react';
 import { ArrowRightLeft, Check, KeyRound, LockKeyhole, RefreshCw, Search, Store, X } from 'lucide-react';
 import { BODY_TYPES, MANUFACTURERS, findVehicleDefinition, type BodyType, type ManufacturerId } from '../data/vehicles';
@@ -121,7 +122,7 @@ export function Market({ game, blocked, visible, onBuy, onSell, onRefresh, onGar
         const requirement = getBuyRequirement(game, entry);
         return <article className="marketCard" key={entry.id} aria-label={`${car.name} listing`}>
           <div className="marketCardTop"><span>{MANUFACTURERS[model.manufacturer]} / {BODY_TYPES[model.bodyType]}</span><b>{car.year}</b></div>
-          <VehicleSilhouette catalogId={car.catalogId} /><div className="marketCardContent"><span className="eyebrow">{entry.seller}</span><h3>{car.name}</h3>
+          <VehicleSilhouette catalogId={car.catalogId} /><div className="marketCardContent"><span className="eyebrow">{entry.seller}</span><h3>{car.name}</h3><RarityBadge catalogId={car.catalogId} />
             <p>{car.engine} · {car.drive} · {car.hp} PS</p><div className="marketCardStats"><span>{number(car.odometerKm)} km</span><span>{getOverallCondition(car)}% condition</span></div>
             <div className="marketAsking"><strong>{yen(entry.askingPriceYen)}</strong><span>ASKING PRICE · NO EXTRA FEES</span></div>
             <p className="marketRequirement">{blocked ? 'Resolve the save warning first.' : requirement ?? 'Available · parked in your garage after purchase'}</p>

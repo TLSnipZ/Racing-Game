@@ -1,5 +1,17 @@
 # Changelog
 
+## Phase 10 — Collection, achievements and Icon Cars (2026-09-12)
+
+- Added Collection as an eighth independent tab: filterable eight-model Book, 18 achievements and two fixed-price milestone Icon offers.
+- Added explicit Common/Rare/Legendary/Icon badges to model metadata, Garage and Market, without affecting performance, prices or stock frequency.
+- Added persistent ever-owned model credit and latched achievements, retaining them after sales or stock restoration; duplicates count once per model and separately for garage capacity.
+- Added exact-once manual yen claims and a claimable-rewards navigation badge; no automatic payout, extra XP/REP or stat boost.
+- Added Tora 85 Heritage (Level 6 + original starter trio, ¥180,000) and Kestrel GT (Level 8 + all four race disciplines completed, ¥320,000) as one-time confirmed purchases. Selling an Icon does not restore its offer.
+- Kept all six existing dealer model samples and the generation algorithm separate from Icons; no stock reroll or existing asking-price changes. New Icon models support compatible non-turbo tuning, races and ordinary protected dealer sale.
+- Added Save v8 collection data with a genuine released-v7 fixture. Prior world fields are preserved exactly; migration recognises only provable history and never pays past rewards without a manual claim. KAGEHAMA1 remains unchanged.
+- Added pure collection command observation, bounded validation, duplicate/overflow/capacity checks, sold-model history, failed-write and stale-tab regressions, and desktop/mobile/narrow Collection views.
+- Updated README, roadmap and the Phase 10 contract. Graphics & Audio I remains open; Phase 11 Advanced Cars is the next numbered system.
+
 ## Phase 9 — Heat & Police (2026-09-12)
 
 - Added a compact, labelled non-flashing driver Heat meter to the persistent HUD and recovery access through City; kept cash/level/REP/XP and seven isolated tabs.

@@ -1,3 +1,5 @@
+import { withCollectionProgress } from './collectionProgress';
+import { createEmptyCollectionState } from './collectionProgress';
 import { createMarketState } from './marketStock';
 import { createHeatState } from './heat';
 import { STARTER_CARS } from '../data/starters';
@@ -9,7 +11,7 @@ import type { GameState, PlayerVehicle } from './types';
 export const STARTING_CASH_YEN = 50000;
 export function createNewGameState(): GameState {
   return { cashYen: STARTING_CASH_YEN, playerLevel: 1, reputation: 0, selectedStarterId: null,
-    ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState(), market: createMarketState(), heat: createHeatState() };
+    ownedVehicles: [], activeVehicleId: null, economy: createEconomyState(), racing: createRacingState(), market: createMarketState(), heat: createHeatState(), collection: createEmptyCollectionState() };
 }
 export function createPlayerVehicle(starterId: string, instanceId: string): PlayerVehicle {
   const starter = STARTER_CARS.find((car) => car.id === starterId);
@@ -21,7 +23,7 @@ export function createPlayerVehicle(starterId: string, instanceId: string): Play
     transmissionCondition: starter.transmissionCondition, originality: starter.originality,
     installedParts: [...starter.stockParts], tuning: createVehicleTuning() };
 }
-export function purchaseStarter(state: GameState, starterId: string, instanceId: string): GameState {
+export const purchaseStarter = withCollectionProgress(function purchaseStarter(state: GameState, starterId: string, instanceId: string): GameState {
   if (state.selectedStarterId !== null || state.ownedVehicles.length > 0) throw new Error('A starter car has already been chosen.');
   const starter = STARTER_CARS.find((car) => car.id === starterId);
   if (!starter) throw new Error('Unknown starter car.');
@@ -29,4 +31,4 @@ export function purchaseStarter(state: GameState, starterId: string, instanceId:
   const vehicle = createPlayerVehicle(starter.id, instanceId);
   return { ...state, cashYen: state.cashYen - starter.priceYen, selectedStarterId: starter.id,
     ownedVehicles: [vehicle], activeVehicleId: vehicle.instanceId };
-}
+});

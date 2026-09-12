@@ -1,3 +1,4 @@
+import type { Rarity } from '../domain/collectionTypes';
 import { STARTER_CARS, type Drive } from './starters';
 
 export const MANUFACTURERS = { hoshino: 'Hoshino', akari: 'Akari', kazuma: 'Kazuma' } as const;
@@ -16,6 +17,8 @@ export type VehicleDefinition = {
   readonly weightKg: number;
   readonly referenceYen: number;
   readonly marketLevel: number;
+  readonly rarity: Rarity;
+  readonly acquisition: 'used-market' | 'icon';
   readonly description: string;
   readonly traits: readonly string[];
   readonly stockParts: readonly string[];
@@ -23,28 +26,38 @@ export type VehicleDefinition = {
 
 /** Explicit model metadata. The original three starter examples and prices stay untouched. */
 const STARTER_METADATA = [
-  { manufacturer: 'hoshino', bodyType: 'hatchback', years: [1992, 1996], referenceYen: 50000 },
-  { manufacturer: 'hoshino', bodyType: 'coupe', years: [1984, 1987], referenceYen: 75000 },
-  { manufacturer: 'akari', bodyType: 'coupe', years: [1990, 1994], referenceYen: 110000 },
+  { manufacturer: 'hoshino', bodyType: 'hatchback', years: [1992, 1996], referenceYen: 50000, rarity: 'common' },
+  { manufacturer: 'hoshino', bodyType: 'coupe', years: [1984, 1987], referenceYen: 75000, rarity: 'legendary' },
+  { manufacturer: 'akari', bodyType: 'coupe', years: [1990, 1994], referenceYen: 110000, rarity: 'rare' },
 ] as const;
 const FACTORY_PARTS = ['Factory intake', 'Factory exhaust', 'Factory ECU', 'Factory suspension', 'Road tires'] as const;
 export const VEHICLE_CATALOG: readonly VehicleDefinition[] = [
   ...STARTER_CARS.map((car, index): VehicleDefinition => ({
     id: car.id, name: car.name, engine: car.engine, drive: car.drive, hp: car.hp, weightKg: car.weightKg,
     description: car.description, traits: [...car.traits], stockParts: [...car.stockParts],
-    ...STARTER_METADATA[index], marketLevel: 1,
+    ...STARTER_METADATA[index], marketLevel: 1, acquisition: 'used-market',
   })),
   { id: 'senda-s', name: 'Akari Senda S', manufacturer: 'akari', bodyType: 'sedan', years: [1996, 1999],
-    engine: '2.0L NA I4', drive: 'RWD', hp: 145, weightKg: 1230, referenceYen: 125000, marketLevel: 3,
+    engine: '2.0L NA I4', drive: 'RWD', hp: 145, weightKg: 1230, referenceYen: 125000, marketLevel: 3, rarity: 'common', acquisition: 'used-market',
     description: 'Four doors, a balanced chassis and absolutely no intention of behaving like a family car.',
     traits: ['Sports sedan', 'RWD', 'Balanced chassis'], stockParts: FACTORY_PARTS },
   { id: 'pico-r', name: 'Hoshino Pico R', manufacturer: 'hoshino', bodyType: 'hatchback', years: [1998, 2001],
-    engine: '1.8L NA I4', drive: 'FWD', hp: 165, weightKg: 1010, referenceYen: 170000, marketLevel: 4,
+    engine: '1.8L NA I4', drive: 'FWD', hp: 165, weightKg: 1010, referenceYen: 170000, marketLevel: 4, rarity: 'rare', acquisition: 'used-market',
     description: 'A higher-revving hatch with sharper responses. Small footprint. Much less reasonable intentions.',
     traits: ['Hot hatch', 'High-revving NA', 'Lightweight'], stockParts: FACTORY_PARTS },
   { id: 'estate-gt', name: 'Kazuma Estate GT', manufacturer: 'kazuma', bodyType: 'wagon', years: [1999, 2003],
-    engine: '2.5L NA I6', drive: 'RWD', hp: 190, weightKg: 1400, referenceYen: 210000, marketLevel: 5,
+    engine: '2.5L NA I6', drive: 'RWD', hp: 190, weightKg: 1400, referenceYen: 210000, marketLevel: 5, rarity: 'rare', acquisition: 'used-market',
     description: 'A straight-six touring wagon. Room for a set of wheels, a toolbox and several questionable plans.',
     traits: ['Touring wagon', 'Straight six', 'RWD'], stockParts: FACTORY_PARTS },
+  { id: 'tora-heritage', name: 'Hoshino Tora 85 Heritage', manufacturer: 'hoshino', bodyType: 'coupe', years: [1987, 1987],
+    engine: '1.6L Heritage NA I4', drive: 'RWD', hp: 135, weightKg: 940, referenceYen: 240000, marketLevel: 6,
+    rarity: 'icon', acquisition: 'icon', description: 'A carefully preserved limited-series coupe. Less power than a modern hot hatch, more stories than the entire car park.',
+    traits: ['Heritage edition', 'Lightweight RWD', 'Collector milestone'], stockParts: FACTORY_PARTS },
+  { id: 'kestrel-gt', name: 'Akari Kestrel GT', manufacturer: 'akari', bodyType: 'coupe', years: [1997, 1997],
+    engine: '3.0L NA I6', drive: 'RWD', hp: 235, weightKg: 1320, referenceYen: 400000, marketLevel: 8,
+    rarity: 'icon', acquisition: 'icon', description: 'A long-bonnet grand tourer from the bay\'s midnight folklore. A reward for knowing every racing scene, not just the quickest straight.',
+    traits: ['Straight-six GT', 'Midnight icon', 'Collector milestone'], stockParts: FACTORY_PARTS },
 ];
+/** Keep the released six-model dealer generator separate from milestone-only cars. */
+export const USED_VEHICLE_CATALOG = VEHICLE_CATALOG.filter((car) => car.acquisition === 'used-market');
 export const findVehicleDefinition = (id: string): VehicleDefinition | undefined => VEHICLE_CATALOG.find((car) => car.id === id);
