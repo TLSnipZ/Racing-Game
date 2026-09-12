@@ -1,0 +1,211 @@
+{
+  "version": 5,
+  "savedAt": 1789185601500,
+  "state": {
+    "cashYen": 86500,
+    "playerLevel": 3,
+    "reputation": 60,
+    "selectedStarterId": "tora-85",
+    "ownedVehicles": [
+      {
+        "instanceId": "legacy-v5-tora",
+        "catalogId": "tora-85",
+        "name": "Hoshino Tora 85",
+        "year": 1986,
+        "engine": "1.6L NA I4",
+        "drive": "RWD",
+        "hp": 118,
+        "weightKg": 970,
+        "odometerKm": 213760,
+        "engineCondition": 74,
+        "bodyCondition": 68,
+        "transmissionCondition": 72,
+        "originality": 91,
+        "installedParts": [
+          "Factory intake",
+          "Factory exhaust",
+          "Factory ECU",
+          "Factory suspension",
+          "Aged road tires"
+        ],
+        "tuning": {
+          "purchasedPartIds": [
+            "aoba-panel-filter",
+            "aoba-street-tires"
+          ],
+          "installedBySlot": {
+            "intake": "aoba-panel-filter",
+            "tires": "aoba-street-tires"
+          }
+        }
+      }
+    ],
+    "activeVehicleId": "legacy-v5-tora",
+    "economy": {
+      "nextRunId": 1,
+      "activeJob": null,
+      "completedJobs": 0,
+      "totalEarnedYen": 0,
+      "lastReceipt": null
+    },
+    "racing": {
+      "nextRunId": 2,
+      "activeRace": {
+        "modelVersion": 1,
+        "runId": 1,
+        "eventId": "hakuro-intro",
+        "eventName": "Hakuro First Descent",
+        "discipline": "touge",
+        "vehicleId": "legacy-v5-tora",
+        "startedAtMs": 1789185601000,
+        "countdownMs": 3000,
+        "playbackMs": 25000,
+        "finishesAtMs": 1789185629000,
+        "entryFeeYen": 1000,
+        "distanceKm": 5,
+        "sectors": [
+          {
+            "name": "Trail-braking entry",
+            "profile": "braking",
+            "baseTimeMs": 10000
+          },
+          {
+            "name": "Lantern hairpins",
+            "profile": "technical",
+            "baseTimeMs": 22000
+          },
+          {
+            "name": "Ridge transitions",
+            "profile": "flow",
+            "baseTimeMs": 14000
+          },
+          {
+            "name": "Final switchbacks",
+            "profile": "technical",
+            "baseTimeMs": 22000
+          }
+        ],
+        "entrants": [
+          {
+            "name": "Kei / Night Clerk",
+            "vehicleName": "Hoshino Pico RS",
+            "catalogId": "pico-rs",
+            "build": {
+              "powerPs": 108,
+              "weightKg": 920,
+              "grip": 51,
+              "handling": 61,
+              "braking": 49,
+              "reliability": 86,
+              "engineCondition": 85,
+              "transmissionCondition": 85
+            },
+            "id": "rival-1",
+            "sectorTimesMs": [
+              9752,
+              20765,
+              13576,
+              20765
+            ],
+            "totalTimeMs": 64858
+          },
+          {
+            "name": "Nori / Side Street",
+            "vehicleName": "Hoshino Tora 85",
+            "catalogId": "tora-85",
+            "build": {
+              "powerPs": 120,
+              "weightKg": 980,
+              "grip": 50,
+              "handling": 64,
+              "braking": 48,
+              "reliability": 76,
+              "engineCondition": 80,
+              "transmissionCondition": 80
+            },
+            "id": "rival-2",
+            "sectorTimesMs": [
+              9920,
+              20887,
+              13601,
+              20887
+            ],
+            "totalTimeMs": 65295
+          },
+          {
+            "name": "Mako / Loose Change",
+            "vehicleName": "Akari RZ-T",
+            "catalogId": "rz-t",
+            "build": {
+              "powerPs": 150,
+              "weightKg": 1190,
+              "grip": 48,
+              "handling": 50,
+              "braking": 48,
+              "reliability": 65,
+              "engineCondition": 70,
+              "transmissionCondition": 70
+            },
+            "id": "rival-3",
+            "sectorTimesMs": [
+              10481,
+              22848,
+              14552,
+              22848
+            ],
+            "totalTimeMs": 70729
+          },
+          {
+            "name": "YOU",
+            "vehicleName": "Hoshino Tora 85",
+            "catalogId": "tora-85",
+            "build": {
+              "powerPs": 124,
+              "weightKg": 970,
+              "grip": 58,
+              "handling": 68,
+              "braking": 49,
+              "reliability": 78,
+              "engineCondition": 74,
+              "transmissionCondition": 72
+            },
+            "id": "player",
+            "sectorTimesMs": [
+              9660,
+              20159,
+              13249,
+              20159
+            ],
+            "totalTimeMs": 63227
+          }
+        ],
+        "prizes": [
+          {
+            "yen": 6500,
+            "reputation": 14
+          },
+          {
+            "yen": 3800,
+            "reputation": 9
+          },
+          {
+            "yen": 2000,
+            "reputation": 5
+          },
+          {
+            "yen": 500,
+            "reputation": 2
+          }
+        ]
+      },
+      "completedRaces": 0,
+      "cancelledRaces": 0,
+      "wins": 0,
+      "podiums": 0,
+      "totalEntryFeesYen": 1000,
+      "totalEarnedYen": 0,
+      "records": [],
+      "lastResult": null
+    }
+  }
+}

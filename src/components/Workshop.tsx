@@ -56,7 +56,7 @@ export function Workshop({ game, blocked, onInstall, onRemove }: {
     <div className="workshopHeading"><div><span className="eyebrow">MERCER PERFORMANCE / PARTS COUNTER</span><h2 id="workshop-title">Build your edge.</h2><p>Earn it. Fit it. Make it yours.</p></div>
       <label className="workshopVehicle"><span>VEHICLE TO TUNE</span><select value={target.instanceId} aria-label="Vehicle to tune"
         onChange={(event) => { setTargetId(event.target.value); setFeedback(''); }}>
-        {game.ownedVehicles.map((car) => <option key={car.instanceId} value={car.instanceId}>{car.name} · {car.instanceId.slice(0, 8)}</option>)}
+        {game.ownedVehicles.map((car) => <option key={car.instanceId} value={car.instanceId}>{car.name} · {car.instanceId.slice(-14)}</option>)}
       </select><small>{target.instanceId === game.activeVehicleId ? 'Active ride' : 'Workshop target only · your active ride is unchanged'}</small></label>
     </div>
     <div className="workshopSummary"><Wrench size={20} /><strong>{target.name}</strong><span>{target.tuning.purchasedPartIds.length} purchased parts · {Object.keys(target.tuning.installedBySlot).length} fitted upgrades</span></div>
@@ -102,7 +102,7 @@ export function Workshop({ game, blocked, onInstall, onRemove }: {
     <dialog className="partDialog" ref={dialog} aria-labelledby="part-review-title" onClose={() => setReview(null)} onCancel={() => setReview(null)}>
       {reviewedPart && reviewedCar && currentStats && <>
         <div className="dialogHeading"><span className="eyebrow">{PART_BRANDS[reviewedPart.brand].name}</span><button type="button" className="iconButton" aria-label="Close part preview" onClick={close}><X size={20} /></button></div>
-        <h3 id="part-review-title">{reviewedPart.name}</h3><p>Target: <strong>{reviewedCar.name}</strong> · {reviewedCar.instanceId.slice(0, 8)}</p><p>{reviewedPart.description}</p>
+        <h3 id="part-review-title">{reviewedPart.name}</h3><p>Target: <strong>{reviewedCar.name}</strong> · {reviewedCar.instanceId.slice(-14)}</p><p>{reviewedPart.description}</p>
         <table className="comparisonTable"><caption>Current setup compared with this part installed</caption><thead><tr><th>Stat</th><th>Current</th><th>Preview</th><th>Change</th></tr></thead>
           <tbody>{STAT_ROWS.map(({ key, label, unit, lowerBetter }) => {
             const delta = after ? Math.round((after[key] - currentStats[key]) * 10) / 10 : 0; const good = lowerBetter ? delta < 0 : delta > 0;

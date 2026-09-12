@@ -3,6 +3,8 @@ import { ChevronRight, Database } from 'lucide-react';
 import { getDistrictAccess } from './domain/city';
 import type { DistrictFilter as CityFilter, DistrictId } from './data/city';
 import type { RaceDiscipline } from './domain/racingTypes';
+import { Market } from './components/Market';
+import { buyMarketVehicle, sellMarketVehicle, refreshMarket } from './domain/market';
 import { City } from './components/City';
 import { STARTER_CARS } from './data/starters';
 import { purchaseStarter } from './domain/game';
@@ -26,6 +28,7 @@ import './styles/phase4.css';
 import './styles/phase5.css';
 import './styles/phase6.css';
 import './styles/phase7.css';
+import './styles/phase8.css';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 export function App() {
@@ -45,7 +48,7 @@ export function App() {
   const raceReady = isRaceReady(game.racing.activeRace, now);
   useLayoutEffect(() => { window.scrollTo({ top: 0, behavior: 'auto' }); }, [tab]);
   function selectTab(next: SectionTab) {
-    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city') && !hasStarted) return;
+    if ((next === 'jobs' || next === 'workshop' || next === 'races' || next === 'city' || next === 'market') && !hasStarted) return;
     setTab(next);
     document.getElementById(`tab-${next}`)?.focus({ preventScroll: true });
   }
@@ -65,7 +68,7 @@ export function App() {
     const id = globalThis.crypto?.randomUUID?.() ?? `vehicle-${Date.now()}-${Math.random().toString(16).slice(2)}`;
     if (session.command((current) => purchaseStarter(current, selected.id, id))) setSelectedId(null);
   }
-  return <main className="shell phase3 phase4 phase5 phase6 phase7">
+  return <main className="shell phase3 phase4 phase5 phase6 phase7 phase8">
     <a className="skipContent" href={`#panel-${tab}`}>Skip to current section</a>
     <GameHeader game={game} tab={tab} hasStarted={hasStarted} jobReady={jobReady} raceReady={raceReady} onTab={selectTab} />
     <div className={`saveIndicator ${session.error ? 'saveIndicatorWarning' : ''}`} role="status">
@@ -79,13 +82,13 @@ export function App() {
     </section>}
     {/* Views retain filters/forms but hidden panels have no layout, focus or accessibility presence. */}
     <div id="panel-garage" role="tabpanel" aria-labelledby="tab-garage" tabIndex={0} hidden={tab !== 'garage'} className="sectionPanel">
-      {hasStarted ? <Garage key={viewEpoch} game={game} blocked={blocked} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
+      {hasStarted ? <Garage key={viewEpoch} game={game} blocked={blocked} onMarket={() => selectTab('market')} onActivate={(id) => session.command((current) => selectActiveVehicle(current, id))} />
         : !blocked && <>
           <section className="hero"><div className="heroCopy"><span className="tag">MERCER GARAGE // EAST WARD</span>
             <h2>Everybody starts<br />with a bad decision.</h2><p>Three unwanted cars. Fifty thousand yen. One way into Kagehama's midnight scene.</p>
             <div className="message"><b>UNKNOWN</b><span>Heard you're looking for a ride. Got three cars nobody wants. Midnight. Don't be late.</span></div></div>
             <div className="city"><div className="road">首都高速 • EASTLINE</div></div></section>
-          <section id="garage" className="choice"><div className="sectionTitle"><div><span>01 / FIRST RIDE</span><h3>Choose your starter</h3></div><p>The other two are planned for the used market later.</p></div>
+          <section id="garage" className="choice"><div className="sectionTitle"><div><span>01 / FIRST RIDE</span><h3>Choose your starter</h3></div><p>The other two remain available through the used market after your first purchase.</p></div>
             <div className="cards">{STARTER_CARS.map((car, i) => <button type="button" key={car.id} className={`carCard ${selectedId === car.id ? 'selected' : ''}`}
               aria-pressed={selectedId === car.id} aria-label={`Choose ${car.name}`} onClick={() => setSelectedId(car.id)}>
               <div className="cardTop"><span>0{i + 1}</span><span>{car.archetype}</span></div><VehicleSilhouette catalogId={car.id} />
@@ -117,6 +120,13 @@ export function App() {
         onInstall={(car, part, expected) => session.command((current) => installPart(current, car, part, expected))}
         onRemove={(car, slot, expected) => session.command((current) => removePart(current, car, slot, expected))} />}
     </div>
+    <div id="panel-market" role="tabpanel" aria-labelledby="tab-market" tabIndex={0} hidden={tab !== 'market'} className="sectionPanel">
+      {hasStarted && <Market key={viewEpoch} game={game} blocked={blocked} visible={tab === 'market'}
+        onBuy={(id, generation, price) => session.command((current) => buyMarketVehicle(current, id, generation, price))}
+        onSell={(id, key, price, replacement) => session.command((current) => sellMarketVehicle(current, id, key, price, replacement))}
+        onRefresh={(generation) => session.command((current) => refreshMarket(current, generation, Date.now()))}
+        onGarage={() => selectTab('garage')} />}
+    </div>
     <div id="panel-saves" role="tabpanel" aria-labelledby="tab-saves" tabIndex={0} hidden={tab !== 'saves'} className="sectionPanel">
       <SaveManagement game={game} blocked={blocked} onImport={(state) => { const ok = session.replaceGame(state); if (ok) returnToGarage(); return ok; }}
         onReset={() => { const ok = session.resetGame(); if (ok) returnToGarage(); return ok; }} />
@@ -126,6 +136,6 @@ export function App() {
         onRaces={(district) => openDistrict('races', district)} onJobs={(district) => openDistrict('jobs', district)}
         onService={selectTab} onResume={selectTab} />}
     </div>
-    <footer>PHASE 7 // KAGEHAMA CITY · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
+    <footer>PHASE 8 // USED CAR MARKET · PRE-ALPHA · STARTER → JOBS → TUNING → RACES</footer>
   </main>;
 }

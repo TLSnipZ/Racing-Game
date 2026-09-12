@@ -1,15 +1,16 @@
 import { useLayoutEffect, useRef, type KeyboardEvent } from 'react';
-import { BriefcaseBusiness, Database, Gauge, Map, Warehouse, Wrench } from 'lucide-react';
+import { BriefcaseBusiness, Database, Gauge, Map, Store, Warehouse, Wrench } from 'lucide-react';
 import { HudLevelProgress } from './HudLevelProgress';
 import type { GameState } from '../domain/types';
 
-export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'saves';
+export type SectionTab = 'garage' | 'jobs' | 'city' | 'races' | 'workshop' | 'market' | 'saves';
 const ITEMS = [
   { id: 'garage', label: 'Garage', Icon: Warehouse },
   { id: 'jobs', label: 'Jobs', Icon: BriefcaseBusiness },
   { id: 'city', label: 'City', Icon: Map },
   { id: 'races', label: 'Races', Icon: Gauge },
   { id: 'workshop', label: 'Workshop', Icon: Wrench },
+  { id: 'market', label: 'Market', Icon: Store },
   { id: 'saves', label: 'Saves', Icon: Database },
 ] as const;
 export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }: {
@@ -39,7 +40,7 @@ export function GameHeader({ game, tab, hasStarted, jobReady, raceReady, onTab }
   }
   return <header className="gameTopbar" ref={header}>
     <div className="gameHud"><div className="compactBrand"><div className="eyebrow">KAGEHAMA / UNDERGROUND</div>
-      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 07</span></div>
+      <h1>KAGEHAMA<span className="brandDot">.</span></h1><span className="buildLabel">PRE-ALPHA / 08</span></div>
       <div className="playerMeta" aria-label="Player status"><div><span>CASH</span><strong data-testid="cash" title={`¥${game.cashYen.toLocaleString('en-US')}`}>¥{game.cashYen.toLocaleString('en-US')}</strong></div>
         <div className="hudLevel"><span>LEVEL</span><strong data-testid="player-level">{game.playerLevel.toLocaleString('en-US')}</strong>
           <HudLevelProgress reputation={game.reputation} playerLevel={game.playerLevel} /></div>

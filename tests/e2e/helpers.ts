@@ -2,7 +2,7 @@ import { expect, type Page } from '@playwright/test';
 import { SAVE_STORAGE_KEY, serializeSave } from '../../src/domain/persistence';
 import type { GameState } from '../../src/domain/types';
 export const T = Date.parse('2026-09-11T12:00:00Z');
-export async function tab(page: Page, name: 'Garage' | 'Jobs' | 'City' | 'Races' | 'Workshop' | 'Saves') {
+export async function tab(page: Page, name: 'Garage' | 'Jobs' | 'City' | 'Races' | 'Workshop' | 'Market' | 'Saves') {
   await page.getByRole('tab', { name, exact: true }).click();
   await expect(page.getByRole('tab', { name, exact: true })).toHaveAttribute('aria-selected', 'true');
 }

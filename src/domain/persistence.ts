@@ -1,10 +1,13 @@
 import { createEconomyState, isEconomyState } from './economy';
-import { createVehicleTuning, getVehicleBuildStats, isVehicleTuning } from './tuning';
+import { createVehicleTuning } from './tuning';
+import { isRecord, isText, isInteger, isLegacyVehicle, isPlayerVehicle } from './vehicleValidation';
+import { createMarketState } from './marketStock';
+import { isMarketState } from './marketValidation';
 import { createRacingState } from './racing';
 import { isRacingState } from './racingValidation';
-import type { GameState, LegacyGameStateV1, LegacyGameStateV2, LegacyGameStateV3, LegacyGameStateV4, LegacyPlayerVehicle, PlayerVehicle } from './types';
+import type { GameState, LegacyGameStateV1, LegacyGameStateV2, LegacyGameStateV3, LegacyGameStateV4, LegacyGameStateV5 } from './types';
 
-export const SAVE_VERSION = 5;
+export const SAVE_VERSION = 6;
 export const SAVE_STORAGE_KEY = 'kagehama:save';
 // The transport stays v1; the envelope inside it has its own schema version.
 export const SAVE_CODE_PREFIX = 'KAGEHAMA1-';
@@ -37,22 +40,6 @@ function decodeBase64Url(input: string): string {
   }
   return new TextDecoder('utf-8', { fatal: true }).decode(new Uint8Array(bytes));
 }
-const isRecord = (v: unknown): v is Record<string, unknown> => !!v && typeof v === 'object' && !Array.isArray(v);
-const isText = (v: unknown): v is string => typeof v === 'string' && v.trim().length > 0 && v.length <= 200;
-const isInteger = (v: unknown, min = 0): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= min;
-const isPercent = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 0 && v <= 100;
-function isLegacyVehicle(value: unknown): value is LegacyPlayerVehicle {
-  if (!isRecord(value)) return false;
-  return isText(value.instanceId) && isText(value.catalogId) && isText(value.name) && isText(value.engine)
-    && (value.drive === 'FWD' || value.drive === 'RWD') && isInteger(value.year, 1) && isInteger(value.hp, 1)
-    && isInteger(value.weightKg, 1) && isInteger(value.odometerKm) && isPercent(value.engineCondition)
-    && isPercent(value.bodyCondition) && isPercent(value.transmissionCondition) && isPercent(value.originality)
-    && Array.isArray(value.installedParts) && value.installedParts.length <= 100 && value.installedParts.every(isText);
-}
-function isPlayerVehicle(value: unknown): value is PlayerVehicle {
-  if (!isLegacyVehicle(value) || !('tuning' in value) || !isVehicleTuning(value.tuning, value.catalogId)) return false;
-  try { getVehicleBuildStats(value as PlayerVehicle); return true; } catch { return false; }
-}
 function isLegacyGameState(value: unknown): value is LegacyGameStateV1 {
   if (!isRecord(value)) return false;
   if (!(isInteger(value.cashYen) && isInteger(value.playerLevel, 1) && isInteger(value.reputation)
@@ -73,10 +60,14 @@ function isGameStateV3(value: unknown): value is LegacyGameStateV3 {
 function isGameStateV4(value: unknown): value is LegacyGameStateV4 {
   return isGameStateV3(value) && value.ownedVehicles.every(isPlayerVehicle);
 }
-export function isGameState(value: unknown): value is GameState {
+function isGameStateV5(value: unknown): value is LegacyGameStateV5 {
   if (!isGameStateV4(value) || !('racing' in value) || !isRacingState(value.racing, value.ownedVehicles)) return false;
   if (value.racing.activeRace && value.economy.activeJob) return false;
   return value.selectedStarterId !== null || value.racing.nextRunId === 1;
+}
+export function isGameState(value: unknown): value is GameState {
+  if (!isGameStateV5(value) || !('market' in value) || !isMarketState(value.market, value.ownedVehicles)) return false;
+  return value.selectedStarterId !== null || (value.market.nextTransactionId === 1 && value.market.generation === 0);
 }
 export function createSaveEnvelope(state: GameState, savedAt = Date.now()): SaveEnvelope {
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
@@ -93,7 +84,7 @@ export function deserializeSave(raw: string): SaveEnvelope {
   let parsed: unknown;
   try { parsed = JSON.parse(raw); } catch { throw new Error('Save data is not valid JSON.'); }
   if (!isRecord(parsed)) throw new Error('Save data is invalid.');
-  if (![1, 2, 3, 4, SAVE_VERSION].includes(parsed.version as number)) {
+  if (![1, 2, 3, 4, 5, SAVE_VERSION].includes(parsed.version as number)) {
     throw new Error(`Unsupported save version: ${String(parsed.version)}. Your stored data has not been deleted.`);
   }
   if (!isInteger(parsed.savedAt)) throw new Error('Save timestamp is invalid.');
@@ -110,10 +101,14 @@ export function deserializeSave(raw: string): SaveEnvelope {
     if (!isGameStateV3(state)) throw new Error('Legacy v3 save game state is invalid.');
     state = { ...state, ownedVehicles: state.ownedVehicles.map((vehicle) => ({ ...vehicle, tuning: createVehicleTuning() })) };
   }
-  if (parsed.version !== SAVE_VERSION) {
+  if ([1, 2, 3, 4].includes(parsed.version as number)) {
     if (!isGameStateV4(state)) throw new Error('Legacy v4 save game state is invalid.');
     // Existing tuned builds, balances, pending jobs and receipts are untouched. No retrospective races or rewards.
     state = { ...state, racing: createRacingState() };
+  }
+  if (parsed.version !== SAVE_VERSION) {
+    if (!isGameStateV5(state)) throw new Error('Legacy v5 save game state is invalid.');
+    state = { ...state, market: createMarketState(state.ownedVehicles.map((vehicle) => vehicle.instanceId)) };
   }
   if (!isGameState(state)) throw new Error('Save game state is invalid.');
   return { version: SAVE_VERSION, savedAt: parsed.savedAt, state };
