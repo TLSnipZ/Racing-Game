@@ -10,14 +10,15 @@ import { GARAGE_CAPACITY } from '../domain/marketStock';
 import { RARITIES, type AchievementStatus, type CollectionStatus, type Rarity } from '../domain/collectionTypes';
 import type { GameState } from '../domain/types';
 import { VehicleSilhouette } from './VehicleSilhouette';
+import type { SpecialistView } from '../domain/advancedTypes';
 import { RarityBadge } from './RarityBadge';
 
 const yen = (n: number) => `¥${n.toLocaleString('en-US')}`;
 type PageMode = 'book' | 'achievements' | 'icons';
 const MODES = [{ id: 'book', label: 'Collection Book', Icon: BookOpen }, { id: 'achievements', label: 'Achievements', Icon: Trophy }, { id: 'icons', label: 'Icon Showroom', Icon: Crown }] as const;
-export function Collection({ game, blocked, onClaim, onIcon, onMarket, onGarage }: {
+export function Collection({ game, blocked, onClaim, onIcon, onMarket, onGarage, onSpecialist }: {
   game: GameState; blocked: boolean; onClaim: (id: string) => boolean;
-  onIcon: (id: string, price: number) => boolean; onMarket: () => void; onGarage: () => void;
+  onIcon: (id: string, price: number) => boolean; onMarket: () => void; onGarage: () => void; onSpecialist: (view: SpecialistView) => void;
 }) {
   const [mode, setMode] = useState<PageMode>('book');
   const [filters, setFilters] = useState(createBookFilters);
@@ -90,7 +91,7 @@ export function Collection({ game, blocked, onClaim, onIcon, onMarket, onGarage 
           <VehicleSilhouette catalogId={model.id} /><div className="bookCardCopy"><span className="eyebrow">{MANUFACTURERS[model.manufacturer]} / {BODY_TYPES[model.bodyType]}</span><h3>{model.name}</h3>
             <p>{model.description}</p><div className="bookSpecs"><span>{model.years[0] === model.years[1] ? model.years[0] : model.years.join('–')}</span><span>{model.hp} PS · {model.drive}</span></div>
             <strong className="bookOwnership">{owned ? `${owned} currently owned` : collected ? 'Collected · no longer parked here' : 'Still waiting for your first set of keys'}</strong>
-            <button type="button" className="secondaryButton" onClick={owned ? onGarage : model.acquisition === 'icon' ? () => setMode('icons') : onMarket}>{owned ? 'OPEN GARAGE' : model.acquisition === 'icon' ? 'VIEW ICON GOALS' : 'BROWSE USED MARKET'}</button></div>
+            <button type="button" className="secondaryButton" onClick={owned ? onGarage : model.acquisition === 'icon' ? () => setMode('icons') : model.acquisition === 'used-market' ? onMarket : () => onSpecialist(model.acquisition === 'import' ? 'imports' : model.acquisition === 'auction' ? 'auctions' : 'barns')}>{owned ? 'OPEN GARAGE' : model.acquisition === 'icon' ? 'VIEW ICON GOALS' : model.acquisition === 'used-market' ? 'BROWSE USED MARKET' : `VIEW ${model.acquisition.toUpperCase()} SOURCE`}</button></div>
         </article>;
       })}</div>
       {book.length === 0 && <p className="collectorEmpty">No models match this combination. Reset the collection filters to see all cars.</p>}

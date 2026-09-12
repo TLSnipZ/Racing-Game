@@ -28,9 +28,9 @@ export const CITY_DISTRICTS: readonly DistrictDefinition[] = [
   { id: 'industrial', name: 'Industrial District', number: '05', scene: 'FUTURE / EMPIRE', minLevel: null,
     future: 'Business locations and crew operations are planned for Phase 12. No activities here yet.',
     description: 'Shuttered body shops and warehouses waiting for a new owner. An address for the empire you have not built yet.', services: [] },
-  { id: 'outskirts', name: 'Outer Kagehama', number: '06', scene: 'FUTURE / DISCOVERY', minLevel: null,
-    future: 'Barn finds and restoration are planned for Phase 11. No discoveries can be purchased here yet.',
-    description: 'Quiet lanes beyond the city. The rumors about forgotten cars are promising; the actual search system comes later.', services: [] },
+  { id: 'outskirts', name: 'Outer Kagehama', number: '06', scene: 'CLASSICS / RECOVERY', minLevel: 5,
+    future: null,
+    description: 'Quiet lanes beyond the city. The Old Orchard lead is now available through the specialist desk: commission a survey, then decide whether the project is worth recovering.', services: [] },
 ];
 
 // Explicit membership: never infer a district by parsing a car, job or event name.

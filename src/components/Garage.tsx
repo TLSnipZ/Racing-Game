@@ -1,3 +1,4 @@
+import { getReservedVehicleIds } from '../domain/garageCapacity';
 import { RarityBadge } from './RarityBadge';
 import { useState } from 'react';
 import { Check, KeyRound, Search, Warehouse } from 'lucide-react';
@@ -36,6 +37,7 @@ export function Garage({ game, blocked, onActivate, onMarket, onCollection }: { 
     <div className="garageHeading"><div><span className="eyebrow">01 / MERCER GARAGE · EAST WARD</span><h2>Your garage.</h2></div>
       <div className="collectionCount"><strong>{game.ownedVehicles.length.toString().padStart(2, '0')}</strong><span>{game.ownedVehicles.length === 1 ? 'VEHICLE' : 'VEHICLES'} OWNED<br />{uniqueModels} UNIQUE {uniqueModels === 1 ? 'MODEL' : 'MODELS'}</span></div></div>
     <button type="button" className="secondaryButton" onClick={onCollection}>OPEN COLLECTION BOOK</button>
+    {getReservedVehicleIds(game).length > 0 && <p className="specialistNote">1 incoming car space reserved. Complete the specialist contract in Market to park it here.</p>}
     <div className="activeSummary" role="status"><KeyRound size={16} /><span>ACTIVE RIDE</span><strong>{active?.name ?? 'None'}</strong><small>Inspecting a card does not switch your active car.</small></div>
     <div className="garageShowcase"><div className="showcaseCopy"><span className="tag">{isActive ? 'YOUR ACTIVE RIDE' : 'VEHICLE PREVIEW'}</span><h3>{inspected.name}</h3><RarityBadge catalogId={inspected.catalogId} />
       <p>{inspected.year} · {inspected.engine} · {inspected.drive}</p><p className="showcaseFlavor">{catalog?.description ?? 'Another chapter in your Kagehama story.'}</p>

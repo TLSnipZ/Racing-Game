@@ -32,6 +32,9 @@ const BASE_RATINGS: Record<string, { grip: number; handling: number; braking: nu
   'pico-r': { grip: 57, handling: 67, braking: 56, reliability: 82 },
   'estate-gt': { grip: 55, handling: 53, braking: 57, reliability: 82 },
   'tora-heritage': { grip: 57, handling: 72, braking: 57, reliability: 86 },
+  'sora-s': { grip: 57, handling: 73, braking: 55, reliability: 85 },
+  'crest-rs': { grip: 59, handling: 57, braking: 60, reliability: 83 },
+  'hachi-gt': { grip: 43, handling: 57, braking: 40, reliability: 73 },
   'kestrel-gt': { grip: 62, handling: 61, braking: 62, reliability: 84 },
 };
 const clampRating = (value: number) => Math.max(0, Math.min(100, value));

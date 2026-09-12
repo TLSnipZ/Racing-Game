@@ -4,7 +4,7 @@ import { STARTER_CARS } from '../data/starters';
 import { findVehicleDefinition, VEHICLE_CATALOG, USED_VEHICLE_CATALOG } from '../data/vehicles';
 import { findRaceEvent } from '../data/races';
 import type { CollectionState } from './collectionTypes';
-import type { GameState, LegacyGameStateV7 } from './types';
+import type { GameState, LegacyGameStateV7, LegacyGameStateV8 } from './types';
 
 export function createEmptyCollectionState(): CollectionState {
   return { collectedModelIds: [], unlockedAchievementIds: [], claimedAchievementIds: [], purchasedIconIds: [] };
@@ -16,17 +16,17 @@ function provenModels(state: LegacyGameStateV7): string[] {
   return unique([...state.ownedVehicles.map((car) => car.catalogId), state.selectedStarterId,
     state.racing.lastResult?.race.entrants.find((entrant) => entrant.id === 'player')?.catalogId].filter(known));
 }
-export function getCollectedModelIds(state: GameState): string[] {
+export function getCollectedModelIds(state: LegacyGameStateV8): string[] {
   return unique([...state.collection.collectedModelIds, ...provenModels(state)]);
 }
-export function getAchievementValue(state: GameState, achievement: AchievementDefinition): number {
+export function getAchievementValue(state: LegacyGameStateV8, achievement: AchievementDefinition): number {
   const models = getCollectedModelIds(state);
   switch (achievement.metric) {
     case 'starter': return state.selectedStarterId === null ? 0 : 1;
     case 'starter-trio': return STARTER_CARS.filter((car) => models.includes(car.id)).length;
     case 'original-six': return USED_VEHICLE_CATALOG.filter((car) => models.includes(car.id)).length;
     case 'garage-size': return state.ownedVehicles.length;
-    case 'body-types': return new Set(models.map((id) => findVehicleDefinition(id)!.bodyType)).size;
+    case 'body-types': return new Set(models.map((id) => findVehicleDefinition(id)!.bodyType).filter((body) => ['hatchback', 'coupe', 'sedan', 'wagon'].includes(body))).size;
     case 'icons': return models.filter((id) => findVehicleDefinition(id)?.rarity === 'icon').length;
     case 'jobs': return state.economy.completedJobs;
     case 'parts': return state.ownedVehicles.reduce((count, car) => count + car.tuning.purchasedPartIds.length, 0);
@@ -40,15 +40,15 @@ export function getAchievementValue(state: GameState, achievement: AchievementDe
     case 'lay-low': return state.heat.lastResolution?.kind === 'lay-low' ? 1 : 0;
   }
 }
-export function getAchievementProgress(state: GameState, item: AchievementDefinition) {
+export function getAchievementProgress(state: LegacyGameStateV8, item: AchievementDefinition) {
   const value = Math.min(item.target, Math.max(0, getAchievementValue(state, item)));
   const unlocked = state.collection.unlockedAchievementIds.includes(item.id) || value >= item.target;
   const claimed = state.collection.claimedAchievementIds.includes(item.id);
   return { value: unlocked ? item.target : value, target: item.target, unlocked, claimed,
     claimable: unlocked && !claimed, percent: unlocked ? 100 : value / item.target * 100 };
 }
-export const getClaimableAchievements = (state: GameState) => ACHIEVEMENTS.filter((item) => getAchievementProgress(state, item).claimable);
-export const getTotalCollectionRewards = (state: GameState) => ACHIEVEMENTS.filter((item) => state.collection.claimedAchievementIds.includes(item.id)).reduce((sum, item) => sum + item.rewardYen, 0);
+export const getClaimableAchievements = (state: LegacyGameStateV8) => ACHIEVEMENTS.filter((item) => getAchievementProgress(state, item).claimable);
+export const getTotalCollectionRewards = (state: LegacyGameStateV8) => ACHIEVEMENTS.filter((item) => state.collection.claimedAchievementIds.includes(item.id)).reduce((sum, item) => sum + item.rewardYen, 0);
 
 export function isCollectionState(value: unknown): value is CollectionState {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
@@ -67,7 +67,7 @@ export function isCollectionState(value: unknown): value is CollectionState {
     });
 }
 /** Pure monotonic observation; this never pays a reward, awards XP, changes old records or calls a clock. */
-export function recordCollectionProgress(state: GameState): GameState {
+export function recordCollectionProgress<T extends LegacyGameStateV8>(state: T): T {
   if (!isCollectionState(state.collection)) throw new Error('Collection data is invalid.');
   const collectedModelIds = getCollectedModelIds(state);
   const observed = { ...state, collection: { ...state.collection, collectedModelIds } };
@@ -82,6 +82,6 @@ export function withCollectionProgress<Args extends unknown[]>(command: (state: 
   return (state: GameState, ...args: Args): GameState => recordCollectionProgress(command(recordCollectionProgress(state), ...args));
 }
 /** Migration recognises only provable history; no guessed sold models, dates, rewards or Icon purchases. */
-export function migrateCollection(state: LegacyGameStateV7): GameState {
+export function migrateCollection(state: LegacyGameStateV7): LegacyGameStateV8 {
   return recordCollectionProgress({ ...state, collection: createEmptyCollectionState() });
 }

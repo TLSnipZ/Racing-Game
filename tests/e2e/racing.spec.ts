@@ -113,7 +113,7 @@ test('pending race survives export, confirmed reset and import with the same dea
 });
 test('v4 tuned saves migrate without losing parts, balances, receipts or the pending delivery', async ({ page }) => {
   await seedRaw(page, JSON.stringify(legacyV4)); await expect(page.locator('.saveIndicator')).toContainText(`SAVE V${SAVE_VERSION}`);
-  const next = await read(page); const { collection, racing, heat, market, ...oldFields } = next;
+  const next = await read(page); const { advanced: _advanced, collection, racing, heat, market, ...oldFields } = next;
   expect(oldFields).toEqual(legacyV4.state); expect(heat).toEqual(createHeatState()); expect(racing.nextRunId).toBe(1);
   expect(market.generation).toBe(0); expect(market.purchasedCount).toBe(0);
   expect(market.soldCount).toBe(0); expect(market.lastTrade).toBeNull(); expect(market.listings).toHaveLength(6);

@@ -37,7 +37,7 @@ describe('Save v6 market and historical compatibility', () => {
     expect(importSaveCode(SAVE_CODE_PREFIX + Buffer.from(before).toString('base64url')).state).toEqual(result.state);
   });
   it('preserves every v5 field, including a paid race, tuned parts, fee and exact sector results', () => {
-    const { heat, market, collection, ...result } = deserializeSave(JSON.stringify(v5)).state;
+    const { heat, market, collection, advanced: _advanced, ...result } = deserializeSave(JSON.stringify(v5)).state;
     expect(result).toEqual(v5.state); expect(collection.claimedAchievementIds).toEqual([]); expect(heat).toEqual(createHeatState()); expect(market.purchasedCount).toBe(0); expect(market.soldCount).toBe(0);
   });
   it('round-trips traded stock, car tuning and a pending race without recalculating or awarding it', () => {
