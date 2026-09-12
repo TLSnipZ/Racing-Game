@@ -79,6 +79,7 @@ test('an eligible Icon can be cancelled for free, bought exactly once and found 
 test('selling the Icon retains its book credit and permanently uses its one-time offer',async({page})=>{
   const state=purchaseIcon(trio(),'heritage-commission',180000);const car=state.ownedVehicles.at(-1)!;await seed(page,state);await tab(page,'Market');
   await page.getByRole('button',{name:/^SELL A CAR/}).click();await page.getByRole('button',{name:`Review sale ${car.instanceId}`}).click();
+  await expect(page.getByRole('dialog')).toContainText('Selling it does not renew its one-time showroom offer');
   await page.getByRole('button',{name:'SELL VEHICLE',exact:true}).click();await tab(page,'Collection');
   await expect(page.getByRole('article',{name:'Collection Hoshino Tora 85 Heritage',exact:true})).toContainText('no longer parked');await section(page,'Icon Showroom');
   await expect(page.getByRole('button',{name:'Review Icon Hoshino Tora 85 Heritage'})).toBeDisabled();

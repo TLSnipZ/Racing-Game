@@ -2,6 +2,8 @@
 
 ## Phase 10 — Collection, achievements and Icon Cars (2026-09-12)
 
+- Browser review: preserve exact old-save assertions alongside the new collection ledger; wrap narrow fallback-font headings and check every Collection subview without webfonts. Add an explicit non-renewable Icon offer warning to dealer-sale confirmation.
+
 - Added Collection as an eighth independent tab: filterable eight-model Book, 18 achievements and two fixed-price milestone Icon offers.
 - Added explicit Common/Rare/Legendary/Icon badges to model metadata, Garage and Market, without affecting performance, prices or stock frequency.
 - Added persistent ever-owned model credit and latched achievements, retaining them after sales or stock restoration; duplicates count once per model and separately for garage capacity.

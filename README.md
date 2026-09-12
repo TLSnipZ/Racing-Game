@@ -56,7 +56,7 @@ The race briefing shows gross and net returns for both the free-wait and fine ch
 
 ### The used car market
 
-**Market** is a seventh separate tab, available after the starter choice, with shortcuts from Garage and East Ward. Browse six individual offers, inspect the exact vehicle and confirm **BUY VEHICLE**. A purchased car joins your garage without replacing or activating over the current car. Its listing is consumed once; the displayed year, mileage, conditions and ID are kept.
+**Market** is a separate tab, available after the starter choice, with shortcuts from Garage and East Ward. Browse six individual offers, inspect the exact vehicle and confirm **BUY VEHICLE**. A purchased car joins your garage without replacing or activating over the current car. Its listing is consumed once; the displayed year, mileage, conditions and ID are kept.
 
 | Model | Body / manufacturer | Model-year range | Factory power | Market level |
 | --- | --- | --- | ---: | ---: |
